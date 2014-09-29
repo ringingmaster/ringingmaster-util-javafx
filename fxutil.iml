@@ -26,19 +26,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="method_engine" />
     <orderEntry type="module" module-name="util" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/lib" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
-      </library>
-    </orderEntry>
-    <orderEntry type="module" module-name="ui-common" />
+    <orderEntry type="module" module-name="ringingmaster-ui-common" />
     <orderEntry type="module-library">
       <library name="IvyIDEA-fxutil-lib">
         <CLASSES>
