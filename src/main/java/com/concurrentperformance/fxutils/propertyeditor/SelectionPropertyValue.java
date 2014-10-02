@@ -1,6 +1,7 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
-import javafx.collections.FXCollections;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
@@ -13,6 +14,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * TODO comments ???
@@ -21,17 +24,24 @@ import javafx.util.Callback;
  */
 public class SelectionPropertyValue extends SkeletalPropertyValue implements PropertyValue {
 
-	public SelectionPropertyValue(String propertyName, String propertyValue) {
-		super(propertyName, buildComboBox());
+	private static final Logger log = LoggerFactory.getLogger(SelectionPropertyValue.class);
+
+	public SelectionPropertyValue(String propertyName, ObservableList<String> items) {
+		super(propertyName);
+		setEditor(buildComboBox(items));
 	}
 
-	private static Region buildComboBox() {
+	private Region buildComboBox(ObservableList<String> items) {
 		ComboBox comboBox = new ComboBox();
 
-		ObservableList<String> items = FXCollections.observableArrayList();
-		items.addAll("False", "item 2");
 		comboBox.setItems(items);
 		comboBox.getSelectionModel().select(0);
+		comboBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				log.info("New Selection " + newValue);
+			}
+		});
 
 		comboBox.setPadding(new Insets(0, 2, 0, 2));
 		comboBox.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));

@@ -16,7 +16,7 @@ public class GroupPropertyValue extends SkeletalPropertyValue implements Propert
 	private boolean groupIsVisible = true;
 
 	GroupPropertyValue(String name) {
-		super(name, null);
+		super(name);
 	}
 
 	@Override

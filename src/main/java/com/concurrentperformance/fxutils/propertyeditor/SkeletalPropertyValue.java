@@ -1,5 +1,6 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
+import javafx.beans.value.ChangeListener;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -14,11 +15,10 @@ import javafx.scene.text.Font;
 public abstract class SkeletalPropertyValue implements PropertyValue {
 
 	private final String name;
-	private final Region editor;
+	private volatile Region editor;
 
-	public SkeletalPropertyValue(String name, Region editor) {
+	public SkeletalPropertyValue(String name) {
 		this.name = name;
-		this.editor = editor;
 	}
 
 	public String getName() {
@@ -37,6 +37,10 @@ public abstract class SkeletalPropertyValue implements PropertyValue {
 
 		gc.setFill(textColor);
 		gc.fillText(getName(), horzPadding, bottom - vertPadding, center - (horzPadding *2));
+	}
+
+	public void setEditor(Region editor) {
+		this.editor = editor;
 	}
 
 	@Override
