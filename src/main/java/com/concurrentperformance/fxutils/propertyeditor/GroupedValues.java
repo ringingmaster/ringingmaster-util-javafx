@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * TODO comments ???
  *
@@ -22,6 +25,11 @@ public class GroupedValues {
 	private final Map<String, GroupPropertyValue> groups = new HashMap<>();
 
 	public GroupPropertyValue add(String groupName, PropertyValue propertyValue) {
+		checkNotNull(groupName);
+		checkNotNull(propertyValue);
+
+		checkState((findPropertyByName(propertyValue.getName()) == null), "Duplicate property name [%s]", propertyValue.getName());
+
 		GroupPropertyValue group = groups.get(groupName);
 		if (group == null) {
 			group = new GroupPropertyValue(groupName);
@@ -79,5 +87,14 @@ public class GroupedValues {
 				propertyValuesCollapsed.add(propertyValue);
 			}
 		}
+	}
+
+	public PropertyValue findPropertyByName(String name) {
+		for (PropertyValue propertyValue : propertyValuesAll) {
+			if (propertyValue.getName().equals(name)) {
+				return propertyValue;
+			}
+		}
+		return null;
 	}
 }

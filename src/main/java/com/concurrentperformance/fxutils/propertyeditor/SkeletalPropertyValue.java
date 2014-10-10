@@ -1,10 +1,11 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
-import javafx.beans.value.ChangeListener;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
@@ -18,7 +19,7 @@ public abstract class SkeletalPropertyValue implements PropertyValue {
 	private volatile Region editor;
 
 	public SkeletalPropertyValue(String name) {
-		this.name = name;
+		this.name = checkNotNull(name);
 	}
 
 	public String getName() {

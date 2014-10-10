@@ -1,7 +1,7 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
@@ -17,6 +17,8 @@ import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * TODO comments ???
  *
@@ -26,22 +28,15 @@ public class SelectionPropertyValue extends SkeletalPropertyValue implements Pro
 
 	private static final Logger log = LoggerFactory.getLogger(SelectionPropertyValue.class);
 
-	public SelectionPropertyValue(String propertyName, ObservableList<String> items) {
+	public SelectionPropertyValue(String propertyName, ChangeListener<Number> listener) {
 		super(propertyName);
-		setEditor(buildComboBox(items));
+		setEditor(buildComboBox(listener));
 	}
 
-	private Region buildComboBox(ObservableList<String> items) {
+	private Region buildComboBox(ChangeListener<Number> listener) {
 		ComboBox comboBox = new ComboBox();
 
-		comboBox.setItems(items);
-		comboBox.getSelectionModel().select(0);
-		comboBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				log.info("New Selection " + newValue);
-			}
-		});
+		comboBox.getSelectionModel().selectedIndexProperty().addListener(listener);
 
 		comboBox.setPadding(new Insets(0, 2, 0, 2));
 		comboBox.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -67,6 +62,15 @@ public class SelectionPropertyValue extends SkeletalPropertyValue implements Pro
 		comboBox.setButtonCell(callback.call(null));
 
 		return comboBox;
+	}
+
+	public void setItems(List<String> items) {
+		final ObservableList<String> observableItems = FXCollections.observableArrayList(items);
+		((ComboBox) getEditor()).setItems(observableItems);
+	}
+
+	public void setSelectedIndex(int selectedIndex) {
+		((ComboBox) getEditor()).getSelectionModel().select(selectedIndex);
 	}
 
 	@Override

@@ -35,12 +35,12 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 		return textField;
 	}
 
+	public void setValue(String value) {
+		((TextField)getEditor()).setText(value);
+	}
+
 	@Override
 	public void setFont(Font font) {
 		((TextField)getEditor()).setFont(font);
-	}
-
-	public void setValue(String value) {
-		((TextField)getEditor()).setText(value);
 	}
 }

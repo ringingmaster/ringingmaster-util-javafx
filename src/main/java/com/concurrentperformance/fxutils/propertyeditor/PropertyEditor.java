@@ -88,11 +88,15 @@ public class PropertyEditor extends ScrollPane {
 		}
 	}
 
+	public PropertyValue findPropertyByName(String name) {
+		return propertyValues.findPropertyByName(name);
+	}
+
 	PropertyGeometry getPropertyGeometry() {
 		return propertyGeometry;
 	}
 
-	public GroupedValues getPropertyValues() {
+	GroupedValues getPropertyValues() {
 		return propertyValues;
 	}
 
