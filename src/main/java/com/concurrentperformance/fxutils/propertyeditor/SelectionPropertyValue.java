@@ -28,9 +28,12 @@ public class SelectionPropertyValue extends SkeletalPropertyValue implements Pro
 
 	private static final Logger log = LoggerFactory.getLogger(SelectionPropertyValue.class);
 
+	private final ChangeListener<Number> listener;
+
 	public SelectionPropertyValue(String propertyName, ChangeListener<Number> listener) {
 		super(propertyName);
 		setEditor(buildComboBox(listener));
+		this.listener = listener;
 	}
 
 	private Region buildComboBox(ChangeListener<Number> listener) {
@@ -65,8 +68,13 @@ public class SelectionPropertyValue extends SkeletalPropertyValue implements Pro
 	}
 
 	public void setItems(List<String> items) {
+		final ComboBox comboBox = (ComboBox) getEditor();
+		// When updating the combo box items, we remove our listener, so it does not get the value set to -1
+		// and then back to the valid value.
+		comboBox.getSelectionModel().selectedIndexProperty().removeListener(listener);
 		final ObservableList<String> observableItems = FXCollections.observableArrayList(items);
-		((ComboBox) getEditor()).setItems(observableItems);
+		comboBox.setItems(observableItems);
+		comboBox.getSelectionModel().selectedIndexProperty().addListener(listener);
 	}
 
 	public void setSelectedIndex(int selectedIndex) {
