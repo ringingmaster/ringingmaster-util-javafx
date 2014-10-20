@@ -86,4 +86,5 @@ public class SelectionPropertyValue extends SkeletalPropertyValue implements Pro
 		super.positionEditor(x,y-1.0,width,height);
 	}
 
+
 }

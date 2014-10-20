@@ -56,8 +56,13 @@ public abstract class SkeletalPropertyValue implements PropertyValue {
 	}
 
 	@Override
-	public void updateVisibleState(boolean visible) {
+	public void setVisible(boolean visible) {
 		editor.setVisible(visible);
+	}
+
+	@Override
+	public void setDisable(boolean disable) {
+		editor.setDisable(disable);
 	}
 
 	@Override

@@ -76,7 +76,7 @@ public class PropertyEditor extends ScrollPane {
 				visible = ((GroupPropertyValue)propertyValue).isGroupVisible();
 			}
 			else {
-				propertyValue.updateVisibleState(visible);
+				propertyValue.setVisible(visible);
 			}
 		}
 		

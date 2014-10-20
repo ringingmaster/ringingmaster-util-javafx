@@ -37,7 +37,8 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 
 	public void setValue(String value) {
 		final TextField editor = (TextField) getEditor();
-		if (value == null || !editor.getText().equals(value)) {
+		if (value == null ||
+			!editor.getText().equals(value)) {
 			editor.setText(value);
 		}
 	}

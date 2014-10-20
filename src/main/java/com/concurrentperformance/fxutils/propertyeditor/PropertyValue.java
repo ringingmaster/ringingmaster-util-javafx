@@ -25,5 +25,9 @@ public interface PropertyValue {
 	          double center, double horzPadding, double vertPadding,
 	          Color backgroundColor, Color linesColor, Color textColor);
 
-	void updateVisibleState(boolean visible);
+	void setVisible(boolean visible);
+
+	void setDisable(boolean disable);
+
+
 }
