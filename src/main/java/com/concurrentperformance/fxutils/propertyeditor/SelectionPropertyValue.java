@@ -1,6 +1,7 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -28,18 +29,15 @@ public class SelectionPropertyValue extends SkeletalPropertyValue implements Pro
 
 	private static final Logger log = LoggerFactory.getLogger(SelectionPropertyValue.class);
 
-	private final ChangeListener<Number> listener;
+	private boolean suppressNotifications = false;
 
-	public SelectionPropertyValue(String propertyName, ChangeListener<Number> listener) {
+	public SelectionPropertyValue(String propertyName) {
 		super(propertyName);
-		setEditor(buildComboBox(listener));
-		this.listener = listener;
+		setEditor(buildComboBox());
 	}
 
-	private Region buildComboBox(ChangeListener<Number> listener) {
+	private Region buildComboBox() {
 		ComboBox comboBox = new ComboBox();
-
-		comboBox.getSelectionModel().selectedIndexProperty().addListener(listener);
 
 		comboBox.setPadding(new Insets(0, 2, 0, 2));
 		comboBox.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -61,20 +59,30 @@ public class SelectionPropertyValue extends SkeletalPropertyValue implements Pro
 
 		};
 		comboBox.setCellFactory(callback);
-
 		comboBox.setButtonCell(callback.call(null));
 
 		return comboBox;
 	}
 
+	public void setListener(ChangeListener<Number> listener) {
+		((ComboBox) getEditor()).getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+				if (!suppressNotifications) {
+					listener.changed(observableValue, oldValue, newValue);
+				}
+			}
+		});
+	}
+
 	public void setItems(List<String> items) {
 		final ComboBox comboBox = (ComboBox) getEditor();
-		// When updating the combo box items, we remove our listener, so it does not get the value set to -1
+		// When updating the combo box items, we remove suppress our listener, so it does not get the value set to -1
 		// and then back to the valid value.
-		comboBox.getSelectionModel().selectedIndexProperty().removeListener(listener);
+		suppressNotifications = true;
 		final ObservableList<String> observableItems = FXCollections.observableArrayList(items);
 		comboBox.setItems(observableItems);
-		comboBox.getSelectionModel().selectedIndexProperty().addListener(listener);
+		suppressNotifications = false;
 	}
 
 	public void setSelectedIndex(int selectedIndex) {
