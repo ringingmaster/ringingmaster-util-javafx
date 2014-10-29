@@ -1,7 +1,7 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -22,13 +22,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lake
  */
-public class TextPropertyValue extends SkeletalPropertyValue implements PropertyValue {
+public class IntegerPropertyValue extends SkeletalPropertyValue implements PropertyValue {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private StringProperty psudoValue = new SimpleStringProperty("");
+	private IntegerProperty psudoValue = new SimpleIntegerProperty(0);
 
-	public TextPropertyValue(String propertyName) {
+	public IntegerPropertyValue(String propertyName) {
 		super(propertyName);
 		setEditor(buildTextField());
 	}
@@ -39,12 +39,25 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 		textField.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 		//TODO textField.setPromptText("TEST");
 
+		// Prevent anything other than integer numbers
+		textField.setOnKeyTyped(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if ((event.getCharacter() != null) &&
+						(event.getCharacter().length() > 0) &&
+						(!Character.isDigit(event.getCharacter().charAt(0)))) {
+					event.consume();
+				}
+			}
+		});
+
 		// update psudo value when valid
 		textField.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
 				try {
-					psudoValue.setValue(newValue);
+					final Integer parsedValue = Integer.parseInt(newValue);
+					psudoValue.setValue(parsedValue);
 				}
 				catch (NumberFormatException e) {
 					// Do nothing
@@ -55,7 +68,8 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 		return textField;
 	}
 
-	public void setListener(ChangeListener<String> listener, CallbackStyle callbackStyle) {
+	public void setListener(ChangeListener<? super Number> listener, CallbackStyle callbackStyle) {
+
 		TextField textField = (TextField) getEditor();
 		if (callbackStyle == CallbackStyle.EVERY_KEYSTROKE) {
 			psudoValue.addListener(listener);
@@ -83,13 +97,14 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 		else {
 			throw new IllegalArgumentException();
 		}
+
 	}
 
-	static String previousNotifiedValue = null;
+	static Integer previousNotifiedValue = null;
 
-	private void notifyListener(ChangeListener<String> listener) {
+	private void notifyListener(ChangeListener<? super Number> listener) {
 
-		final String newValue = psudoValue.getValue();
+		final Integer newValue = psudoValue.getValue();
 
 		if (newValue != null && !newValue.equals(previousNotifiedValue)) {
 			listener.changed(psudoValue, previousNotifiedValue, newValue);
@@ -97,11 +112,11 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 		}
 	}
 
-	public void setValue(String value) {
+	public void setValue(Integer value) {
 		final TextField textField = (TextField) getEditor();
 		if (value == null ||
 			!textField.getText().equals(value)) {
-			textField.setText(value);
+			textField.setText(value.toString());
 		}
 	}
 
