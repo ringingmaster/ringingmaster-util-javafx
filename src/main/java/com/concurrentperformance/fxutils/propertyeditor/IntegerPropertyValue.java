@@ -1,7 +1,7 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -26,7 +26,10 @@ public class IntegerPropertyValue extends SkeletalPropertyValue implements Prope
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private IntegerProperty psudoValue = new SimpleIntegerProperty(0);
+	private CallbackStyle callbackStyle = CallbackStyle.EVERY_KEYSTROKE;
+	private Integer previousNotifiedValue = null;
+	private Integer currentValue = null;
+	private ChangeListener<? super Number> listener;
 
 	public IntegerPropertyValue(String propertyName) {
 		super(propertyName);
@@ -56,11 +59,18 @@ public class IntegerPropertyValue extends SkeletalPropertyValue implements Prope
 			@Override
 			public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
 				try {
-					final Integer parsedValue = Integer.parseInt(newValue);
-					psudoValue.setValue(parsedValue);
+					if (Strings.isNullOrEmpty(newValue)) {
+						currentValue = null;
+					}
+					else {
+						currentValue  = Integer.parseInt(newValue);
+					}
 				}
 				catch (NumberFormatException e) {
 					// Do nothing
+				}
+				if (callbackStyle == CallbackStyle.EVERY_KEYSTROKE) {
+					notifyListener();
 				}
 			}
 		});
@@ -70,9 +80,12 @@ public class IntegerPropertyValue extends SkeletalPropertyValue implements Prope
 
 	public void setListener(ChangeListener<? super Number> listener, CallbackStyle callbackStyle) {
 
+		this.callbackStyle = callbackStyle;
+		this.listener = listener;
+
 		TextField textField = (TextField) getEditor();
 		if (callbackStyle == CallbackStyle.EVERY_KEYSTROKE) {
-			psudoValue.addListener(listener);
+			// Do nothing
 		}
 		else if (callbackStyle == CallbackStyle.WHEN_FINISHED){
 			// just loss of focus.
@@ -80,7 +93,7 @@ public class IntegerPropertyValue extends SkeletalPropertyValue implements Prope
 				@Override
 				public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
 					if (newValue == false) {
-						notifyListener(listener);
+						notifyListener();
 					}
 				}
 			});
@@ -89,7 +102,7 @@ public class IntegerPropertyValue extends SkeletalPropertyValue implements Prope
 				@Override
 				public void handle(KeyEvent event) {
 					if (event.getCode().equals(KeyCode.ENTER)) {
-						notifyListener(listener);
+						notifyListener();
 					}
 				}
 			});
@@ -100,23 +113,32 @@ public class IntegerPropertyValue extends SkeletalPropertyValue implements Prope
 
 	}
 
-	static Integer previousNotifiedValue = null;
-
-	private void notifyListener(ChangeListener<? super Number> listener) {
-
-		final Integer newValue = psudoValue.getValue();
-
-		if (newValue != null && !newValue.equals(previousNotifiedValue)) {
-			listener.changed(psudoValue, previousNotifiedValue, newValue);
-			previousNotifiedValue = newValue;
+	public void setValue(Integer value) {
+		final TextField textField = (TextField) getEditor();
+		String textFieldValue = textField.getText();
+		if (value == null) {
+			if (!Strings.isNullOrEmpty(textFieldValue)) {
+				textField.setText("");
+			}
+		}
+		else  {
+			String convertedValue = value.toString();
+			if (!Objects.equal(convertedValue, textFieldValue)) {
+				textField.setText(convertedValue);
+			}
+		}
+		// Need to do this, otherwise this change never gets notified as no keyboard action takes place.
+		if (callbackStyle == CallbackStyle.WHEN_FINISHED) {
+			notifyListener();
 		}
 	}
 
-	public void setValue(Integer value) {
-		final TextField textField = (TextField) getEditor();
-		if (value == null ||
-			!textField.getText().equals(value)) {
-			textField.setText(value.toString());
+	private void notifyListener() {
+		if (listener != null) {
+			if (!Objects.equal(currentValue, previousNotifiedValue)) {
+				listener.changed(null, previousNotifiedValue, currentValue);
+				previousNotifiedValue = currentValue;
+			}
 		}
 	}
 
