@@ -19,7 +19,7 @@ public interface PropertyValue {
 
 	void setFont(Font font);
 
-	void positionEditor(double x, double y, double width, int height);
+	void positionEditor(double x, double y, double width, double height);
 
 	void draw(GraphicsContext gc, double top, double bottom, double left, double right,
 	          double center, double horzPadding, double vertPadding,

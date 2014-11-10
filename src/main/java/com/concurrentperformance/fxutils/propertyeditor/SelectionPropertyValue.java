@@ -90,7 +90,7 @@ public class SelectionPropertyValue extends SkeletalPropertyValue implements Pro
 	}
 
 	@Override
-	public void positionEditor(double x, double y, double width, int height) {
+	public void positionEditor(double x, double y, double width, double height) {
 		super.positionEditor(x,y-1.0,width,height);
 	}
 

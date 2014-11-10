@@ -20,7 +20,7 @@ public class GroupPropertyValue extends SkeletalPropertyValue implements Propert
 	}
 
 	@Override
-	public void positionEditor(double x, double y, double width, int height) {
+	public void positionEditor(double x, double y, double width, double height) {
 		// Groups do not have an editor
 	}
 

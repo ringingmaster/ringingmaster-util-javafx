@@ -66,7 +66,7 @@ public abstract class SkeletalPropertyValue implements PropertyValue {
 	}
 
 	@Override
-	public void positionEditor(double x, double y, double width, int height) {
+	public void positionEditor(double x, double y, double width, double height) {
 		getEditor().relocate(x, y);
 		getEditor().setPrefSize(width, height);
 	}

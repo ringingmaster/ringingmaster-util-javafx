@@ -71,4 +71,19 @@ public class PropertyGeometry {
 	public double getMinUnderlyingControlWidth() {
 		return minUnderlyingControlWidth;
 	}
+
+	@Override
+	public String toString() {
+		return "PropertyGeometry{" +
+				"vertSeparatorPosition=" + vertSeparatorPosition +
+				", vertResizeWidth=" + vertResizeWidth +
+				", closestVertSeparatorCanBeToEdge=" + closestVertSeparatorCanBeToEdge +
+				", font=" + font +
+				", height=" + height +
+				", descent=" + descent +
+				", padding=" + padding +
+				", minUnderlyingControlWidth=" + minUnderlyingControlWidth +
+				", minUnderlyingControlHeight=" + minUnderlyingControlHeight +
+				'}';
+	}
 }

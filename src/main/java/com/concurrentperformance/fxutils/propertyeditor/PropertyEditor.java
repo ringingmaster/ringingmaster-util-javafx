@@ -2,6 +2,7 @@ package com.concurrentperformance.fxutils.propertyeditor;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
@@ -21,7 +22,7 @@ public class PropertyEditor extends ScrollPane {
 
 	private final GroupedValues propertyValues = new GroupedValues();
 
-	private Pane managerPane;
+	private Pane editorsContainer;
 	private PropertyInteractionPane interactionPane = new PropertyInteractionPane(this);
 	private PropertyGeometry propertyGeometry = new PropertyGeometry();
 
@@ -29,16 +30,17 @@ public class PropertyEditor extends ScrollPane {
 
 	public PropertyEditor() {
 
-		managerPane = new Pane(interactionPane);
-		setContent(managerPane);
+		editorsContainer = new Pane(interactionPane);
+		setContent(editorsContainer);
+		editorsContainer.relocate(0, 0);
 
-		setFitToHeight(true);
-
-		widthProperty().addListener(new ChangeListener<Number>() {
+		viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
 			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				nominalWidth = Math.max(propertyGeometry.getMinUnderlyingControlWidth(), observable.getValue().doubleValue());
+			public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
+				nominalWidth = Math.max(propertyGeometry.getMinUnderlyingControlWidth(), newValue.getWidth()-2);
+
 				interactionPane.setWidth(nominalWidth);
+				editorsContainer.setPrefWidth(nominalWidth);
 				if (propertyGeometry.getVertSeparatorPosition() > nominalWidth - propertyGeometry.getClosestVertSeparatorCanBeToEdge()) {
 					propertyGeometry.setVertSeparatorPosition(nominalWidth - propertyGeometry.getClosestVertSeparatorCanBeToEdge());
 				}
@@ -46,29 +48,24 @@ public class PropertyEditor extends ScrollPane {
 			}
 		});
 
-		heightProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				interactionPane.setHeight(Math.max(propertyGeometry.getMinUnderlyingControlHeight(), observable.getValue().doubleValue()));
-				updateControl();
-			}
-		});
 	}
 
 	public void add(String group, PropertyValue propertyValue) {
 		propertyValues.add(group, propertyValue);
 		propertyValue.setFont(propertyGeometry.getFont());
 		Node editor = propertyValue.getEditor();
-		managerPane.getChildren().add(editor);
+		editorsContainer.getChildren().add(editor);
 		updateControl();
 	}
 
 	void updateControl() {
-		interactionPane.draw();
+		setEditorsContainerHeight();
+		setEditorVisibility();
 		relocateEditors();
+		interactionPane.draw();
 	}
 
-	private void relocateEditors() {
+	private void setEditorVisibility() {
 		boolean visible = false;
 		for (int index=0;index<propertyValues.size();index++) {
 			PropertyValue propertyValue = propertyValues.get(index);
@@ -79,12 +76,21 @@ public class PropertyEditor extends ScrollPane {
 				propertyValue.setVisible(visible);
 			}
 		}
-		
+	}
+
+	private void setEditorsContainerHeight() {
+		double height = Math.max(propertyGeometry.getMinUnderlyingControlHeight(), ((propertyValues.sizeCollapsed()) * propertyGeometry.getHeight()) + propertyGeometry.getPadding());
+
+		interactionPane.setHeight(height);
+		editorsContainer.setPrefHeight(height);
+	}
+
+	private void relocateEditors() {
 		for (int index=0;index<propertyValues.sizeCollapsed();index++) {
 			PropertyValue propertyValue = propertyValues.getAsCollapsed(index);
 			propertyValue.positionEditor(propertyGeometry.getVertSeparatorPosition() + ROOM_FOR_VERT_LINE,
-										(index * propertyGeometry.getHeight()) + propertyGeometry.getPadding(),
-										nominalWidth - propertyGeometry.getVertSeparatorPosition() - ROOM_FOR_VERT_LINE, 10);
+					(index * propertyGeometry.getHeight()) + propertyGeometry.getPadding(),
+					nominalWidth - propertyGeometry.getVertSeparatorPosition() - ROOM_FOR_VERT_LINE, 10);
 		}
 	}
 
