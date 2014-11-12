@@ -35,8 +35,12 @@ public class GroupPropertyValue extends SkeletalPropertyValue implements Propert
 		ShapeDrawer.drawTriangle(gc, 10, top + 10, 5, groupIsVisible ? Direction.RIGHT : Direction.DOWN);
 	}
 
-	public void toggleViewState() {
+	public void toggleGroupVisible() {
 		groupIsVisible = !groupIsVisible;
+	}
+
+	public void setGroupVisible(boolean groupIsVisible) {
+		this.groupIsVisible = groupIsVisible;
 	}
 
 	public boolean isGroupVisible() {

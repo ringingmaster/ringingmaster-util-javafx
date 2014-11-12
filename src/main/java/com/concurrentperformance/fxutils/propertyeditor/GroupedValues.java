@@ -24,11 +24,11 @@ public class GroupedValues {
 	private final List<PropertyValue> propertyValuesCollapsed = new ArrayList<>();
 	private final Map<String, GroupPropertyValue> groups = new HashMap<>();
 
-	public GroupPropertyValue add(String groupName, PropertyValue propertyValue) {
+	public GroupPropertyValue add(String groupName, PropertyValue newPropertyValue) {
 		checkNotNull(groupName);
-		checkNotNull(propertyValue);
+		checkNotNull(newPropertyValue);
 
-		checkState((findPropertyByName(propertyValue.getName()) == null), "Duplicate property name [%s]", propertyValue.getName());
+		checkState((findPropertyByName(newPropertyValue.getName()) == null), "Duplicate property name [%s]", newPropertyValue.getName());
 
 		GroupPropertyValue group = groups.get(groupName);
 		if (group == null) {
@@ -36,7 +36,17 @@ public class GroupedValues {
 			propertyValuesAll.add(group);
 			groups.put(groupName, group);
 		}
-		propertyValuesAll.add(propertyValue);
+
+		// Find the index of the last item in the required group. i.e. the one before the next group, or the end
+		int insertionIndex = propertyValuesAll.indexOf(group) + 1;
+		for(;insertionIndex<propertyValuesAll.size();insertionIndex++) {
+			PropertyValue propertyValue = propertyValuesAll.get(insertionIndex);
+			if (propertyValue instanceof GroupPropertyValue) {
+				break;
+			}
+		}
+		propertyValuesAll.add(insertionIndex, newPropertyValue);
+
 		rebuildCollapsedState();
 		return group;
 	}
@@ -67,7 +77,7 @@ public class GroupedValues {
 			return;
 		}
 
-		((GroupPropertyValue)propertyValue).toggleViewState();
+		((GroupPropertyValue)propertyValue).toggleGroupVisible();
 		rebuildCollapsedState();
 
 	}
