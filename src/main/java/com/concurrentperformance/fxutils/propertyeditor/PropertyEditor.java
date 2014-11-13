@@ -9,9 +9,6 @@ import javafx.scene.layout.Pane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-
 /**
  * TODO comments ???
  *
@@ -62,9 +59,8 @@ public class PropertyEditor extends ScrollPane {
 	}
 
 	public void showGroupByName(String groupName, boolean show) {
-		PropertyValue groupPropertyValue = checkNotNull(findPropertyByName(groupName), "Can't find group [{}] ", groupName);
-		checkState(groupPropertyValue instanceof GroupPropertyValue);
-		((GroupPropertyValue)groupPropertyValue).setGroupVisible(show);
+		propertyValues.showGroupByName(groupName, show);
+		updateControl();
 	}
 
 	void updateControl() {

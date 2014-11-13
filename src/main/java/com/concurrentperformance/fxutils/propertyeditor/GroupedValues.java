@@ -82,6 +82,14 @@ public class GroupedValues {
 
 	}
 
+	public void showGroupByName(String groupName, boolean show) {
+		PropertyValue groupPropertyValue = checkNotNull(findPropertyByName(groupName), "Can't find group [{}] ", groupName);
+		checkState(groupPropertyValue instanceof GroupPropertyValue);
+		((GroupPropertyValue)groupPropertyValue).setGroupVisible(show);
+
+		rebuildCollapsedState();
+	}
+
 	private void rebuildCollapsedState() {
 
 		propertyValuesCollapsed.clear();
