@@ -27,6 +27,7 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private StringProperty psudoValue = new SimpleStringProperty("");
+	private String previousNotifiedValue = null;
 
 	public TextPropertyValue(String propertyName) {
 		super(propertyName);
@@ -59,8 +60,7 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 		TextField textField = (TextField) getEditor();
 		if (callbackStyle == CallbackStyle.EVERY_KEYSTROKE) {
 			psudoValue.addListener(listener);
-		}
-		else if (callbackStyle == CallbackStyle.WHEN_FINISHED){
+		} else if (callbackStyle == CallbackStyle.WHEN_FINISHED) {
 			// just loss of focus.
 			textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 				@Override
@@ -79,13 +79,10 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 					}
 				}
 			});
-		}
-		else {
+		} else {
 			throw new IllegalArgumentException();
 		}
 	}
-
-	static String previousNotifiedValue = null;
 
 	private void notifyListener(ChangeListener<String> listener) {
 
@@ -108,5 +105,12 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 	@Override
 	public void setFont(Font font) {
 		((TextField)getEditor()).setFont(font);
+	}
+
+	@Override
+	public String toString() {
+		return "TextPropertyValue{" +
+				"name=" + getName() +
+				'}';
 	}
 }
