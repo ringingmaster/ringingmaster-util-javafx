@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -20,35 +18,46 @@ public class GroupedValues {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+	public static final String UNGROUPED = "<UNGROUPED>";
+
 	private final List<PropertyValue> propertyValuesAll = new ArrayList<>();
 	private final List<PropertyValue> propertyValuesCollapsed = new ArrayList<>();
-	private final Map<String, GroupPropertyValue> groups = new HashMap<>();
 
-	public GroupPropertyValue add(String groupName, PropertyValue newPropertyValue) {
+	void add(String groupName, PropertyValue newPropertyValue) {
 		checkNotNull(groupName);
 		checkNotNull(newPropertyValue);
-
 		checkState((findPropertyByName(newPropertyValue.getName()) == null), "Duplicate property name [%s]", newPropertyValue.getName());
 
-		GroupPropertyValue group = groups.get(groupName);
-		if (group == null) {
-			group = new GroupPropertyValue(groupName);
-			propertyValuesAll.add(group);
-			groups.put(groupName, group);
-		}
-
 		// Find the index of the last item in the required group. i.e. the one before the next group, or the end
-		int insertionIndex = propertyValuesAll.indexOf(group) + 1;
+		int insertionIndex = getInsertionIndexInGroup(groupName);
+		propertyValuesAll.add(insertionIndex, newPropertyValue);
+
+		rebuildCollapsedState();
+	}
+
+	private int getInsertionIndexInGroup(String groupName) {
+		int insertionIndex = getFirstGroupChildIndex(groupName);
+
 		for(;insertionIndex<propertyValuesAll.size();insertionIndex++) {
 			PropertyValue propertyValue = propertyValuesAll.get(insertionIndex);
 			if (propertyValue instanceof GroupPropertyValue) {
 				break;
 			}
 		}
-		propertyValuesAll.add(insertionIndex, newPropertyValue);
+		return insertionIndex;
+	}
 
-		rebuildCollapsedState();
-		return group;
+	int getFirstGroupChildIndex(String groupName) {
+		if (groupName.equals(UNGROUPED)) {
+			return 0;
+		}
+
+		PropertyValue group = findPropertyByName(groupName);
+		if (group == null) {
+			group = new GroupPropertyValue(groupName);
+			propertyValuesAll.add(group);
+		}
+		return propertyValuesAll.indexOf(group) + 1;
 	}
 
 	public PropertyValue getAsCollapsed(int index) {
@@ -59,15 +68,15 @@ public class GroupedValues {
 		return propertyValuesCollapsed.size();
 	}
 
-	public PropertyValue get(int index) {
+	PropertyValue get(int index) {
 		return propertyValuesAll.get(index);
 	}
 
-	public int size() {
+	int size() {
 		return propertyValuesAll.size();
 	}
 
-	public void toggleGroupItem(int index) {
+	void toggleGroupItem(int index) {
 		if (index >= propertyValuesCollapsed.size()) {
 			return;
 		}
@@ -77,12 +86,12 @@ public class GroupedValues {
 			return;
 		}
 
-		((GroupPropertyValue)propertyValue).toggleGroupVisible();
+		((GroupPropertyValue) propertyValue).toggleGroupVisible();
 		rebuildCollapsedState();
 
 	}
 
-	public void showGroupByName(String groupName, boolean show) {
+	void showGroupByName(String groupName, boolean show) {
 		PropertyValue groupPropertyValue = checkNotNull(findPropertyByName(groupName), "Can't find group [{}] ", groupName);
 		checkState(groupPropertyValue instanceof GroupPropertyValue);
 		((GroupPropertyValue)groupPropertyValue).setGroupVisible(show);
@@ -94,7 +103,7 @@ public class GroupedValues {
 
 		propertyValuesCollapsed.clear();
 
-		boolean groupVisible = false;
+		boolean groupVisible = true; // Start with 'true' to handle UNGROUPED items
 		for (PropertyValue propertyValue : propertyValuesAll) {
 			if (propertyValue instanceof GroupPropertyValue) {
 				GroupPropertyValue groupPropertyValue = (GroupPropertyValue)propertyValue;
@@ -107,7 +116,7 @@ public class GroupedValues {
 		}
 	}
 
-	public PropertyValue findPropertyByName(String name) {
+	PropertyValue findPropertyByName(String name) {
 		for (PropertyValue propertyValue : propertyValuesAll) {
 			if (propertyValue.getName().equals(name)) {
 				return propertyValue;

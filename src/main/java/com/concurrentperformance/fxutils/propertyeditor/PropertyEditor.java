@@ -50,6 +50,10 @@ public class PropertyEditor extends ScrollPane {
 
 	}
 
+	public void add(PropertyValue propertyValue) {
+		add(GroupedValues.UNGROUPED, propertyValue);
+	}
+
 	public void add(String group, PropertyValue propertyValue) {
 		propertyValues.add(group, propertyValue);
 		propertyValue.setFont(propertyGeometry.getFont());
@@ -71,7 +75,7 @@ public class PropertyEditor extends ScrollPane {
 	}
 
 	private void setEditorVisibility() {
-		boolean visible = false;
+		boolean visible = true;
 		for (int index=0;index<propertyValues.size();index++) {
 			PropertyValue propertyValue = propertyValues.get(index);
 			if (propertyValue instanceof GroupPropertyValue) {

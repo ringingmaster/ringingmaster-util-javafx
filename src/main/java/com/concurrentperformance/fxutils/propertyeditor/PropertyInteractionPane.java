@@ -92,7 +92,7 @@ public class PropertyInteractionPane extends Canvas {
 		return index;
 	}
 
-	public void draw() {
+	void draw() {
 		GraphicsContext gc = getGraphicsContext2D();
 		clearBackground(gc);
 		drawGrid(gc);
