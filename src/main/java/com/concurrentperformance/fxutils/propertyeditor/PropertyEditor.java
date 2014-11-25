@@ -50,6 +50,15 @@ public class PropertyEditor extends ScrollPane {
 
 	}
 
+	public void setVertSeparatorPosition(double vertSeparatorPosition) {
+
+		if (vertSeparatorPosition > nominalWidth - propertyGeometry.getClosestVertSeparatorCanBeToEdge()) {
+			vertSeparatorPosition = nominalWidth - propertyGeometry.getClosestVertSeparatorCanBeToEdge();
+		}
+
+		propertyGeometry.setVertSeparatorPosition(vertSeparatorPosition);
+	}
+
 	public void add(PropertyValue propertyValue) {
 		add(GroupedValues.UNGROUPED, propertyValue);
 	}
