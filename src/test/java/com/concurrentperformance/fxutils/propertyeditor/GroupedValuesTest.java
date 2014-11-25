@@ -35,10 +35,10 @@ public class GroupedValuesTest {
 		groupedValues.add("Group2", mock(PropertyValue.class));
 
 		assertEquals(4,groupedValues.sizeCollapsed());
-		assertEquals(4,groupedValues.size());
+		assertEquals(4,groupedValues.sizeAll());
 
 		groupedValues.toggleGroupItem(0);
 		assertEquals(3,groupedValues.sizeCollapsed());
-		assertEquals(4,groupedValues.size());
+		assertEquals(4,groupedValues.sizeAll());
 	}
 }

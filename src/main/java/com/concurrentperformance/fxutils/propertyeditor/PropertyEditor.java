@@ -71,6 +71,11 @@ public class PropertyEditor extends ScrollPane {
 		updateControl();
 	}
 
+	public void clear() {
+		propertyValues.clear();
+		updateControl();
+	}
+
 	public void showGroupByName(String groupName, boolean show) {
 		propertyValues.showGroupByName(groupName, show);
 		updateControl();
@@ -85,7 +90,7 @@ public class PropertyEditor extends ScrollPane {
 
 	private void setEditorVisibility() {
 		boolean visible = true;
-		for (int index=0;index<propertyValues.size();index++) {
+		for (int index=0;index<propertyValues.sizeAll();index++) {
 			PropertyValue propertyValue = propertyValues.get(index);
 			if (propertyValue instanceof GroupPropertyValue) {
 				visible = ((GroupPropertyValue)propertyValue).isGroupVisible();
@@ -122,6 +127,10 @@ public class PropertyEditor extends ScrollPane {
 
 	GroupedValues getPropertyValues() {
 		return propertyValues;
+	}
+
+	public int sizeAll() {
+		return propertyValues.sizeAll();
 	}
 
 

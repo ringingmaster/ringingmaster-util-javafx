@@ -72,7 +72,7 @@ public class GroupedValues {
 		return propertyValuesAll.get(index);
 	}
 
-	int size() {
+	int sizeAll() {
 		return propertyValuesAll.size();
 	}
 
@@ -123,5 +123,10 @@ public class GroupedValues {
 			}
 		}
 		return null;
+	}
+
+	public void clear() {
+		propertyValuesAll.clear();
+		propertyValuesCollapsed.clear();
 	}
 }
