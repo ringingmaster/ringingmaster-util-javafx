@@ -64,7 +64,7 @@ public class SelectionPropertyValue extends SkeletalPropertyValue implements Pro
 		return comboBox;
 	}
 
-	public void setListener(ChangeListener<Number> listener) {
+	public void setListener(ChangeListener<Number> listener) { //TODO change to monitor and select objects rather than index's'
 		((ComboBox) getEditor()).getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
