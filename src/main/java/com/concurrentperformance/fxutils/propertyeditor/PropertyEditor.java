@@ -1,8 +1,5 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
@@ -14,7 +11,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lake
  */
-public class PropertyEditor extends ScrollPane {
+public class PropertyEditor extends ScrollPane implements PropertyValueListener {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -34,18 +31,15 @@ public class PropertyEditor extends ScrollPane {
 		setContent(editorsContainer);
 		editorsContainer.relocate(0, 0);
 
-		viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
-			@Override
-			public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
-				nominalWidth = Math.max(propertyGeometry.getMinUnderlyingControlWidth(), newValue.getWidth()-2);
+		viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
+			nominalWidth = Math.max(propertyGeometry.getMinUnderlyingControlWidth(), newValue.getWidth()-2);
 
-				interactionPane.setWidth(nominalWidth);
-				editorsContainer.setPrefWidth(nominalWidth);
-				if (propertyGeometry.getVertSeparatorPosition() > nominalWidth - propertyGeometry.getClosestVertSeparatorCanBeToEdge()) {
-					propertyGeometry.setVertSeparatorPosition(nominalWidth - propertyGeometry.getClosestVertSeparatorCanBeToEdge());
-				}
-				updateControl();
+			interactionPane.setWidth(nominalWidth);
+			editorsContainer.setPrefWidth(nominalWidth);
+			if (propertyGeometry.getVertSeparatorPosition() > nominalWidth - propertyGeometry.getClosestVertSeparatorCanBeToEdge()) {
+				propertyGeometry.setVertSeparatorPosition(nominalWidth - propertyGeometry.getClosestVertSeparatorCanBeToEdge());
 			}
+			updateControl();
 		});
 
 	}
@@ -68,10 +62,14 @@ public class PropertyEditor extends ScrollPane {
 		propertyValue.setFont(propertyGeometry.getFont());
 		Node editor = propertyValue.getEditor();
 		editorsContainer.getChildren().add(editor);
+		propertyValue.addListener(this);
 		updateControl();
 	}
 
 	public void clear() {
+		for (int i=0;i<propertyValues.sizeAll();i++) {
+			editorsContainer.getChildren().remove(propertyValues.get(i).getEditor());
+		}
 		propertyValues.clear();
 		updateControl();
 	}
@@ -81,7 +79,7 @@ public class PropertyEditor extends ScrollPane {
 		updateControl();
 	}
 
-	void updateControl() {
+	protected void updateControl() {
 		setEditorsContainerHeight();
 		setEditorVisibility();
 		relocateEditors();
@@ -134,4 +132,8 @@ public class PropertyEditor extends ScrollPane {
 	}
 
 
+	@Override
+	public void propertyValue_renderingChanged(PropertyValue propertyValue) {
+		updateControl();
+	}
 }

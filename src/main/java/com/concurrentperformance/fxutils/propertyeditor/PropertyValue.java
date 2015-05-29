@@ -1,5 +1,6 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
+import com.concurrentperformance.util.listener.Listenable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -11,7 +12,7 @@ import javafx.scene.text.Font;
  *
  * @author Lake
  */
-public interface PropertyValue {
+public interface PropertyValue extends Listenable<PropertyValueListener> {
 
 	String getName();
 
@@ -23,7 +24,7 @@ public interface PropertyValue {
 
 	void draw(GraphicsContext gc, double top, double bottom, double left, double right,
 	          double center, double horzPadding, double vertPadding,
-	          Color backgroundColor, Color linesColor, Color textColor);
+	          Color backgroundColor, Color linesColor, Color textColor, Color textDisabledColor);
 
 	void setVisible(boolean visible);
 

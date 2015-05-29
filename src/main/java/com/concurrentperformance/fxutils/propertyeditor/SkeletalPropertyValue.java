@@ -1,11 +1,13 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
+import com.concurrentperformance.util.listener.ConcurrentListenable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 
 /**
@@ -13,7 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Lake
  */
-public abstract class SkeletalPropertyValue implements PropertyValue {
+public abstract class SkeletalPropertyValue extends ConcurrentListenable<PropertyValueListener> implements PropertyValue {
 
 	private final String name;
 	private volatile Region editor;
@@ -29,19 +31,20 @@ public abstract class SkeletalPropertyValue implements PropertyValue {
 	@Override
 	public void draw(GraphicsContext gc, double top, double bottom, double left, double right,
 	                 double center, double horzPadding, double vertPadding,
-	                 Color backgroundColor, Color linesColor, Color textColor) {
+	                 Color backgroundColor, Color linesColor, Color textColor, Color textDisabledColor) {
 		gc.setFill(backgroundColor);
 		gc.fillRect(0,top,right,bottom-top);
 
 		gc.setStroke(linesColor);
 		gc.strokeLine(center, top, center, bottom);
 
-		gc.setFill(textColor);
+		gc.setFill((editor.isDisabled())?textDisabledColor:textColor);
 		gc.fillText(getName(), horzPadding, bottom - vertPadding, center - (horzPadding *2));
 	}
 
 	public void setEditor(Region editor) {
-		this.editor = editor;
+		checkState(this.editor == null);
+		this.editor = checkNotNull(editor);
 	}
 
 	@Override
@@ -63,6 +66,9 @@ public abstract class SkeletalPropertyValue implements PropertyValue {
 	@Override
 	public void setDisable(boolean disable) {
 		editor.setDisable(disable);
+		for (PropertyValueListener propertyValueListener : getListeners()) {
+			propertyValueListener.propertyValue_renderingChanged(this);
+		}
 	}
 
 	@Override

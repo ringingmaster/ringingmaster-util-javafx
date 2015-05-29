@@ -1,10 +1,8 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,54 +28,37 @@ public class PropertyInteractionPane extends Canvas {
 	}
 
 	private void configureMouseHandlers() {
-		setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (separatorBeingMoved) {
-					final PropertyGeometry propertyGeometry = propertyEditor.getPropertyGeometry();
-					propertyGeometry.setVertSeparatorPosition(
-							Math.max(Math.min(event.getX(), getWidth() - propertyGeometry.getClosestVertSeparatorCanBeToEdge()), propertyGeometry.getClosestVertSeparatorCanBeToEdge()));
-					propertyEditor.updateControl();
-				}
-			}
-		});
-
-		setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (isOverSeparator(event.getX())) {
-					separatorBeingMoved = true;
-				}
-			}
-		});
-
-		setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				separatorBeingMoved = false;
-			}
-		});
-
-		setOnMouseMoved(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (isOverSeparator(event.getX()))	{
-					setCursor(Cursor.E_RESIZE);
-				}
-				else {
-					setCursor(Cursor.DEFAULT);
-				}
-			}
-		});
-
-		setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				final int propertyIndexAtPosition = getPropertyIndexAtPosition(event.getX(), event.getY());
-
-				propertyEditor.getPropertyValues().toggleGroupItem(propertyIndexAtPosition);
+		setOnMouseDragged(event -> {
+			if (separatorBeingMoved) {
+				final PropertyGeometry propertyGeometry = propertyEditor.getPropertyGeometry();
+				propertyGeometry.setVertSeparatorPosition(
+						Math.max(Math.min(event.getX(), getWidth() - propertyGeometry.getClosestVertSeparatorCanBeToEdge()), propertyGeometry.getClosestVertSeparatorCanBeToEdge()));
 				propertyEditor.updateControl();
 			}
+		});
+
+		setOnMousePressed(event -> {
+			if (isOverSeparator(event.getX())) {
+				separatorBeingMoved = true;
+			}
+		});
+
+		setOnMouseReleased(event -> separatorBeingMoved = false);
+
+		setOnMouseMoved(event -> {
+			if (isOverSeparator(event.getX()))	{
+				setCursor(Cursor.E_RESIZE);
+			}
+			else {
+				setCursor(Cursor.DEFAULT);
+			}
+		});
+
+		setOnMouseClicked(event -> {
+			final int propertyIndexAtPosition = getPropertyIndexAtPosition(event.getX(), event.getY());
+
+			propertyEditor.getPropertyValues().toggleGroupItem(propertyIndexAtPosition);
+			propertyEditor.updateControl();
 		});
 	}
 
@@ -125,7 +106,7 @@ public class PropertyInteractionPane extends Canvas {
 			final double bottom = (propertyGeometry.getHeight() * (index+1));
 
 			propertyValue.draw(gc, top, bottom, left, right, center, horzPadding, vertPadding,
-					Color.WHITE, Color.LIGHTGRAY, Color.BLACK);
+					Color.WHITE, Color.LIGHTGRAY, Color.BLACK, Color.LIGHTGRAY); //TODO Set color from system colours
 		}
 
 		//Vertical separator for area where there is no items,.
