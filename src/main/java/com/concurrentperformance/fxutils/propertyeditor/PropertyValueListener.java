@@ -7,4 +7,5 @@ package com.concurrentperformance.fxutils.propertyeditor;
  */
 public interface PropertyValueListener {
 	void propertyValue_renderingChanged(PropertyValue propertyValue);
+	void propertyValue_editorSelected(PropertyValue propertyValue);
 }

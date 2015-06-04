@@ -19,6 +19,7 @@ public abstract class SkeletalPropertyValue extends ConcurrentListenable<Propert
 
 	private final String name;
 	private volatile Region editor;
+	private boolean selected;
 
 	public SkeletalPropertyValue(String name) {
 		this.name = checkNotNull(name);
@@ -31,14 +32,16 @@ public abstract class SkeletalPropertyValue extends ConcurrentListenable<Propert
 	@Override
 	public void draw(GraphicsContext gc, double top, double bottom, double left, double right,
 	                 double center, double horzPadding, double vertPadding,
-	                 Color backgroundColor, Color linesColor, Color textColor, Color textDisabledColor) {
-		gc.setFill(backgroundColor);
+	                 Color backgroundColor, Color backgroundColorSelected,
+	                 Color linesColor,
+	                 Color textColor, Color textColorDisabled, Color textColorSelected) {
+		gc.setFill(selected?backgroundColorSelected:backgroundColor);
 		gc.fillRect(0,top,right,bottom-top);
 
 		gc.setStroke(linesColor);
 		gc.strokeLine(center, top, center, bottom);
 
-		gc.setFill((editor.isDisabled())?textDisabledColor:textColor);
+		gc.setFill(selected ?textColorSelected: ((editor.isDisabled())?textColorDisabled:textColor));
 		gc.fillText(getName(), horzPadding, bottom - vertPadding, center - (horzPadding *2));
 	}
 
@@ -56,6 +59,16 @@ public abstract class SkeletalPropertyValue extends ConcurrentListenable<Propert
 	@Override
 	public void setFont(Font font) {
 		// Do nothing - just for override.
+	}
+
+	@Override
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
+	@Override
+	public boolean isSelected() {
+		return selected;
 	}
 
 	@Override

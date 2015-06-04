@@ -38,7 +38,7 @@ public class GroupedValues {
 	private int getInsertionIndexInGroup(String groupName) {
 		int insertionIndex = getFirstGroupChildIndex(groupName);
 
-		for(;insertionIndex<propertyValuesAll.size();insertionIndex++) {
+		for (; insertionIndex < propertyValuesAll.size(); insertionIndex++) {
 			PropertyValue propertyValue = propertyValuesAll.get(insertionIndex);
 			if (propertyValue instanceof GroupPropertyValue) {
 				break;
@@ -76,25 +76,10 @@ public class GroupedValues {
 		return propertyValuesAll.size();
 	}
 
-	void toggleGroupItem(int index) {
-		if (index >= propertyValuesCollapsed.size()) {
-			return;
-		}
-
-		final PropertyValue propertyValue = propertyValuesCollapsed.get(index);
-		if (!(propertyValue instanceof GroupPropertyValue)) {
-			return;
-		}
-
-		((GroupPropertyValue) propertyValue).toggleGroupVisible();
-		rebuildCollapsedState();
-
-	}
-
 	void showGroupByName(String groupName, boolean show) {
 		PropertyValue groupPropertyValue = checkNotNull(findPropertyByName(groupName), "Can't find group [{}] ", groupName);
 		checkState(groupPropertyValue instanceof GroupPropertyValue);
-		((GroupPropertyValue)groupPropertyValue).setGroupVisible(show);
+		((GroupPropertyValue) groupPropertyValue).setGroupVisible(show);
 
 		rebuildCollapsedState();
 	}
@@ -106,11 +91,10 @@ public class GroupedValues {
 		boolean groupVisible = true; // Start with 'true' to handle UNGROUPED items
 		for (PropertyValue propertyValue : propertyValuesAll) {
 			if (propertyValue instanceof GroupPropertyValue) {
-				GroupPropertyValue groupPropertyValue = (GroupPropertyValue)propertyValue;
+				GroupPropertyValue groupPropertyValue = (GroupPropertyValue) propertyValue;
 				groupVisible = groupPropertyValue.isGroupVisible();
 				propertyValuesCollapsed.add(groupPropertyValue);
-			}
-			else if (groupVisible) {
+			} else if (groupVisible) {
 				propertyValuesCollapsed.add(propertyValue);
 			}
 		}
@@ -128,5 +112,29 @@ public class GroupedValues {
 	public void clear() {
 		propertyValuesAll.clear();
 		propertyValuesCollapsed.clear();
+	}
+
+	public void setSelected(int index) {
+		setSelected(get(index));
+	}
+
+	public void setSelected(PropertyValue propertyValue) {
+		for (PropertyValue value : propertyValuesAll) {
+			value.setSelected(false);
+		}
+		if (propertyValue != null) {
+			propertyValue.setSelected(true);
+		}
+	}
+
+	public boolean isGroup(int index) {
+		return (get(index) instanceof GroupPropertyValue);
+	}
+
+	public void toggleGroupVisible(int index) {
+		if (isGroup(index)) {
+			((GroupPropertyValue) get(index)).toggleGroupVisible();
+			rebuildCollapsedState();
+		}
 	}
 }

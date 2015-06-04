@@ -17,6 +17,7 @@ public class PropertyInteractionPane extends Canvas {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private boolean separatorBeingMoved = false;
+	private boolean allowSelection = false;
 
 	private final PropertyEditor propertyEditor;
 
@@ -57,7 +58,18 @@ public class PropertyInteractionPane extends Canvas {
 		setOnMouseClicked(event -> {
 			final int propertyIndexAtPosition = getPropertyIndexAtPosition(event.getX(), event.getY());
 
-			propertyEditor.getPropertyValues().toggleGroupItem(propertyIndexAtPosition);
+			if (propertyIndexAtPosition >= propertyEditor.getPropertyValues().sizeCollapsed()) {
+				return;
+			}
+
+			if (propertyEditor.getPropertyValues().isGroup(propertyIndexAtPosition)) {
+				propertyEditor.getPropertyValues().toggleGroupVisible(propertyIndexAtPosition);
+			} else {
+				if (allowSelection) {
+					propertyEditor.getPropertyValues().setSelected(propertyIndexAtPosition);
+				}
+			}
+
 			propertyEditor.updateControl();
 		});
 	}
@@ -106,7 +118,9 @@ public class PropertyInteractionPane extends Canvas {
 			final double bottom = (propertyGeometry.getHeight() * (index+1));
 
 			propertyValue.draw(gc, top, bottom, left, right, center, horzPadding, vertPadding,
-					Color.WHITE, Color.LIGHTGRAY, Color.BLACK, Color.LIGHTGRAY); //TODO Set color from system colours
+					Color.WHITE, Color.DEEPPINK,
+					Color.LIGHTGRAY,
+					Color.BLACK, Color.LIGHTGRAY, Color.WHITE); //TODO Set color from system colours
 		}
 
 		//Vertical separator for area where there is no items,.
@@ -121,4 +135,7 @@ public class PropertyInteractionPane extends Canvas {
 		}
 	}
 
+	public void allowSelection(boolean allowSelection) {
+		this.allowSelection = allowSelection;
+	}
 }

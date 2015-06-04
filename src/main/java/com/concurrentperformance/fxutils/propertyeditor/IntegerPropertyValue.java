@@ -146,4 +146,5 @@ public class IntegerPropertyValue extends SkeletalPropertyValue implements Prope
 	public void setFont(Font font) {
 		((TextField)getEditor()).setFont(font);
 	}
+
 }

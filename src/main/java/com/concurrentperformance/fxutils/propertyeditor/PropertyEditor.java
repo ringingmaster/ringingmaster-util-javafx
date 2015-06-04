@@ -131,9 +131,28 @@ public class PropertyEditor extends ScrollPane implements PropertyValueListener 
 		return propertyValues.sizeAll();
 	}
 
+	public void allowSelection(boolean allowSelection) {
+		interactionPane.allowSelection(allowSelection);
+	}
+
+	public PropertyValue getSelected() {
+		for (int i=0;i<propertyValues.sizeAll();i++) {
+			if (propertyValues.get(i).isSelected()) {
+				return propertyValues.get(i);
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public void propertyValue_renderingChanged(PropertyValue propertyValue) {
 		updateControl();
+	}
+
+	@Override
+	public void propertyValue_editorSelected(PropertyValue propertyValue) {
+		propertyValues.setSelected(propertyValue);
+		updateControl();
+
 	}
 }

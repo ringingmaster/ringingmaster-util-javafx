@@ -26,12 +26,18 @@ public class LabelPropertyValue extends SkeletalPropertyValue implements Propert
 	}
 
 	private Label buildLabel() {
-		Label textField = new Label();
-		textField.setPadding(new Insets(0,2,0,2));
-		textField.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-		//TODO textField.setPromptText("TEST");
+		Label label = new Label();
+		label.setPadding(new Insets(0, 2, 0, 2));
+		label.setBackground(Background.EMPTY);
+		//TODO label.setPromptText("TEST");
 
-		return textField;
+		label.setOnMouseClicked(event -> {
+			for (PropertyValueListener listener : getListeners()) {
+				listener.propertyValue_editorSelected(LabelPropertyValue.this);
+			}
+		});
+
+		return label;
 	}
 
 	public void setValue(String value) {
