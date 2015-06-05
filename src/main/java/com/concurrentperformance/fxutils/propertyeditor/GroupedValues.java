@@ -114,11 +114,11 @@ public class GroupedValues {
 		propertyValuesCollapsed.clear();
 	}
 
-	public void setSelected(int index) {
-		setSelected(get(index));
+	public void setSelectedIndex(int index) {
+		setSelectedIndex(get(index));
 	}
 
-	public void setSelected(PropertyValue propertyValue) {
+	public void setSelectedIndex(PropertyValue propertyValue) {
 		for (PropertyValue value : propertyValuesAll) {
 			value.setSelected(false);
 		}

@@ -66,7 +66,7 @@ public class PropertyInteractionPane extends Canvas {
 				propertyEditor.getPropertyValues().toggleGroupVisible(propertyIndexAtPosition);
 			} else {
 				if (allowSelection) {
-					propertyEditor.getPropertyValues().setSelected(propertyIndexAtPosition);
+					propertyEditor.getPropertyValues().setSelectedIndex(propertyIndexAtPosition);
 				}
 			}
 

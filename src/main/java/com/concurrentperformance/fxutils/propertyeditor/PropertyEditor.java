@@ -135,6 +135,15 @@ public class PropertyEditor extends ScrollPane implements PropertyValueListener 
 		interactionPane.allowSelection(allowSelection);
 	}
 
+	public int getSelectedIndex() {
+		for (int i=0;i<propertyValues.sizeAll();i++) {
+			if (propertyValues.get(i).isSelected()) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	public PropertyValue getSelected() {
 		for (int i=0;i<propertyValues.sizeAll();i++) {
 			if (propertyValues.get(i).isSelected()) {
@@ -144,6 +153,10 @@ public class PropertyEditor extends ScrollPane implements PropertyValueListener 
 		return null;
 	}
 
+	public void setSelectedIndex(int index) {
+		propertyValues.setSelectedIndex(index);
+	}
+
 	@Override
 	public void propertyValue_renderingChanged(PropertyValue propertyValue) {
 		updateControl();
@@ -151,7 +164,7 @@ public class PropertyEditor extends ScrollPane implements PropertyValueListener 
 
 	@Override
 	public void propertyValue_editorSelected(PropertyValue propertyValue) {
-		propertyValues.setSelected(propertyValue);
+		propertyValues.setSelectedIndex(propertyValue);
 		updateControl();
 
 	}
