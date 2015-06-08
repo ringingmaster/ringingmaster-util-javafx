@@ -24,6 +24,7 @@ public interface PropertyValue extends Listenable<PropertyValueListener> {
 
 	void draw(GraphicsContext gc, double top, double bottom, double left, double right,
 	          double center, double horzPadding, double vertPadding,
+	          boolean selected,
 	          Color backgroundColor, Color backgroundColorSelected,
 	          Color linesColor,
 	          Color textColor, Color textColorDisabled, Color textColorSelected);
@@ -32,7 +33,4 @@ public interface PropertyValue extends Listenable<PropertyValueListener> {
 
 	void setDisable(boolean disable);
 
-	void setSelected(boolean selected);
-
-	boolean isSelected();
 }

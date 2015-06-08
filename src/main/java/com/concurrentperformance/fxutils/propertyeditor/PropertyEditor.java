@@ -1,5 +1,7 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
@@ -11,7 +13,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lake
  */
-public class PropertyEditor extends ScrollPane implements PropertyValueListener {
+public class PropertyEditor extends ScrollPane {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -24,6 +26,8 @@ public class PropertyEditor extends ScrollPane implements PropertyValueListener 
 	private PropertyGeometry propertyGeometry = new PropertyGeometry();
 
 	private double nominalWidth = propertyGeometry.getMinUnderlyingControlWidth();
+
+	private IntegerProperty selectedIndex = new SimpleIntegerProperty(this, "selectedIndex", propertyValues.UNDEFINED_INDEX);
 
 	public PropertyEditor() {
 
@@ -62,7 +66,20 @@ public class PropertyEditor extends ScrollPane implements PropertyValueListener 
 		propertyValue.setFont(propertyGeometry.getFont());
 		Node editor = propertyValue.getEditor();
 		editorsContainer.getChildren().add(editor);
-		propertyValue.addListener(this);
+		propertyValue.addListener(new PropertyValueListener() {
+			@Override
+			public void propertyValue_renderingChanged(PropertyValue propertyValue) {
+				updateControl();
+			}
+
+			@Override
+			public void propertyValue_editorSelected(PropertyValue propertyValue) {
+				int index = propertyValues.getIndexOf(propertyValue);
+				setSelectedIndex(index);
+				updateControl();
+
+			}
+		});
 		updateControl();
 	}
 
@@ -135,37 +152,16 @@ public class PropertyEditor extends ScrollPane implements PropertyValueListener 
 		interactionPane.allowSelection(allowSelection);
 	}
 
-	public int getSelectedIndex() {
-		for (int i=0;i<propertyValues.sizeAll();i++) {
-			if (propertyValues.get(i).isSelected()) {
-				return i;
-			}
-		}
-		return -1;
+	public final void setSelectedIndex(int value) {
+		selectedIndex.set(value);
 	}
 
-	public PropertyValue getSelected() {
-		for (int i=0;i<propertyValues.sizeAll();i++) {
-			if (propertyValues.get(i).isSelected()) {
-				return propertyValues.get(i);
-			}
-		}
-		return null;
+	public final int getSelectedIndex() {
+		return selectedIndex.get();
 	}
 
-	public void setSelectedIndex(int index) {
-		propertyValues.setSelectedIndex(index);
+	public final IntegerProperty selectedIndexProperty() {
+		return selectedIndex;
 	}
 
-	@Override
-	public void propertyValue_renderingChanged(PropertyValue propertyValue) {
-		updateControl();
-	}
-
-	@Override
-	public void propertyValue_editorSelected(PropertyValue propertyValue) {
-		propertyValues.setSelectedIndex(propertyValue);
-		updateControl();
-
-	}
 }

@@ -66,7 +66,7 @@ public class PropertyInteractionPane extends Canvas {
 				propertyEditor.getPropertyValues().toggleGroupVisible(propertyIndexAtPosition);
 			} else {
 				if (allowSelection) {
-					propertyEditor.getPropertyValues().setSelectedIndex(propertyIndexAtPosition);
+					propertyEditor.setSelectedIndex(propertyIndexAtPosition);
 				}
 			}
 
@@ -116,8 +116,10 @@ public class PropertyInteractionPane extends Canvas {
 
 			final double top = (propertyGeometry.getHeight() * (index));
 			final double bottom = (propertyGeometry.getHeight() * (index+1));
+			final boolean selected = (propertyEditor.getSelectedIndex() == index);
 
 			propertyValue.draw(gc, top, bottom, left, right, center, horzPadding, vertPadding,
+					selected,
 					Color.WHITE, Color.DEEPPINK,
 					Color.LIGHTGRAY,
 					Color.BLACK, Color.LIGHTGRAY, Color.WHITE); //TODO Set color from system colours

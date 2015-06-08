@@ -16,6 +16,7 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class GroupedValues {
 
+	public static final int UNDEFINED_INDEX = -1;
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	public static final String UNGROUPED = "<UNGROUPED>";
@@ -114,19 +115,6 @@ public class GroupedValues {
 		propertyValuesCollapsed.clear();
 	}
 
-	public void setSelectedIndex(int index) {
-		setSelectedIndex(get(index));
-	}
-
-	public void setSelectedIndex(PropertyValue propertyValue) {
-		for (PropertyValue value : propertyValuesAll) {
-			value.setSelected(false);
-		}
-		if (propertyValue != null) {
-			propertyValue.setSelected(true);
-		}
-	}
-
 	public boolean isGroup(int index) {
 		return (get(index) instanceof GroupPropertyValue);
 	}
@@ -136,5 +124,14 @@ public class GroupedValues {
 			((GroupPropertyValue) get(index)).toggleGroupVisible();
 			rebuildCollapsedState();
 		}
+	}
+
+	public int getIndexOf(PropertyValue propertyValue) {
+		for (int index = 0;index<propertyValuesCollapsed.size();index++) {
+			if (propertyValuesCollapsed.get(index) == propertyValue) {
+				return index;
+			}
+		}
+		return UNDEFINED_INDEX;
 	}
 }

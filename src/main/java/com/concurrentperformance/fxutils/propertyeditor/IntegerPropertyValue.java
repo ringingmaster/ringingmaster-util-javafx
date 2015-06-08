@@ -89,21 +89,15 @@ public class IntegerPropertyValue extends SkeletalPropertyValue implements Prope
 		}
 		else if (callbackStyle == CallbackStyle.WHEN_FINISHED){
 			// just loss of focus.
-			textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-				@Override
-				public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-					if (newValue == false) {
-						notifyListener();
-					}
+			textField.focusedProperty().addListener((observableValue, oldValue, newValue) -> {
+				if (newValue == false) {
+					notifyListener();
 				}
 			});
 
-			textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-				@Override
-				public void handle(KeyEvent event) {
-					if (event.getCode().equals(KeyCode.ENTER)) {
-						notifyListener();
-					}
+			textField.setOnKeyReleased(event -> {
+				if (event.getCode().equals(KeyCode.ENTER)) {
+					notifyListener();
 				}
 			});
 		}
