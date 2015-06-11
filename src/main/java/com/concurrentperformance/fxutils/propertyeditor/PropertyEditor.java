@@ -24,6 +24,7 @@ public class PropertyEditor extends ScrollPane {
 	private Pane editorsContainer;
 	private PropertyInteractionPane interactionPane = new PropertyInteractionPane(this);
 	private PropertyGeometry propertyGeometry = new PropertyGeometry();
+	private DoubleClickListener doubleClickListener;
 
 	private double nominalWidth = propertyGeometry.getMinUnderlyingControlWidth();
 
@@ -79,6 +80,16 @@ public class PropertyEditor extends ScrollPane {
 				updateControl();
 
 			}
+
+			@Override
+			public void propertyValue_doubleClick(PropertyValue propertyValue) {
+				int index = propertyValues.getIndexOf(propertyValue);
+
+				if (doubleClickListener != null) {
+					doubleClickListener.onDoubleClick(index);
+				}
+			}
+
 		});
 		updateControl();
 	}
@@ -164,4 +175,7 @@ public class PropertyEditor extends ScrollPane {
 		return selectedIndex;
 	}
 
+	public void setOnDoubleClickListener(DoubleClickListener listener) {
+		this.doubleClickListener = listener;
+	}
 }

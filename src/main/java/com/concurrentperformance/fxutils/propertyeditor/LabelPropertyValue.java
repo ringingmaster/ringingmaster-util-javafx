@@ -32,8 +32,16 @@ public class LabelPropertyValue extends SkeletalPropertyValue implements Propert
 		//TODO label.setPromptText("TEST");
 
 		label.setOnMouseClicked(event -> {
-			for (PropertyValueListener listener : getListeners()) {
-				listener.propertyValue_editorSelected(LabelPropertyValue.this);
+			int clickCount = event.getClickCount();
+			if (clickCount == 1) {
+				for (PropertyValueListener listener : getListeners()) {
+					listener.propertyValue_editorSelected(LabelPropertyValue.this);
+				}
+			}
+			else if (clickCount == 2) {
+				for (PropertyValueListener listener : getListeners()) {
+					listener.propertyValue_doubleClick(LabelPropertyValue.this);
+				}
 			}
 		});
 
