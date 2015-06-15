@@ -17,7 +17,6 @@ public class PropertyInteractionPane extends Canvas {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private boolean separatorBeingMoved = false;
-	private boolean allowSelection = false;
 
 	private final PropertyEditor propertyEditor;
 
@@ -65,8 +64,11 @@ public class PropertyInteractionPane extends Canvas {
 			if (propertyEditor.getPropertyValues().isGroup(propertyIndexAtPosition)) {
 				propertyEditor.getPropertyValues().toggleGroupVisible(propertyIndexAtPosition);
 			} else {
-				if (allowSelection) {
+				if (event.getClickCount() == 1) {
 					propertyEditor.setSelectedIndex(propertyIndexAtPosition);
+				}
+				else {
+					propertyEditor.fireDoubleClick(propertyIndexAtPosition);
 				}
 			}
 
@@ -135,9 +137,5 @@ public class PropertyInteractionPane extends Canvas {
 			final double vertPos = (propertyEditor.getPropertyGeometry().getHeight() * (index+1));
 			gc.strokeLine(0.0, vertPos, getWidth(), vertPos);
 		}
-	}
-
-	public void allowSelection(boolean allowSelection) {
-		this.allowSelection = allowSelection;
 	}
 }
