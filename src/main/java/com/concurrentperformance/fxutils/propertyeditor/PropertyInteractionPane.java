@@ -4,6 +4,7 @@ import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.FontSmoothingType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,6 +90,7 @@ public class PropertyInteractionPane extends Canvas {
 
 	void draw() {
 		GraphicsContext gc = getGraphicsContext2D();
+		gc.setFontSmoothingType(FontSmoothingType.LCD);
 		clearBackground(gc);
 		drawGrid(gc);
 	}
