@@ -3,12 +3,9 @@ package com.concurrentperformance.fxutils.propertyeditor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -41,15 +38,12 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 		//TODO textField.setPromptText("TEST");
 
 		// update psudo value when valid
-		textField.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-				try {
-					psudoValue.setValue(newValue);
-				}
-				catch (NumberFormatException e) {
-					// Do nothing
-				}
+		textField.textProperty().addListener((observableValue, oldValue, newValue) -> {
+			try {
+				psudoValue.setValue(newValue);
+			}
+			catch (NumberFormatException e) {
+				// Do nothing
 			}
 		});
 
@@ -62,21 +56,15 @@ public class TextPropertyValue extends SkeletalPropertyValue implements Property
 			psudoValue.addListener(listener);
 		} else if (callbackStyle == CallbackStyle.WHEN_FINISHED) {
 			// just loss of focus.
-			textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-				@Override
-				public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-					if (newValue == false) {
-						notifyListener(listener);
-					}
+			textField.focusedProperty().addListener((observableValue, oldValue, newValue) -> {
+				if (newValue == false) {
+					notifyListener(listener);
 				}
 			});
 
-			textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-				@Override
-				public void handle(KeyEvent event) {
-					if (event.getCode().equals(KeyCode.ENTER)) {
-						notifyListener(listener);
-					}
+			textField.setOnKeyReleased(event -> {
+				if (event.getCode().equals(KeyCode.ENTER)) {
+					notifyListener(listener);
 				}
 			});
 		} else {
