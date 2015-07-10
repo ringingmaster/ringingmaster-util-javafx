@@ -1,7 +1,7 @@
 .invalidCell {
     -fx-text-fill: ladder(
             -fx-background,
-            darkgray 0%,
+            white 0%,
             darkgray 70%,
-            lightgray 100% ) !important;
+            darkgray 100% ) !important;
 }

@@ -5,7 +5,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
@@ -34,18 +33,6 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 				createTableColumn("Value", NameValuePairModel::valueProperty)
 		));
 
-		setRowFactory(tv -> {
-			TableRow<NameValuePairModel> row = new TableRow<>();
-
-			// use EasyBind to access the nameProperty of the itemProperty of the cell:
-//			row.disableProperty().bind(
-//					EasyBind.select(row.itemProperty()) // start at itemProperty of row
-//							.selectObject(NameValuePairModel::nameProperty)  // map to nameProperty of item, if item non-null
-//							.map(x -> x.intValue() < 5) // map to BooleanBinding via intValue of value < 5
-//							.orElse(false)); // value to use if item was null
-
-			return row;
-		});
 		setFixedCellSize(22);
 
 		hideHeaders();
@@ -67,7 +54,7 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 		});
 	}
 
-	private <S> TableColumn<S, NameValueColumnDescriptor> createTableColumn(String name, Function<S, ObservableValue<NameValueColumnDescriptor>> propertyMapper) {
+		private <S> TableColumn<S, NameValueColumnDescriptor> createTableColumn(String name, Function<S, ObservableValue<NameValueColumnDescriptor>> propertyMapper) {
 		TableColumn<S, NameValueColumnDescriptor> col = new TableColumn<>(name);
 		col.setCellValueFactory(cellData -> propertyMapper.apply(cellData.getValue()));
 		col.setCellFactory(new Callback<TableColumn<S, NameValueColumnDescriptor>, TableCell<S, NameValueColumnDescriptor>>() {
