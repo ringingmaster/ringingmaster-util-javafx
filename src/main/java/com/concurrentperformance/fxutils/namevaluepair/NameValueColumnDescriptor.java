@@ -9,12 +9,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Lake
  */
-public class ColumnDescriptor {
+public class NameValueColumnDescriptor {
 	private final String text;
 	private final Color backgroundColor;
+	private final boolean invalid;
 
 
-	public ColumnDescriptor(String text, Color backgroundColor) {
+	public NameValueColumnDescriptor(String text, Color backgroundColor, boolean invalid) {
+		this.invalid = invalid;
 		this.text = checkNotNull(text);
 		this.backgroundColor = backgroundColor;
 	}
@@ -25,6 +27,10 @@ public class ColumnDescriptor {
 
 	public Color getBackgroundColor() {
 		return backgroundColor;
+	}
+
+	public boolean isInvalid() {
+		return invalid;
 	}
 
 	@Override

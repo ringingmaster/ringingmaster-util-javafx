@@ -24,7 +24,11 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+	public static final String STYLESHEET = "com/concurrentperformance/fxutils/namevaluepair/namevaluepair.css";
+
 	public NameValuePairTable() {
+		getStylesheets().add(STYLESHEET);
+
 		getColumns().addAll(Arrays.asList(
 				createTableColumn("Name", NameValuePairModel::nameProperty),
 				createTableColumn("Value", NameValuePairModel::valueProperty)
@@ -63,26 +67,32 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 		});
 	}
 
-	private <S> TableColumn<S, ColumnDescriptor> createTableColumn(String name, Function<S, ObservableValue<ColumnDescriptor>> propertyMapper) {
-		TableColumn<S, ColumnDescriptor> col = new TableColumn<>(name);
+	private <S> TableColumn<S, NameValueColumnDescriptor> createTableColumn(String name, Function<S, ObservableValue<NameValueColumnDescriptor>> propertyMapper) {
+		TableColumn<S, NameValueColumnDescriptor> col = new TableColumn<>(name);
 		col.setCellValueFactory(cellData -> propertyMapper.apply(cellData.getValue()));
-		col.setCellFactory(new Callback<TableColumn<S, ColumnDescriptor>, TableCell<S, ColumnDescriptor>>() {
+		col.setCellFactory(new Callback<TableColumn<S, NameValueColumnDescriptor>, TableCell<S, NameValueColumnDescriptor>>() {
 			@Override
-			public TableCell<S, ColumnDescriptor> call(TableColumn<S, ColumnDescriptor> param) {
-				return new TableCell<S, ColumnDescriptor>() {
-					@Override protected void updateItem(ColumnDescriptor item, boolean empty) {
-						if (item == getItem()) return;
+			public TableCell<S, NameValueColumnDescriptor> call(TableColumn<S, NameValueColumnDescriptor> param) {
+				return new TableCell<S, NameValueColumnDescriptor>() {
+					@Override protected void updateItem(NameValueColumnDescriptor item, boolean empty) {
+					if (item == getItem()) return;
 
 						super.updateItem(item, empty);
 
 						if (item != null) {
 
-							//setTextFill(Color.CHOCOLATE);
 							if (item.getBackgroundColor() == null) {
 								setStyle("");
 							}
 							else {
 								setStyle("-fx-background-color: " + ColorUtil.toWeb(item.getBackgroundColor()));
+							}
+
+							if (item.isInvalid()) {
+								getStyleClass().add("invalidCell");
+							}
+							else {
+								getStyleClass().remove("invalidCell");
 							}
 
 							setPadding(new Insets(0,4,0,4));
