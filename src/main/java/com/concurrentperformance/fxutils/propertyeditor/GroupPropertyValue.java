@@ -27,10 +27,9 @@ public class GroupPropertyValue extends SkeletalPropertyValue implements Propert
 	@Override
 	public void draw(GraphicsContext gc, double top, double bottom, double left, double right,
 	                 double center, double horzPadding, double vertPadding,
-	                 boolean selected,
-	                 Color backgroundColor, Color backgroundColorSelected,
+	                 Color backgroundColor,
 	                 Color linesColor,
-	                 Color textColor, Color textColorDisabled, Color textColorSelected) {
+	                 Color textColor, Color textColorDisabled) {
 		gc.setFill(textColor);
 		gc.fillText(getName(), TRIANGLE_SPACE, bottom - vertPadding, right - TRIANGLE_SPACE -(horzPadding *2));
 

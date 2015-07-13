@@ -24,10 +24,9 @@ public interface PropertyValue extends Listenable<PropertyValueListener> {
 
 	void draw(GraphicsContext gc, double top, double bottom, double left, double right,
 	          double center, double horzPadding, double vertPadding,
-	          boolean selected,
-	          Color backgroundColor, Color backgroundColorSelected,
+	          Color backgroundColor,
 	          Color linesColor,
-	          Color textColor, Color textColorDisabled, Color textColorSelected);
+	          Color textColor, Color textColorDisabled);
 
 	void setVisible(boolean visible);
 

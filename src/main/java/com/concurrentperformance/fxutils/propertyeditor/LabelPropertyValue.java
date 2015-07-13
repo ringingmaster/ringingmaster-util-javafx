@@ -31,20 +31,6 @@ public class LabelPropertyValue extends SkeletalPropertyValue implements Propert
 		label.setBackground(Background.EMPTY);
 		//TODO label.setPromptText("TEST");
 
-		label.setOnMouseClicked(event -> {
-			int clickCount = event.getClickCount();
-			if (clickCount == 1) {
-				for (PropertyValueListener listener : getListeners()) {
-					listener.propertyValue_editorSelected(LabelPropertyValue.this);
-				}
-			}
-			else if (clickCount == 2) {
-				for (PropertyValueListener listener : getListeners()) {
-					listener.propertyValue_doubleClick(LabelPropertyValue.this);
-				}
-			}
-		});
-
 		return label;
 	}
 

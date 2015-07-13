@@ -1,7 +1,5 @@
 package com.concurrentperformance.fxutils.propertyeditor;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
@@ -24,13 +22,9 @@ public class PropertyEditor extends ScrollPane {
 	private Pane editorsContainer;
 	private PropertyInteractionPane interactionPane = new PropertyInteractionPane(this);
 	private PropertyGeometry propertyGeometry = new PropertyGeometry();
-	private DoubleClickListener doubleClickListener;
-	private boolean allowSelection = false;
 
 
 	private double nominalWidth = propertyGeometry.getMinUnderlyingControlWidth();
-
-	private IntegerProperty selectedIndex = new SimpleIntegerProperty(this, "selectedIndex", propertyValues.UNDEFINED_INDEX);
 
 	public PropertyEditor() {
 
@@ -74,21 +68,6 @@ public class PropertyEditor extends ScrollPane {
 			public void propertyValue_renderingChanged(PropertyValue propertyValue) {
 				updateControl();
 			}
-
-			@Override
-			public void propertyValue_editorSelected(PropertyValue propertyValue) {
-				int index = propertyValues.getIndexOf(propertyValue);
-				setSelectedIndex(index);
-				updateControl();
-
-			}
-
-			@Override
-			public void propertyValue_doubleClick(PropertyValue propertyValue) {
-				int index = propertyValues.getIndexOf(propertyValue);
-				fireDoubleClick(index);
-			}
-
 		});
 		updateControl();
 	}
@@ -156,34 +135,5 @@ public class PropertyEditor extends ScrollPane {
 
 	public int sizeAll() {
 		return propertyValues.sizeAll();
-	}
-
-	public void allowSelection(boolean allowSelection) {
-		this.allowSelection = allowSelection;
-	}
-
-	public final void setSelectedIndex(int value) {
-		if (allowSelection) {
-			selectedIndex.set(value);
-		}
-	}
-
-	public final int getSelectedIndex() {
-		return selectedIndex.get();
-	}
-
-	public final IntegerProperty selectedIndexProperty() {
-		return selectedIndex;
-	}
-
-	public void setOnDoubleClickListener(DoubleClickListener listener) {
-		this.doubleClickListener = listener;
-	}
-
-	public void fireDoubleClick(int index) {
-		if (doubleClickListener != null) {
-			doubleClickListener.onDoubleClick(index);
-		}
-
 	}
 }

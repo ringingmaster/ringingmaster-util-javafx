@@ -31,17 +31,16 @@ public abstract class SkeletalPropertyValue extends ConcurrentListenable<Propert
 	@Override
 	public void draw(GraphicsContext gc, double top, double bottom, double left, double right,
 	                 double center, double horzPadding, double vertPadding,
-	                 boolean selected,
-	                 Color backgroundColor, Color backgroundColorSelected,
+	                 Color backgroundColor,
 	                 Color linesColor,
-	                 Color textColor, Color textColorDisabled, Color textColorSelected) {
-		gc.setFill(selected?backgroundColorSelected:backgroundColor);
+	                 Color textColor, Color textColorDisabled) {
+		gc.setFill(backgroundColor);
 		gc.fillRect(0,top,right,bottom-top);
 
 		gc.setStroke(linesColor);
 		gc.strokeLine(center, top, center, bottom);
 
-		gc.setFill(selected ?textColorSelected: ((editor.isDisabled())?textColorDisabled:textColor));
+		gc.setFill((editor.isDisabled())?textColorDisabled:textColor);
 		gc.fillText(getName(), horzPadding, bottom - vertPadding, center - (horzPadding *2));
 	}
 

@@ -64,13 +64,6 @@ public class PropertyInteractionPane extends Canvas {
 
 			if (propertyEditor.getPropertyValues().isGroup(propertyIndexAtPosition)) {
 				propertyEditor.getPropertyValues().toggleGroupVisible(propertyIndexAtPosition);
-			} else {
-				if (event.getClickCount() == 1) {
-					propertyEditor.setSelectedIndex(propertyIndexAtPosition);
-				}
-				else {
-					propertyEditor.fireDoubleClick(propertyIndexAtPosition);
-				}
 			}
 
 			propertyEditor.updateControl();
@@ -120,13 +113,11 @@ public class PropertyInteractionPane extends Canvas {
 
 			final double top = (propertyGeometry.getHeight() * (index));
 			final double bottom = (propertyGeometry.getHeight() * (index+1));
-			final boolean selected = (propertyEditor.getSelectedIndex() == index);
 
 			propertyValue.draw(gc, top, bottom, left, right, center, horzPadding, vertPadding,
-					selected,
-					Color.WHITE, Color.DEEPPINK,
+					Color.WHITE,
 					Color.LIGHTGRAY,
-					Color.BLACK, Color.LIGHTGRAY, Color.WHITE); //TODO Set color from system colours
+					Color.BLACK, Color.LIGHTGRAY); //TODO Set color from system colours
 		}
 
 		//Vertical separator for area where there is no items,.
