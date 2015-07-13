@@ -29,6 +29,7 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 		getStylesheets().add(STYLESHEET);
 
 		getColumns().addAll(Arrays.asList(
+
 				createTableColumn("Name", NameValuePairModel::nameProperty),
 				createTableColumn("Value", NameValuePairModel::valueProperty)
 		));
@@ -86,11 +87,15 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 
 							super.setText(item.toString());
 						}
+						else {
+							super.setText(null);
+						}
 					}
 
 				};
 			}
 		});
+
 		return col ;
 	}
 
