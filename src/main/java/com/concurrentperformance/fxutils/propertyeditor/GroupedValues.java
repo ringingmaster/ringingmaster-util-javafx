@@ -61,12 +61,12 @@ public class GroupedValues {
 		return propertyValuesUncollapsed.indexOf(group) + 1;
 	}
 
-	public PropertyValue getAsCollapsed(int index) {
-		return propertyValuesCollapsed.get(index);
+	public PropertyValue getAsCollapsed(int collapsedIndex) {
+		return propertyValuesCollapsed.get(collapsedIndex);
 	}
 
-	PropertyValue getAsUncollapsed(int index) {
-		return propertyValuesUncollapsed.get(index);
+	PropertyValue getAsUncollapsed(int uncollapsedIndex) {
+		return propertyValuesUncollapsed.get(uncollapsedIndex);
 	}
 
 	public int sizeCollapsed() {
@@ -115,8 +115,8 @@ public class GroupedValues {
 		propertyValuesCollapsed.clear();
 	}
 
-	public boolean isGroup(int index) {
-		return (getAsCollapsed(index) instanceof GroupPropertyValue);
+	public boolean isGroup(int collapsedIndex) {
+		return (getAsCollapsed(collapsedIndex) instanceof GroupPropertyValue);
 	}
 
 	public void toggleGroupVisible(int index) {
