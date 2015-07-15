@@ -117,14 +117,9 @@ public class PropertyInteractionPane extends Canvas {
 			propertyValue.draw(gc, top, bottom, left, right, center, horzPadding, vertPadding,
 					Color.WHITE,
 					Color.LIGHTGRAY,
-					Color.BLACK, Color.LIGHTGRAY); //TODO Set color from system colours
+					Color.BLACK, Color.LIGHTGRAY); //TODO Set color from CSS colours
 		}
-
-		//Vertical separator for area where there is no items,.
-		final double bottomOfLastProperty = (propertyEditor.getPropertyGeometry().getHeight() * (propertyValues.sizeCollapsed()));
-		gc.strokeLine(propertyGeometry.getVertSeparatorPosition(), bottomOfLastProperty, propertyGeometry.getVertSeparatorPosition(), getHeight());
-
-
+		
 		//Horizontal separators
 		for (int index=0;index<propertyValues.sizeCollapsed();index++) {
 			final double vertPos = (propertyEditor.getPropertyGeometry().getHeight() * (index+1));
