@@ -73,8 +73,8 @@ public class PropertyEditor extends ScrollPane {
 	}
 
 	public void clear() {
-		for (int i=0;i<propertyValues.sizeAll();i++) {
-			editorsContainer.getChildren().remove(propertyValues.get(i).getEditor());
+		for (int i=0;i<propertyValues.sizeUncollapsed();i++) {
+			editorsContainer.getChildren().remove(propertyValues.getAsUncollapsed(i).getEditor());
 		}
 		propertyValues.clear();
 		updateControl();
@@ -94,8 +94,8 @@ public class PropertyEditor extends ScrollPane {
 
 	private void setEditorVisibility() {
 		boolean visible = true;
-		for (int index=0;index<propertyValues.sizeAll();index++) {
-			PropertyValue propertyValue = propertyValues.get(index);
+		for (int index=0;index<propertyValues.sizeUncollapsed();index++) {
+			PropertyValue propertyValue = propertyValues.getAsUncollapsed(index);
 			if (propertyValue instanceof GroupPropertyValue) {
 				visible = ((GroupPropertyValue)propertyValue).isGroupVisible();
 			}
@@ -134,6 +134,6 @@ public class PropertyEditor extends ScrollPane {
 	}
 
 	public int sizeAll() {
-		return propertyValues.sizeAll();
+		return propertyValues.sizeUncollapsed();
 	}
 }

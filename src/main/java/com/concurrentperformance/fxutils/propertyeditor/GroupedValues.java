@@ -21,7 +21,7 @@ public class GroupedValues {
 
 	public static final String UNGROUPED = "<UNGROUPED>";
 
-	private final List<PropertyValue> propertyValuesAll = new ArrayList<>();
+	private final List<PropertyValue> propertyValuesUncollapsed = new ArrayList<>();
 	private final List<PropertyValue> propertyValuesCollapsed = new ArrayList<>();
 
 	void add(String groupName, PropertyValue newPropertyValue) {
@@ -31,7 +31,7 @@ public class GroupedValues {
 
 		// Find the index of the last item in the required group. i.e. the one before the next group, or the end
 		int insertionIndex = getInsertionIndexInGroup(groupName);
-		propertyValuesAll.add(insertionIndex, newPropertyValue);
+		propertyValuesUncollapsed.add(insertionIndex, newPropertyValue);
 
 		rebuildCollapsedState();
 	}
@@ -39,8 +39,8 @@ public class GroupedValues {
 	private int getInsertionIndexInGroup(String groupName) {
 		int insertionIndex = getFirstGroupChildIndex(groupName);
 
-		for (; insertionIndex < propertyValuesAll.size(); insertionIndex++) {
-			PropertyValue propertyValue = propertyValuesAll.get(insertionIndex);
+		for (; insertionIndex < propertyValuesUncollapsed.size(); insertionIndex++) {
+			PropertyValue propertyValue = propertyValuesUncollapsed.get(insertionIndex);
 			if (propertyValue instanceof GroupPropertyValue) {
 				break;
 			}
@@ -56,25 +56,25 @@ public class GroupedValues {
 		PropertyValue group = findPropertyByName(groupName);
 		if (group == null) {
 			group = new GroupPropertyValue(groupName);
-			propertyValuesAll.add(group);
+			propertyValuesUncollapsed.add(group);
 		}
-		return propertyValuesAll.indexOf(group) + 1;
+		return propertyValuesUncollapsed.indexOf(group) + 1;
 	}
 
 	public PropertyValue getAsCollapsed(int index) {
 		return propertyValuesCollapsed.get(index);
 	}
 
+	PropertyValue getAsUncollapsed(int index) {
+		return propertyValuesUncollapsed.get(index);
+	}
+
 	public int sizeCollapsed() {
 		return propertyValuesCollapsed.size();
 	}
 
-	PropertyValue get(int index) {
-		return propertyValuesAll.get(index);
-	}
-
-	int sizeAll() {
-		return propertyValuesAll.size();
+	int sizeUncollapsed() {
+		return propertyValuesUncollapsed.size();
 	}
 
 	void showGroupByName(String groupName, boolean show) {
@@ -90,7 +90,7 @@ public class GroupedValues {
 		propertyValuesCollapsed.clear();
 
 		boolean groupVisible = true; // Start with 'true' to handle UNGROUPED items
-		for (PropertyValue propertyValue : propertyValuesAll) {
+		for (PropertyValue propertyValue : propertyValuesUncollapsed) {
 			if (propertyValue instanceof GroupPropertyValue) {
 				GroupPropertyValue groupPropertyValue = (GroupPropertyValue) propertyValue;
 				groupVisible = groupPropertyValue.isGroupVisible();
@@ -102,7 +102,7 @@ public class GroupedValues {
 	}
 
 	PropertyValue findPropertyByName(String name) {
-		for (PropertyValue propertyValue : propertyValuesAll) {
+		for (PropertyValue propertyValue : propertyValuesUncollapsed) {
 			if (propertyValue.getName().equals(name)) {
 				return propertyValue;
 			}
@@ -111,17 +111,17 @@ public class GroupedValues {
 	}
 
 	public void clear() {
-		propertyValuesAll.clear();
+		propertyValuesUncollapsed.clear();
 		propertyValuesCollapsed.clear();
 	}
 
 	public boolean isGroup(int index) {
-		return (get(index) instanceof GroupPropertyValue);
+		return (getAsCollapsed(index) instanceof GroupPropertyValue);
 	}
 
 	public void toggleGroupVisible(int index) {
 		if (isGroup(index)) {
-			((GroupPropertyValue) get(index)).toggleGroupVisible();
+			((GroupPropertyValue) getAsCollapsed(index)).toggleGroupVisible();
 			rebuildCollapsedState();
 		}
 	}
