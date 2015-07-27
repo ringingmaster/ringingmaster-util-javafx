@@ -1,6 +1,7 @@
 package com.concurrentperformance.fxutils.namevaluepair;
 
 import com.concurrentperformance.fxutils.color.ColorUtil;
+import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.TableCell;
@@ -38,6 +39,13 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 
 		hideHeaders();
 
+		widthProperty().addListener((observable, oldValue, newValue) -> {
+			resizeColumns();
+		});
+
+		getItems().addListener((Observable observable) -> {
+			resizeColumns();
+		});
 	}
 
 	void hideHeaders() {
@@ -55,15 +63,16 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 		});
 	}
 
-		private <S> TableColumn<S, NameValueColumnDescriptor> createTableColumn(String name, Function<S, ObservableValue<NameValueColumnDescriptor>> propertyMapper) {
+	private <S> TableColumn<S, NameValueColumnDescriptor> createTableColumn(String name, Function<S, ObservableValue<NameValueColumnDescriptor>> propertyMapper) {
 		TableColumn<S, NameValueColumnDescriptor> col = new TableColumn<>(name);
 		col.setCellValueFactory(cellData -> propertyMapper.apply(cellData.getValue()));
 		col.setCellFactory(new Callback<TableColumn<S, NameValueColumnDescriptor>, TableCell<S, NameValueColumnDescriptor>>() {
 			@Override
 			public TableCell<S, NameValueColumnDescriptor> call(TableColumn<S, NameValueColumnDescriptor> param) {
 				return new TableCell<S, NameValueColumnDescriptor>() {
-					@Override protected void updateItem(NameValueColumnDescriptor item, boolean empty) {
-					if (item == getItem()) return;
+					@Override
+					protected void updateItem(NameValueColumnDescriptor item, boolean empty) {
+						if (item == getItem()) return;
 
 						super.updateItem(item, empty);
 
@@ -97,6 +106,12 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 		});
 
 		return col ;
+	}
+
+	private void resizeColumns() {
+		setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
+		setColumnResizePolicy(UNCONSTRAINED_RESIZE_POLICY);
+		requestLayout();
 	}
 
 }
