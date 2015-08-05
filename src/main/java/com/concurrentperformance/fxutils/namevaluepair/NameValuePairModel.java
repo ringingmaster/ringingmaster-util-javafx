@@ -14,6 +14,10 @@ public class NameValuePairModel {
 		setName(new NameValueColumnDescriptor(name, null, false));
 	}
 
+	public NameValuePairModel(String name, String value) {
+		setName(new NameValueColumnDescriptor(name, null, false));
+		setValue(new NameValueColumnDescriptor(value, null, false));
+	}
 
 	private final ObjectProperty<NameValueColumnDescriptor> name = new SimpleObjectProperty<>(this, "name");
 

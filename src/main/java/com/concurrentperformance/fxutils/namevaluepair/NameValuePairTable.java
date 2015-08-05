@@ -1,6 +1,7 @@
 package com.concurrentperformance.fxutils.namevaluepair;
 
 import com.concurrentperformance.fxutils.color.ColorUtil;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -8,6 +9,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +48,7 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 		getItems().addListener((Observable observable) -> {
 			resizeColumns();
 		});
+
 	}
 
 	void hideHeaders() {
@@ -109,9 +112,30 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 	}
 
 	protected void resizeColumns() {
-		setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
-		setColumnResizePolicy(UNCONSTRAINED_RESIZE_POLICY);
-		requestLayout();
+		Platform.runLater(() -> {
+			setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
+			setColumnResizePolicy(UNCONSTRAINED_RESIZE_POLICY);
+			requestLayout();
+		});
+	}
+
+	public void updateDisplayProperty(String propertyName, String value) {
+		updateDisplayProperty(propertyName, value, null);
+	}
+
+	public void updateDisplayProperty(String propertyName, String value, Color valueColor) {
+		getItems().stream()
+				.filter(columnDescriptor -> columnDescriptor.getName().getText().equals(propertyName))
+				.forEach(pair -> pair.setValue(new NameValueColumnDescriptor(value, valueColor, false)));
+		resizeColumns();
+	}
+
+	public void updateDisplayProperty(String propertyName, String value, boolean disabled) {
+		getItems().stream()
+				.filter(columnDescriptor -> columnDescriptor.getName().getText().equals(propertyName))
+				.forEach(pair -> {pair.setValue(new NameValueColumnDescriptor(value, null, disabled));
+					pair.setName(new NameValueColumnDescriptor(propertyName, null, disabled));
+				});
 	}
 
 }
