@@ -108,7 +108,7 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 		return col ;
 	}
 
-	private void resizeColumns() {
+	protected void resizeColumns() {
 		setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
 		setColumnResizePolicy(UNCONSTRAINED_RESIZE_POLICY);
 		requestLayout();
