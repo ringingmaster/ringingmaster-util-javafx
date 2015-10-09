@@ -1,6 +1,5 @@
 package com.concurrentperformance.fxutils.toolbar;
 
-import javafx.scene.Node;
 import javafx.scene.control.ToolBar;
 
 import java.util.List;
@@ -12,8 +11,10 @@ import java.util.List;
  */
 public class InjectableToolBar extends ToolBar {
 
-	public void setToolBarElements(List<Node> elements) {
-		getItems().addAll(elements);
+	public void setDefinitions(List<ToolbarDefinitionItem> toolbarDefinitionItems) {
 
+		for (ToolbarDefinitionItem toolbarDefinitionItem : toolbarDefinitionItems) {
+			getItems().add(toolbarDefinitionItem.getItem());
+		}
 	}
 }

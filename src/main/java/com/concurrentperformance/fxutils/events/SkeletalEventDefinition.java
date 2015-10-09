@@ -1,6 +1,7 @@
 package com.concurrentperformance.fxutils.events;
 
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.image.Image;
 
 import java.io.InputStream;
@@ -19,6 +20,7 @@ public abstract class SkeletalEventDefinition implements EventDefinition {
 	private final String text;
 	private final Image image;
 	private final SimpleBooleanProperty disableProperty = new SimpleBooleanProperty(true);
+	private final SimpleStringProperty tooltipTextProperty = new SimpleStringProperty("");
 
 
 	public SkeletalEventDefinition(String imageResourceClasspath, String text) {
@@ -40,6 +42,11 @@ public abstract class SkeletalEventDefinition implements EventDefinition {
 	@Override
 	public SimpleBooleanProperty disableProperty() {
 		return disableProperty;
+	}
+
+	@Override
+	public SimpleStringProperty tooltipTextProperty() {
+		return tooltipTextProperty;
 	}
 
 	@Override

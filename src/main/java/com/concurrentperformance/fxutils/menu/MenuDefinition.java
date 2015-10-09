@@ -1,8 +1,6 @@
 package com.concurrentperformance.fxutils.menu;
 
-import com.concurrentperformance.fxutils.events.EventDefinition;
-
-import java.util.List;
+import javafx.scene.control.MenuItem;
 
 /**
  * TODO Comments
@@ -11,7 +9,6 @@ import java.util.List;
  */
 public interface MenuDefinition {
 
-	EventDefinition getEvent();
-	List<MenuDefinition> getSubItems();
+	MenuItem getMenu();
 
 }
