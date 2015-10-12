@@ -1,7 +1,7 @@
 package com.concurrentperformance.fxutils.events;
 
-import javafx.beans.value.ObservableBooleanValue;
-import javafx.beans.value.ObservableStringValue;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 
@@ -21,6 +21,6 @@ public interface EventDefinition {
 
 	void handle(ActionEvent event);
 
-	ObservableBooleanValue disableProperty();
-	ObservableStringValue tooltipTextProperty();
+	BooleanProperty disableProperty();
+	StringProperty tooltipTextProperty();
 }

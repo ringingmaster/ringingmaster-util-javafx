@@ -1,5 +1,6 @@
 package com.concurrentperformance.fxutils.components;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Button;
 
 /**
@@ -9,7 +10,14 @@ import javafx.scene.control.Button;
  */
 public class PressableButton extends Button {
 
-	public void setPressedState(boolean pressed) {
-		setPressed(pressed);
+	private final SimpleBooleanProperty pressedProperty = new SimpleBooleanProperty(true);
+
+//	public BooleanProperty pressedOverrideProperty() {
+//		return pressedProperty();
+//	}
+
+
+	public void setPressedOverride(boolean pressedOverride) {
+		setPressed(pressedOverride);
 	}
 }

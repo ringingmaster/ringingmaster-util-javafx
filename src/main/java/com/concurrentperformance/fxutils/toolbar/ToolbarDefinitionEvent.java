@@ -28,6 +28,7 @@ public class ToolbarDefinitionEvent implements ToolbarDefinitionItem {
 		Tooltip tooltip = new Tooltip();
 		tooltip.textProperty().bind(eventDefinition.tooltipTextProperty());
 		button.setTooltip(tooltip);
+//TODO 		button.setPressed();
 
 		return button;
 	}
