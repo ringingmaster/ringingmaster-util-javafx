@@ -23,4 +23,5 @@ public interface EventDefinition {
 
 	BooleanProperty disableProperty();
 	StringProperty tooltipTextProperty();
+	BooleanProperty pressedProperty();
 }
