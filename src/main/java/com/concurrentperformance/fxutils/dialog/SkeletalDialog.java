@@ -1,6 +1,5 @@
 package com.concurrentperformance.fxutils.dialog;
 
-import com.concurrentperformance.ringingmaster.fxui.desktop.RingingMasterDesktopApp;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.List;
 import java.util.function.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -24,55 +25,61 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public abstract class SkeletalDialog<T> {
 
-	private final static Logger log = LoggerFactory.getLogger(CallEditor.class);
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	protected EditMode editMode;
-	protected Stage stage;
+	private EditMode editMode;
+	private Stage stage;
 	private Function<T, Boolean> onSuccessHandler;
 
 
-	protected static class Launcher<T> {
-		public void showDialog(EditMode editMode, T model, Window owner, String fxml, Function<T, Boolean> onSuccessHandler) {
+	public static class Launcher<T> {
+		public void showDialog(EditMode editMode, T model, Window owner, URL fxmlResource, List<String> stylesheets, Function<T, Boolean> onSuccessHandler) {
 			checkNotNull(editMode);
 			checkNotNull(owner);
-			checkNotNull(fxml);
+			checkNotNull(fxmlResource);
 			checkNotNull(onSuccessHandler);
 
-			FXMLLoader fxmlLoader = new FXMLLoader(NotationEditorDialog.class.getResource(fxml));
+			FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource);
 
 			try {
 				Scene scene = new Scene(fxmlLoader.load());
 				SkeletalDialog controller = fxmlLoader.getController();
-				controller.init(editMode, scene, model, owner, onSuccessHandler);
+				controller.init(editMode, scene, model, owner, stylesheets, onSuccessHandler);
 
 			} catch (IOException e) {
-				log.error("Error initialising NotationEditorDialog", e);
+				final Logger log = LoggerFactory.getLogger(this.getClass());
+				log.error("Error initialising [" + fxmlResource + "]", e);
 			}
 		}
 	}
 
-	private void init(EditMode editMode, Scene scene, T model, Window owner, Function<T, Boolean> onSuccessHandler) {
-		this.editMode = editMode;
-		this.onSuccessHandler = onSuccessHandler;
+	private void init(EditMode editMode, Scene scene, T model, Window owner, List<String> stylesheets, Function<T, Boolean> onSuccessHandler) {
+		this.editMode = checkNotNull(editMode);
+		this.onSuccessHandler = checkNotNull(onSuccessHandler);
 
-		configureScene(scene);
+		configureScene(scene, stylesheets);
 		buildStage(scene, owner);
 
+		buildDialogStructure(editMode, model);
+
+
 		if (model != null) {
-			buildDialogDataFromModel(model);
+			populateDialogFromModel(model);
+			checkModelFromDialogData();
 		}
 		stage.showAndWait();
 	}
 
-	private void configureScene(Scene scene) {
+	private void configureScene(Scene scene, List<String> stylesheets) {
 		checkNotNull(scene);
-		scene.getStylesheets().add(RingingMasterDesktopApp.STYLESHEET);
+		scene.getStylesheets().addAll(stylesheets);
 		scene.setOnKeyReleased(event -> {
 			if (event.getCode().equals(KeyCode.ESCAPE)) {
 				OnCancel();
 			}
 		});
 	}
+
 
 	private void buildStage(Scene scene, Window owner) {
 		stage = new Stage(StageStyle.DECORATED);
@@ -82,9 +89,17 @@ public abstract class SkeletalDialog<T> {
 		stage.setTitle(editMode.getEditText() + ": ");
 	}
 
+	public Stage getStage() {
+		return stage;
+	}
+
+	public EditMode getEditMode() {
+		return editMode;
+	}
+
 	@FXML
 	private void OnOk() {
-		T result = buildModelFromDialogData();
+		T result = populateModelFromDialogData();
 
 		try {
 			Boolean success = onSuccessHandler.apply(result);
@@ -105,7 +120,8 @@ public abstract class SkeletalDialog<T> {
 		stage.close();
 	}
 
-
-	protected abstract void buildDialogDataFromModel(T model);
-	protected abstract T buildModelFromDialogData();
+	protected void checkModelFromDialogData() {}
+	protected void buildDialogStructure(EditMode editMode, T model) {};
+	protected abstract void populateDialogFromModel(T model);
+	protected abstract T populateModelFromDialogData();
 }
