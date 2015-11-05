@@ -11,39 +11,39 @@ import javafx.beans.property.SimpleObjectProperty;
 public class NameValuePairModel {
 
 	public NameValuePairModel(String name) {
-		setName(new NameValueColumnDescriptor(name, null, false));
+		setName(new NameValueCellDescriptor(name, null, false));
 	}
 
 	public NameValuePairModel(String name, String value) {
-		setName(new NameValueColumnDescriptor(name, null, false));
-		setValue(new NameValueColumnDescriptor(value, null, false));
+		setName(new NameValueCellDescriptor(name, null, false));
+		setValue(new NameValueCellDescriptor(value, null, false));
 	}
 
-	private final ObjectProperty<NameValueColumnDescriptor> name = new SimpleObjectProperty<>(this, "name");
+	private final ObjectProperty<NameValueCellDescriptor> name = new SimpleObjectProperty<>(this, "name");
 
-	public ObjectProperty<NameValueColumnDescriptor> nameProperty() {
+	public ObjectProperty<NameValueCellDescriptor> nameProperty() {
 		return name;
 	}
 
-	public final NameValueColumnDescriptor getName() {
+	public final NameValueCellDescriptor getName() {
 		return this.name.get();
 	}
 
-	public final void setName(final NameValueColumnDescriptor name) {
+	public final void setName(final NameValueCellDescriptor name) {
 		this.name.set(name);
 	}
 
-	private final ObjectProperty<NameValueColumnDescriptor> value = new SimpleObjectProperty<>(this, "value");
+	private final ObjectProperty<NameValueCellDescriptor> value = new SimpleObjectProperty<>(this, "value");
 
-	public ObjectProperty<NameValueColumnDescriptor> valueProperty() {
+	public ObjectProperty<NameValueCellDescriptor> valueProperty() {
 		return value;
 	}
 
-	public final NameValueColumnDescriptor getValue() {
+	public final NameValueCellDescriptor getValue() {
 		return this.value.get();
 	}
 
-	public final void setValue(final NameValueColumnDescriptor value) {
+	public final void setValue(final NameValueCellDescriptor value) {
 		this.value.set(value);
 	}
 }

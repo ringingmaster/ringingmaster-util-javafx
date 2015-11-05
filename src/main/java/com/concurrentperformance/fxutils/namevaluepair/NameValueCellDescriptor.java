@@ -9,13 +9,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Lake
  */
-public class NameValueColumnDescriptor {
+public class NameValueCellDescriptor {
 	private final String text;
 	private final Color backgroundColor;
 	private final boolean invalid;
 
 
-	public NameValueColumnDescriptor(String text, Color backgroundColor, boolean invalid) {
+	public NameValueCellDescriptor(String text, Color backgroundColor, boolean invalid) {
 		this.invalid = invalid;
 		this.text = checkNotNull(text);
 		this.backgroundColor = backgroundColor;

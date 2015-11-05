@@ -1,8 +1,6 @@
 package com.concurrentperformance.fxutils.namevaluepair;
 
 import com.concurrentperformance.fxutils.color.ColorUtil;
-import javafx.application.Platform;
-import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.TableCell;
@@ -33,22 +31,20 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 
 		getColumns().addAll(Arrays.asList(
 
-				createTableColumn("Name", NameValuePairModel::nameProperty),
-				createTableColumn("Value", NameValuePairModel::valueProperty)
+				createTableColumn("Name", NameValuePairModel::nameProperty, 150, 150, 150),
+				createTableColumn("Value", NameValuePairModel::valueProperty, 10000, 100, 10000)
 		));
 
 		setFixedCellSize(22);
+		setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
 
 		hideHeaders();
+	}
 
-		widthProperty().addListener((observable, oldValue, newValue) -> {
-			resizeColumns();
-		});
-
-		getItems().addListener((Observable observable) -> {
-			resizeColumns();
-		});
-
+	public void setSize(double size) {
+		getColumns().get(0).setMaxWidth(size);
+		getColumns().get(0).setMinWidth(size);
+		getColumns().get(0).setPrefWidth(size);
 	}
 
 	void hideHeaders() {
@@ -66,20 +62,26 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 		});
 	}
 
-	private <S> TableColumn<S, NameValueColumnDescriptor> createTableColumn(String name, Function<S, ObservableValue<NameValueColumnDescriptor>> propertyMapper) {
-		TableColumn<S, NameValueColumnDescriptor> col = new TableColumn<>(name);
+	private <S> TableColumn<S, NameValueCellDescriptor> createTableColumn(String name, Function<S, ObservableValue<NameValueCellDescriptor>> propertyMapper, double maxWidth, double minWidth, double prefWidth) {
+		TableColumn<S, NameValueCellDescriptor> col = new TableColumn<>(name);
 		col.setCellValueFactory(cellData -> propertyMapper.apply(cellData.getValue()));
-		col.setCellFactory(new Callback<TableColumn<S, NameValueColumnDescriptor>, TableCell<S, NameValueColumnDescriptor>>() {
+		col.setMaxWidth(maxWidth);
+		col.setMinWidth(minWidth);
+		col.setPrefWidth(prefWidth);
+
+		col.setCellFactory(new Callback<TableColumn<S, NameValueCellDescriptor>, TableCell<S, NameValueCellDescriptor>>() {
 			@Override
-			public TableCell<S, NameValueColumnDescriptor> call(TableColumn<S, NameValueColumnDescriptor> param) {
-				return new TableCell<S, NameValueColumnDescriptor>() {
+			public TableCell<S, NameValueCellDescriptor> call(TableColumn<S, NameValueCellDescriptor> column) {
+				return new TableCell<S, NameValueCellDescriptor>() {
 					@Override
-					protected void updateItem(NameValueColumnDescriptor item, boolean empty) {
+					protected void updateItem(NameValueCellDescriptor item, boolean empty) {
 						if (item == getItem()) return;
 
 						super.updateItem(item, empty);
 
+						setMinWidth(200);
 						if (item != null) {
+
 
 							if (item.getBackgroundColor() == null) {
 								setStyle("");
@@ -111,14 +113,6 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 		return col ;
 	}
 
-	protected void resizeColumns() {
-		Platform.runLater(() -> {
-			setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
-//			setColumnResizePolicy(UNCONSTRAINED_RESIZE_POLICY);
-			requestLayout();
-		});
-	}
-
 	public void updateDisplayProperty(String propertyName, String value) {
 		updateDisplayProperty(propertyName, value, null);
 	}
@@ -126,15 +120,14 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 	public void updateDisplayProperty(String propertyName, String value, Color valueColor) {
 		getItems().stream()
 				.filter(columnDescriptor -> columnDescriptor.getName().getText().equals(propertyName))
-				.forEach(pair -> pair.setValue(new NameValueColumnDescriptor(value, valueColor, false)));
-		resizeColumns();
+				.forEach(pair -> pair.setValue(new NameValueCellDescriptor(value, valueColor, false)));
 	}
 
 	public void updateDisplayProperty(String propertyName, String value, boolean disabled) {
 		getItems().stream()
 				.filter(columnDescriptor -> columnDescriptor.getName().getText().equals(propertyName))
-				.forEach(pair -> {pair.setValue(new NameValueColumnDescriptor(value, null, disabled));
-					pair.setName(new NameValueColumnDescriptor(propertyName, null, disabled));
+				.forEach(pair -> {pair.setValue(new NameValueCellDescriptor(value, null, disabled));
+					pair.setName(new NameValueCellDescriptor(propertyName, null, disabled));
 				});
 	}
 
