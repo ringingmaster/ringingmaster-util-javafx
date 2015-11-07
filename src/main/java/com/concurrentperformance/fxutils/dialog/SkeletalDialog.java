@@ -60,12 +60,11 @@ public abstract class SkeletalDialog<T> {
 		configureScene(scene, stylesheets);
 		buildStage(scene, owner);
 
-		buildDialogStructure(editMode, model);
+		initialiseDialog(editMode, model);
 
 
 		if (model != null) {
 			populateDialogFromModel(model);
-			checkModelFromDialogData();
 		}
 		stage.showAndWait();
 	}
@@ -99,7 +98,7 @@ public abstract class SkeletalDialog<T> {
 
 	@FXML
 	private void OnOk() {
-		T result = populateModelFromDialogData();
+		T result = buildModelFromDialogData();
 
 		try {
 			Boolean success = onSuccessHandler.apply(result);
@@ -120,9 +119,8 @@ public abstract class SkeletalDialog<T> {
 		stage.close();
 	}
 
-	protected void buildDialogStructure(EditMode editMode, T model) {};
-	protected void checkModelFromDialogData() {}
+	protected void initialiseDialog(EditMode editMode, T model) {};
 
 	protected abstract void populateDialogFromModel(T model);
-	protected abstract T populateModelFromDialogData();
+	protected abstract T buildModelFromDialogData();
 }
