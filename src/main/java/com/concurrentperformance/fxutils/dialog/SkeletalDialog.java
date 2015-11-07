@@ -120,8 +120,9 @@ public abstract class SkeletalDialog<T> {
 		stage.close();
 	}
 
-	protected void checkModelFromDialogData() {}
 	protected void buildDialogStructure(EditMode editMode, T model) {};
+	protected void checkModelFromDialogData() {}
+
 	protected abstract void populateDialogFromModel(T model);
 	protected abstract T populateModelFromDialogData();
 }
