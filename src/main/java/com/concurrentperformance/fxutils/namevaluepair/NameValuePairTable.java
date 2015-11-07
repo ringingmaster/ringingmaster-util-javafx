@@ -3,6 +3,7 @@ package com.concurrentperformance.fxutils.namevaluepair;
 import com.concurrentperformance.fxutils.color.ColorUtil;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -37,8 +38,12 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 
 		setFixedCellSize(22);
 		setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
-
+		setEmptyTableMessage("");
 		hideHeaders();
+	}
+
+	protected void setEmptyTableMessage(String message) {
+		setPlaceholder(new Label(message));
 	}
 
 	public void setSize(double size) {
