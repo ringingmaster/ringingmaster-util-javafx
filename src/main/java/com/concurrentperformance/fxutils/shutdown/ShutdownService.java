@@ -25,6 +25,7 @@ public class ShutdownService extends ConcurrentListenable<ShutdownServiceVeto> i
 					return;
 				}
 			}
+			log.info("Shutdown allowed");
 
 		});
 	}
