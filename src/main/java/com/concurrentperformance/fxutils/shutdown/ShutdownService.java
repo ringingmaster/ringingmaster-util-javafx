@@ -20,7 +20,7 @@ public class ShutdownService extends ConcurrentListenable<ShutdownServiceVeto> i
 			log.info("Attempt at shutdown");
 			for (ShutdownServiceVeto shutdownServiceVeto : getListeners()) {
 				if (shutdownServiceVeto.shutdownServiceVeto_allowShutdown() == ShutdownServiceVeto.ShutdownOptions.PREVENT_SHUTDOWN) {
-					log.info("[] is preventing shutdown", shutdownServiceVeto);
+					log.info("[{}] is preventing shutdown", shutdownServiceVeto);
 					event.consume();
 					return;
 				}
@@ -29,13 +29,4 @@ public class ShutdownService extends ConcurrentListenable<ShutdownServiceVeto> i
 		});
 	}
 }
-
-
-//if (currentDocTab.isPresent()) {
-//		log.info("Prevent shut down");
-//		event.consume();
-//		}
-//		else {
-//		log.info("Allowing shut down");
-//		}
 
