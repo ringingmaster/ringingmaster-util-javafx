@@ -21,6 +21,7 @@ public class ShutdownService extends ConcurrentListenable<ShutdownServiceVeto> i
 			for (ShutdownServiceVeto shutdownServiceVeto : getListeners()) {
 				if (shutdownServiceVeto.shutdownServiceVeto_allowShutdown() == ShutdownServiceVeto.ShutdownOptions.PREVENT_SHUTDOWN) {
 					log.info("[{}] is preventing shutdown", shutdownServiceVeto);
+					// prevent the close by consuming the event
 					event.consume();
 					return;
 				}
