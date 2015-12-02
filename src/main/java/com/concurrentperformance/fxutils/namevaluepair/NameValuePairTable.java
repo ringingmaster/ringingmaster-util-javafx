@@ -26,6 +26,7 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	public static final String STYLESHEET = "com/concurrentperformance/fxutils/namevaluepair/namevaluepair.css";
+	public static final String INVALID_CELL_STYLE = "invalidCell";
 
 	public NameValuePairTable() {
 		getStylesheets().add(STYLESHEET);
@@ -96,15 +97,17 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 							}
 
 							if (item.isInvalid()) {
-								getStyleClass().add("invalidCell");
+								if (!getStyleClass().contains(INVALID_CELL_STYLE)) {
+									getStyleClass().add(INVALID_CELL_STYLE);
+								}
 							}
 							else {
-								getStyleClass().remove("invalidCell");
+								getStyleClass().remove(INVALID_CELL_STYLE);
 							}
 
 							setPadding(new Insets(0,4,0,4));
 
-							super.setText(item.toString());
+							super.setText(item.getText());
 						}
 						else {
 							super.setText(null);
@@ -122,10 +125,10 @@ public class NameValuePairTable extends TableView<NameValuePairModel> {
 		updateDisplayProperty(propertyName, value, null);
 	}
 
-	public void updateDisplayProperty(String propertyName, String value, Color valueColor) {
+	public void updateDisplayProperty(String propertyName, String value, Color backgroundColor) {
 		getItems().stream()
 				.filter(columnDescriptor -> columnDescriptor.getName().getText().equals(propertyName))
-				.forEach(pair -> pair.setValue(new NameValueCellDescriptor(value, valueColor, false)));
+				.forEach(pair -> pair.setValue(new NameValueCellDescriptor(value, backgroundColor, false)));
 	}
 
 	public void updateDisplayProperty(String propertyName, String value, boolean disabled) {

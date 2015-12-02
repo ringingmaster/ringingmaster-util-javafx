@@ -35,6 +35,10 @@ public class NameValueCellDescriptor {
 
 	@Override
 	public String toString() {
-		return text;
+		return "NameValueCellDescriptor{" +
+				"text='" + text + '\'' +
+				", backgroundColor=" + backgroundColor +
+				", invalid=" + invalid +
+				'}';
 	}
 }
