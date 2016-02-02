@@ -72,7 +72,7 @@ public abstract class SkeletalDialog<T> {
 	private void configureScene(Scene scene, List<String> stylesheets) {
 		checkNotNull(scene);
 		scene.getStylesheets().addAll(stylesheets);
-		scene.setOnKeyReleased(event -> {
+		scene.setOnKeyPressed(event -> {
 			if (event.getCode().equals(KeyCode.ESCAPE)) {
 				OnCancel();
 			}
