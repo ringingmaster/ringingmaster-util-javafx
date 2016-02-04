@@ -174,7 +174,7 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 	/** {@inheritDoc} */
 	@Override public void cancelEdit() {
 		super.cancelEdit();
-//		cancelEdit(this, getConverter(), null);
+		cancelEdit(this, getConverter(), null);
 	}
 
 	/** {@inheritDoc} */
