@@ -1,21 +1,18 @@
 package com.concurrentperformance.fxutils.table;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.Node;
-import javafx.scene.control.Cell;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import javafx.util.converter.DefaultStringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * TODO Comments
@@ -30,20 +27,6 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 	 *                                                                         *
 	 **************************************************************************/
 
-	/**
-	 * Provides a {@link TextField} that allows editing of the cell content when
-	 * the cell is double-clicked, or when
-	 * {@link TableView#edit(int, javafx.scene.control.TableColumn)} is called.
-	 * This method will only  work on {@link TableColumn} instances which are of
-	 * type String.
-	 *
-	 * @return A {@link Callback} that can be inserted into the
-	 *      {@link TableColumn#cellFactoryProperty() cell factory property} of a
-	 *      TableColumn, that enables textual editing of the content.
-	 */
-	public static <S> Callback<TableColumn<S,String>, TableCell<S,String>> forTableColumn() {
-		return forTableColumn(new DefaultStringConverter());
-	}
 
 	/**
 	 * Provides a {@link TextField} that allows editing of the cell content when
@@ -62,8 +45,8 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 	 *      TableColumn, that enables textual editing of the content.
 	 */
 	public static <S,T> Callback<TableColumn<S,T>, TableCell<S,T>> forTableColumn(
-			final StringConverter<T> converter) {
-		return list -> new EnhancedTextFieldTableCell<S,T>(converter);
+			final Consumer<T> postCommitHook, final StringConverter<T> converter) {
+		return list -> new EnhancedTextFieldTableCell<>(postCommitHook, converter);
 	}
 
 
@@ -74,7 +57,8 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 	 **************************************************************************/
 
 	private TextField textField;
-
+	private StringConverter<T> converter;
+	private Consumer<T> postCommitHook;
 
 
 	/***************************************************************************
@@ -82,17 +66,6 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 	 * Constructors                                                            *
 	 *                                                                         *
 	 **************************************************************************/
-
-	/**
-	 * Creates a default TextFieldTableCell with a null converter. Without a
-	 * {@link StringConverter} specified, this cell will not be able to accept
-	 * input from the TextField (as it will not know how to convert this back
-	 * to the domain object). It is therefore strongly encouraged to not use
-	 * this constructor unless you intend to set the converter separately.
-	 */
-	public EnhancedTextFieldTableCell() {
-		this(null);
-	}
 
 	/**
 	 * Creates a TextFieldTableCell that provides a {@link TextField} when put
@@ -107,45 +80,11 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 	 *      the given String (from what the user typed in) into an instance of
 	 *      type T.
 	 */
-	public EnhancedTextFieldTableCell(StringConverter<T> converter) {
+	public EnhancedTextFieldTableCell(Consumer<T> postCommitHook, StringConverter<T> converter) {
 		this.getStyleClass().add("text-field-table-cell");
-		setConverter(converter);
+		this.postCommitHook = checkNotNull(postCommitHook);
+		this.converter = checkNotNull(converter);
 	}
-
-
-
-	/***************************************************************************
-	 *                                                                         *
-	 * Properties                                                              *
-	 *                                                                         *
-	 **************************************************************************/
-
-	// --- converter
-	private ObjectProperty<StringConverter<T>> converter =
-			new SimpleObjectProperty<StringConverter<T>>(this, "converter");
-
-	/**
-	 * The {@link StringConverter} property.
-	 */
-	public final ObjectProperty<StringConverter<T>> converterProperty() {
-		return converter;
-	}
-
-	/**
-	 * Sets the {@link StringConverter} to be used in this cell.
-	 */
-	public final void setConverter(StringConverter<T> value) {
-		converterProperty().set(value);
-	}
-
-	/**
-	 * Returns the {@link StringConverter} used in this cell.
-	 */
-	public final StringConverter<T> getConverter() {
-		return converterProperty().get();
-	}
-
-
 
 	/***************************************************************************
 	 *                                                                         *
@@ -164,116 +103,39 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 
 		if (isEditing()) {
 			if (textField == null) {
-				textField = createTextField(this, getConverter());
+				textField = createTextField();
 			}
 
-			startEdit(this, getConverter(), null, null, textField);
+			textField.setText(getItemText());
+			setText(null);
+			setGraphic(textField);
+
+			textField.selectAll();
+
+			// requesting focus so that key input can immediately go into the
+			// TextField (see RT-28132)
+			textField.requestFocus();
 		}
 	}
 
-	/** {@inheritDoc} */
-	@Override public void cancelEdit() {
-		super.cancelEdit();
-		cancelEdit(this, getConverter(), null);
-	}
-
-	/** {@inheritDoc} */
-	@Override public void updateItem(T item, boolean empty) {
-		super.updateItem(item, empty);
-		updateItem(this, getConverter(), null, null, textField);
-	}
-
-	static <T> void updateItem(final Cell<T> cell,
-	                           final StringConverter<T> converter,
-	                           final HBox hbox,
-	                           final Node graphic,
-	                           final TextField textField) {
-		if (cell.isEmpty()) {
-			cell.setText(null);
-			cell.setGraphic(null);
-		} else {
-			if (cell.isEditing()) {
-				if (textField != null) {
-					textField.setText(getItemText(cell, converter));
-				}
-				cell.setText(null);
-
-				if (graphic != null) {
-					hbox.getChildren().setAll(graphic, textField);
-					cell.setGraphic(hbox);
-				} else {
-					cell.setGraphic(textField);
-				}
-			} else {
-				cell.setText(getItemText(cell, converter));
-				cell.setGraphic(graphic);
-			}
-		}
-	}
-
-	private static <T> String getItemText(Cell<T> cell, StringConverter<T> converter) {
-		return converter == null ?
-				cell.getItem() == null ? "" : cell.getItem().toString() :
-				converter.toString(cell.getItem());
-	}
-
-	static <T> void startEdit(final Cell<T> cell,
-	                          final StringConverter<T> converter,
-	                          final HBox hbox,
-	                          final Node graphic,
-	                          final TextField textField) {
-		if (textField != null) {
-			textField.setText(getItemText(cell, converter));
-		}
-		cell.setText(null);
-
-		if (graphic != null) {
-			hbox.getChildren().setAll(graphic, textField);
-			cell.setGraphic(hbox);
-		} else {
-			cell.setGraphic(textField);
-		}
-
-		textField.selectAll();
-
-		// requesting focus so that key input can immediately go into the
-		// TextField (see RT-28132)
-		textField.requestFocus();
-	}
-
-	static <T> void cancelEdit(Cell<T> cell, final StringConverter<T> converter, Node graphic) {
-		cell.setText(getItemText(cell, converter));
-		cell.setGraphic(graphic);
-	}
-
-	<T> TextField createTextField(final Cell<T> cell, final StringConverter<T> converter) {
-		final TextField textField = new TextField(getItemText(cell, converter));
+	private TextField createTextField() {
+		final TextField textField = new TextField(getItemText());
 
 		// Use onAction here rather than onKeyReleased (with check for Enter),
 		// as otherwise we encounter RT-34685
 		textField.setOnAction(event -> {
-			if (converter == null) {
-				throw new IllegalStateException(
-						"Attempting to convert text input into Object, but provided "
-								+ "StringConverter is null. Be sure to set a StringConverter "
-								+ "in your cell factory.");
-			}
-			cell.commitEdit(converter.fromString(textField.getText()));
+			doCommitEdit();
+
 			event.consume();
 		});
 
 		textField.setOnKeyPressed(event -> {
 			if (event.getCode() == KeyCode.ESCAPE) {
-				cancelEdit(cell, converter, null);
+				doCancelEdit();
 				event.consume();
 			} else if (event.getCode() == KeyCode.TAB) {
-				if (converter == null) {
-					throw new IllegalStateException(
-							"Attempting to convert text input into Object, but provided "
-									+ "StringConverter is null. Be sure to set a StringConverter "
-									+ "in your cell factory.");
-				}
-				cell.commitEdit(converter.fromString(textField.getText()));
+				doCommitEdit();
+
 				TableColumn nextColumn = getNextColumn(!event.isShiftDown());
 				if (nextColumn != null) {
 					getTableView().edit(getTableRow().getIndex(), nextColumn);
@@ -284,11 +146,57 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 
 		textField.setOnKeyReleased(t -> {
 			if (t.getCode() == KeyCode.ESCAPE) {
-				cell.cancelEdit();
+				cancelEdit();
 				t.consume();
 			}
 		});
 		return textField;
+	}
+
+	private void doCommitEdit() {
+		String newValueText = textField.getText();
+		T newValueObject = converter.fromString(newValueText);
+		commitEdit(newValueObject);
+
+		postCommitHook.accept(newValueObject);
+	}
+
+	/** {@inheritDoc} */
+	@Override public void cancelEdit() {
+		super.cancelEdit();
+		doCancelEdit();
+	}
+
+	private void doCancelEdit() {
+		setText(getItemText());
+		setGraphic(null);
+	}
+
+	/** {@inheritDoc} */
+	@Override public void updateItem(T item, boolean empty) {
+		super.updateItem(item, empty);
+		if (isEmpty()) {
+			setText(null);
+			setGraphic(null);
+		} else {
+			if (isEditing()) {
+				if (textField != null) {
+					textField.setText(getItemText());
+				}
+				setText(null);
+
+				setGraphic(textField);
+			} else {
+				setText(getItemText());
+				setGraphic(null);
+			}
+		}
+	}
+
+	private String getItemText() {
+		return converter == null ?
+				getItem() == null ? "" : getItem().toString() :
+				converter.toString(getItem());
 	}
 
 	/**
