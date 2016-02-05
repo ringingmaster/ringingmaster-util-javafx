@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Lake
  */
 public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
+
+
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/***************************************************************************
 	 *                                                                         *
@@ -152,11 +157,13 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 	}
 
 	private void doCommitEdit() {
-		String newValueText = textField.getText();
-		T newValueObject = converter.fromString(newValueText);
-		commitEdit(newValueObject);
+		if (isEditing()) {
+			String newValueText = textField.getText();
+			T newValueObject = converter.fromString(newValueText);
+			commitEdit(newValueObject);
 
-		postCommitHook.accept(newValueObject);
+			postCommitHook.accept(newValueObject);
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -180,6 +187,7 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 			if (isEditing()) {
 				if (textField != null) {
 					textField.setText(getItemText());
+					textField.selectAll();
 				}
 				setText(null);
 
