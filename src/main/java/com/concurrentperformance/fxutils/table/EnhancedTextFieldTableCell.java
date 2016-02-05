@@ -125,7 +125,6 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 		// as otherwise we encounter RT-34685
 		textField.setOnAction(event -> {
 			doCommitEdit();
-
 			event.consume();
 		});
 
@@ -143,13 +142,12 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 			}
 		});
 
-
-		textField.setOnKeyReleased(t -> {
-			if (t.getCode() == KeyCode.ESCAPE) {
-				cancelEdit();
-				t.consume();
+		textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue) {
+				doCommitEdit();
 			}
 		});
+
 		return textField;
 	}
 
