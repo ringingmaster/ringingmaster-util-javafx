@@ -148,11 +148,12 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 			}
 		});
 
-		textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-			if (!newValue) {
-				doCommitEdit();
-			}
-		});
+//TODO it would be great if we could commit edits on loss of focus.
+// 		textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+//			if (!newValue) {
+//				doCommitEdit();
+//			}
+//		});
 
 		return textField;
 	}
