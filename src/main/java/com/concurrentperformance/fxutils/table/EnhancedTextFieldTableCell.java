@@ -6,6 +6,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.util.Callback;
+import javafx.util.Pair;
 import javafx.util.StringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,9 +141,9 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 			} else if (event.getCode() == KeyCode.TAB) {
 				doCommitEdit();
 
-				TableColumn nextColumn = getNextColumn(!event.isShiftDown());
-				if (nextColumn != null) {
-					getTableView().edit(getTableRow().getIndex(), nextColumn);
+				Pair<Integer, TableColumn<S, ?>> nextCell = getNextCellIndex(!event.isShiftDown());
+				if (nextCell != null) {
+					getTableView().edit(nextCell.getKey(), nextCell.getValue());
 				}
 			}
 		});
@@ -210,7 +211,7 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 	 * @param forward true gets the column to the right, false the column to the left of the current column
 	 * @return
 	 */
-	private TableColumn<S, ?> getNextColumn(boolean forward) {
+	private Pair<Integer, TableColumn<S, ?>> getNextCellIndex(boolean forward) {
 		List<TableColumn<S, ?>> columns = new ArrayList<>();
 		for (TableColumn<S, ?> column : getTableView().getColumns()) {
 			columns.addAll(getLeaves(column));
@@ -219,20 +220,30 @@ public class EnhancedTextFieldTableCell<S,T> extends TableCell<S,T> {
 		if (columns.size() < 2) {
 			return null;
 		}
-		int currentIndex = columns.indexOf(getTableColumn());
-		int nextIndex = currentIndex;
+
+		int rowIndex = getTableRow().getIndex();
+
+		int columnIndex = columns.indexOf(getTableColumn());
 		if (forward) {
-			nextIndex++;
-			if (nextIndex > columns.size() - 1) {
-				nextIndex = 0;
+			columnIndex++;
+			if (columnIndex > columns.size() - 1) {
+				columnIndex = 0;
+				rowIndex++;
+				if (rowIndex >= getTableView().getItems().size()) {
+					rowIndex= 0;
+				}
 			}
 		} else {
-			nextIndex--;
-			if (nextIndex < 0) {
-				nextIndex = columns.size() - 1;
+			columnIndex--;
+			if (columnIndex < 0) {
+				columnIndex = columns.size() - 1;
+				rowIndex--;
+				if (rowIndex < 0) {
+					rowIndex = getTableView().getItems().size()-1;
+				}
 			}
 		}
-		return columns.get(nextIndex);
+		return new Pair<>(rowIndex, columns.get(columnIndex));
 	}
 
 	private List<TableColumn<S, ?>> getLeaves(TableColumn<S, ?> root) {
