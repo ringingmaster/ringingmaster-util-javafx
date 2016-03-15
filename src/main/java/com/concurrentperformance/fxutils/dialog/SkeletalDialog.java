@@ -32,8 +32,8 @@ public abstract class SkeletalDialog<T> {
 	private Function<T, Boolean> onSuccessHandler;
 
 
-	public static class Launcher<T> {
-		public void showDialog(EditMode editMode, T model, Window owner, URL fxmlResource, List<String> stylesheets, Function<T, Boolean> onSuccessHandler) {
+	public static class DialogBuilder<MODEL, DLG extends SkeletalDialog<MODEL>> {
+		public DLG buildDialog(EditMode editMode, MODEL model, Window owner, URL fxmlResource, List<String> stylesheets, Function<MODEL, Boolean> onSuccessHandler) {
 			checkNotNull(editMode);
 			checkNotNull(owner);
 			checkNotNull(fxmlResource);
@@ -43,17 +43,19 @@ public abstract class SkeletalDialog<T> {
 
 			try {
 				Scene scene = new Scene(fxmlLoader.load());
-				SkeletalDialog controller = fxmlLoader.getController();
+				DLG controller = fxmlLoader.getController();
 				controller.init(editMode, scene, model, owner, stylesheets, onSuccessHandler);
+				return controller;
 
 			} catch (IOException e) {
 				final Logger log = LoggerFactory.getLogger(this.getClass());
 				log.error("Error initialising [" + fxmlResource + "]", e);
+				throw new RuntimeException(e);
 			}
 		}
 	}
 
-	private void init(EditMode editMode, Scene scene, T model, Window owner, List<String> stylesheets, Function<T, Boolean> onSuccessHandler) {
+	protected void init(EditMode editMode, Scene scene, T model, Window owner, List<String> stylesheets, Function<T, Boolean> onSuccessHandler) {
 		this.editMode = checkNotNull(editMode);
 		this.onSuccessHandler = checkNotNull(onSuccessHandler);
 
@@ -66,6 +68,9 @@ public abstract class SkeletalDialog<T> {
 		if (model != null) {
 			populateDialogFromModel(model);
 		}
+	}
+
+	protected void showAndWait() {
 		stage.showAndWait();
 	}
 
