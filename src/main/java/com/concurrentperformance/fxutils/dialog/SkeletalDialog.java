@@ -23,17 +23,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Lake
  */
-public abstract class SkeletalDialog<T> {
+public abstract class SkeletalDialog<MODEL> {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private EditMode editMode;
 	private Stage stage;
-	private Function<T, Boolean> onSuccessHandler;
+	private Function<MODEL, Boolean> onSuccessHandler;
 
 
-	public static class DialogBuilder<MODEL, DLG extends SkeletalDialog<MODEL>> {
-		public DLG buildDialog(EditMode editMode, MODEL model, Window owner, URL fxmlResource, List<String> stylesheets, Function<MODEL, Boolean> onSuccessHandler) {
+	public static class DialogBuilder<S_MODEL, S_CTRL extends SkeletalDialog<S_MODEL>> {
+		public S_CTRL buildDialog(EditMode editMode, S_MODEL model, Window owner, URL fxmlResource, List<String> stylesheets, Function<S_MODEL, Boolean> onSuccessHandler) {
 			checkNotNull(editMode);
 			checkNotNull(owner);
 			checkNotNull(fxmlResource);
@@ -43,7 +43,7 @@ public abstract class SkeletalDialog<T> {
 
 			try {
 				Scene scene = new Scene(fxmlLoader.load());
-				DLG controller = fxmlLoader.getController();
+				S_CTRL controller = fxmlLoader.getController();
 				controller.init(editMode, scene, model, owner, stylesheets, onSuccessHandler);
 				return controller;
 
@@ -55,7 +55,7 @@ public abstract class SkeletalDialog<T> {
 		}
 	}
 
-	protected void init(EditMode editMode, Scene scene, T model, Window owner, List<String> stylesheets, Function<T, Boolean> onSuccessHandler) {
+	protected void init(EditMode editMode, Scene scene, MODEL model, Window owner, List<String> stylesheets, Function<MODEL, Boolean> onSuccessHandler) {
 		this.editMode = checkNotNull(editMode);
 		this.onSuccessHandler = checkNotNull(onSuccessHandler);
 
@@ -103,7 +103,7 @@ public abstract class SkeletalDialog<T> {
 
 	@FXML
 	private void OnOk() {
-		T result = buildModelFromDialogData();
+		MODEL result = buildModelFromDialogData();
 
 		try {
 			Boolean success = onSuccessHandler.apply(result);
@@ -124,8 +124,8 @@ public abstract class SkeletalDialog<T> {
 		stage.close();
 	}
 
-	protected void initialiseDialog(EditMode editMode, T model) {};
+	protected void initialiseDialog(EditMode editMode, MODEL model) {};
 
-	protected abstract void populateDialogFromModel(T model);
-	protected abstract T buildModelFromDialogData();
+	protected abstract void populateDialogFromModel(MODEL model);
+	protected abstract MODEL buildModelFromDialogData();
 }
