@@ -1,4 +1,25 @@
-dependencies {
-    compile project(':util')
+apply plugin: 'java'
 
+group 'com.concurrentperformance.ringingmaster'
+version '1.0.0'
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.concurrentperformance.ringingmaster:ringingmaster-util:1.0.0'
+
+    // TEST: General
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-all:1.10.19'
+
+    // TEST: Logging
+    testRuntime 'org.apache.logging.log4j:log4j-core:2.5'
+    testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.5'
 }
