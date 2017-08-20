@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ringingmaster/ringingmaster-util-javafx.svg?branch=master)](https://travis-ci.org/ringingmaster/ringingmaster-util-javafx)
+
 # ringingmaster-util-javafx
 
 
