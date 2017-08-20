@@ -1,6 +1,6 @@
 apply plugin: 'java'
 
-group 'com.concurrentperformance.ringingmaster'
+group 'org.ringingmaster'
 version '1.0.0'
 
 compileJava {
@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.concurrentperformance.ringingmaster:ringingmaster-util:1.0.0'
+    compile 'org.ringingmaster:ringingmaster-util:1.0.0'
 
     // TEST: General
     testCompile 'junit:junit:4.12'
