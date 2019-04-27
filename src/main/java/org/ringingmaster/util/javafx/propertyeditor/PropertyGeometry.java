@@ -1,7 +1,5 @@
 package org.ringingmaster.util.javafx.propertyeditor;
 
-import com.sun.javafx.tk.FontMetrics;
-import com.sun.javafx.tk.Toolkit;
 import javafx.scene.text.Font;
 
 /**
@@ -27,9 +25,14 @@ public class PropertyGeometry {
 	public PropertyGeometry() {
 
 
-		final FontMetrics fm = Toolkit.getToolkit().getFontLoader().getFontMetrics(font);
-		descent = fm.getDescent();
-		height = (descent + fm.getAscent()) + (2 * padding);
+//		final FontMetrics fm = Toolkit.getToolkit().getFontLoader().getFontMetrics(font);
+//		descent = fm.getDescent();
+//		height = (descent + fm.getAscent()) + (2 * padding);
+
+		//TODO REactiuve
+		descent = 10;
+		height = 10;
+
 	}
 
 	public double getVertSeparatorPosition() {
