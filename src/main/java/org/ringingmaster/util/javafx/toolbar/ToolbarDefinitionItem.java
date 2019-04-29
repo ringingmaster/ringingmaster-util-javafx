@@ -9,5 +9,5 @@ import javafx.scene.Node;
  */
 public interface ToolbarDefinitionItem {
 
-	Node getItem();
+    Node getItem();
 }

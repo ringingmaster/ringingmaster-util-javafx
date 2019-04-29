@@ -10,8 +10,8 @@ import javafx.scene.control.SeparatorMenuItem;
  */
 public class MenuDefinitionLeafSeparator implements MenuDefinition {
 
-	@Override
-	public MenuItem getMenu() {
-		return new SeparatorMenuItem();
-	}
+    @Override
+    public MenuItem getMenu() {
+        return new SeparatorMenuItem();
+    }
 }

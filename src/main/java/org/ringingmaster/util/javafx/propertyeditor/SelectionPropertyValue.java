@@ -27,72 +27,74 @@ import java.util.List;
  */
 public class SelectionPropertyValue extends SkeletalPropertyValue implements PropertyValue {
 
-	private static final Logger log = LoggerFactory.getLogger(SelectionPropertyValue.class);
+    public static final int UNDEFINED_INDEX = -1;
 
-	private boolean suppressNotifications = false;
+    private static final Logger log = LoggerFactory.getLogger(SelectionPropertyValue.class);
 
-	public SelectionPropertyValue(String propertyName) {
-		super(propertyName);
-		setEditor(buildComboBox());
-	}
+    private boolean suppressNotifications = false;
 
-	private Region buildComboBox() {
-		ComboBox comboBox = new ComboBox();
+    public SelectionPropertyValue(String propertyName) {
+        super(propertyName);
+        setEditor(buildComboBox());
+    }
 
-		comboBox.setPadding(new Insets(0, 2, 0, 2));
-		comboBox.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+    private Region buildComboBox() {
+        ComboBox comboBox = new ComboBox();
 
-		final Callback<ListView<String>, ListCell<String>> callback = new Callback<ListView<String>, ListCell<String>>() {
-			@Override
-			public ListCell<String> call(ListView<String> param) {
-				final ListCell<String> cell = new ListCell<String>() {
-					@Override
-					public void updateItem(String item, boolean empty) {
-						super. updateItem(item, empty);
-						setFont(Font.getDefault()); //TODO set the font using the propertyGeometry
-						setPadding(new Insets(0, 1, 0, 1));
-						setText(item);
-					}
-				};
-				return cell;
-			}
+        comboBox.setPadding(new Insets(0, 2, 0, 2));
+        comboBox.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-		};
-		comboBox.setCellFactory(callback);
-		comboBox.setButtonCell(callback.call(null));
+        final Callback<ListView<String>, ListCell<String>> callback = new Callback<>() {
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                final ListCell<String> cell = new ListCell<String>() {
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setFont(Font.getDefault()); //TODO set the font using the propertyGeometry
+                        setPadding(new Insets(0, 1, 0, 1));
+                        setText(item);
+                    }
+                };
+                return cell;
+            }
 
-		return comboBox;
-	}
+        };
+        comboBox.setCellFactory(callback);
+        comboBox.setButtonCell(callback.call(null));
 
-	public void setListener(ChangeListener<Number> listener) { //TODO change to monitor and select objects rather than index's'
-		((ComboBox) getEditor()).getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
-				if (!suppressNotifications) {
-					listener.changed(observableValue, oldValue, newValue);
-				}
-			}
-		});
-	}
+        return comboBox;
+    }
 
-	public void setItems(List<String> items) {
-		final ComboBox comboBox = (ComboBox) getEditor();
-		// When updating the combo box items, we remove suppress our listener, so it does not get the value set to -1
-		// and then back to the valid value.
-		suppressNotifications = true;
-		final ObservableList<String> observableItems = FXCollections.observableArrayList(items);
-		comboBox.setItems(observableItems);
-		suppressNotifications = false;
-	}
+    public void setListener(ChangeListener<Number> listener) { //TODO change to monitor and select objects rather than index's'
+        ((ComboBox) getEditor()).getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+                if (!suppressNotifications) {
+                    listener.changed(observableValue, oldValue, newValue);
+                }
+            }
+        });
+    }
 
-	public void setSelectedIndex(int selectedIndex) {
-		((ComboBox) getEditor()).getSelectionModel().select(selectedIndex);
-	}
+    public void setItems(List<String> items) {
+        final ComboBox comboBox = (ComboBox) getEditor();
+        // When updating the combo box items, we remove suppress our listener, so it does not get the value set to -1
+        // and then back to the valid value.
+        suppressNotifications = true;
+        final ObservableList<String> observableItems = FXCollections.observableArrayList(items);
+        comboBox.setItems(observableItems);
+        suppressNotifications = false;
+    }
 
-	@Override
-	public void positionEditor(double x, double y, double width, double height) {
-		super.positionEditor(x,y-1.0,width,height);
-	}
+    public void setSelectedIndex(int selectedIndex) {
+        ((ComboBox) getEditor()).getSelectionModel().select(selectedIndex);
+    }
+
+    @Override
+    public void positionEditor(double x, double y, double width, double height) {
+        super.positionEditor(x, y - 1.0, width, height);
+    }
 
 
 }

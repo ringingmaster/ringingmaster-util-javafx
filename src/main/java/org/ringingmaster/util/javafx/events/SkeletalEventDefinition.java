@@ -17,46 +17,46 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public abstract class SkeletalEventDefinition implements EventDefinition {
 
-	private final String text;
-	private final Image image;
-	private final SimpleBooleanProperty disableProperty = new SimpleBooleanProperty(true);
-	private final SimpleBooleanProperty pressedProperty = new SimpleBooleanProperty(true);
-	private final SimpleStringProperty tooltipTextProperty = new SimpleStringProperty("");
+    private final String text;
+    private final Image image;
+    private final SimpleBooleanProperty disableProperty = new SimpleBooleanProperty(true);
+    private final SimpleBooleanProperty pressedProperty = new SimpleBooleanProperty(true);
+    private final SimpleStringProperty tooltipTextProperty = new SimpleStringProperty("");
 
 
-	public SkeletalEventDefinition(String imageResourceClasspath, String text) {
-		InputStream imageResourceAsStream = SkeletalEventDefinition.class.getResourceAsStream(checkNotNull(imageResourceClasspath));
-		image = new Image(checkNotNull(imageResourceAsStream));
-		this.text = text;
-	}
+    public SkeletalEventDefinition(String imageResourceClasspath, String text) {
+        InputStream imageResourceAsStream = SkeletalEventDefinition.class.getResourceAsStream(checkNotNull(imageResourceClasspath));
+        image = new Image(checkNotNull(imageResourceAsStream));
+        this.text = text;
+    }
 
-	@Override
-	public String getName() {
-		return text;
-	}
+    @Override
+    public String getName() {
+        return text;
+    }
 
-	@Override
-	public Image getImage() {
-		return image;
-	}
+    @Override
+    public Image getImage() {
+        return image;
+    }
 
-	@Override
-	public SimpleBooleanProperty disableProperty() {
-		return disableProperty;
-	}
+    @Override
+    public SimpleBooleanProperty disableProperty() {
+        return disableProperty;
+    }
 
-	public SimpleBooleanProperty pressedProperty() {
-		return pressedProperty;
-	}
+    public SimpleBooleanProperty pressedProperty() {
+        return pressedProperty;
+    }
 
-	@Override
-	public SimpleStringProperty tooltipTextProperty() {
-		return tooltipTextProperty;
-	}
+    @Override
+    public SimpleStringProperty tooltipTextProperty() {
+        return tooltipTextProperty;
+    }
 
-	@Override
-	public List<EventDefinition> getSubItems() {
-		return Collections.emptyList();
-	}
+    @Override
+    public List<EventDefinition> getSubItems() {
+        return Collections.emptyList();
+    }
 
 }

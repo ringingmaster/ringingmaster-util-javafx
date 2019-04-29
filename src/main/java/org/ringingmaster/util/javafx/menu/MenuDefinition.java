@@ -9,6 +9,6 @@ import javafx.scene.control.MenuItem;
  */
 public interface MenuDefinition {
 
-	MenuItem getMenu();
+    MenuItem getMenu();
 
 }

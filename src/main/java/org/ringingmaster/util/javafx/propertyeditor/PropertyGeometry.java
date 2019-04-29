@@ -1,6 +1,7 @@
 package org.ringingmaster.util.javafx.propertyeditor;
 
 import javafx.scene.text.Font;
+import org.ringingmaster.util.javafx.font.FontMetrics;
 
 /**
  * TODO comments ???
@@ -9,84 +10,80 @@ import javafx.scene.text.Font;
  */
 public class PropertyGeometry {
 
-	private double vertSeparatorPosition = 100.0;
-	private final double vertResizeWidth = 3.0;
-	private final double closestVertSeparatorCanBeToEdge = 30.0;
+    private double vertSeparatorPosition = 100.0;
+    private final double vertResizeWidth = 3.0;
+    private final double closestVertSeparatorCanBeToEdge = 30.0;
 
-	private final Font font = Font.getDefault();
-	private final double height;
-	private final double descent;
-	private final double padding = 3.0;
-
-
-	private final double minUnderlyingControlWidth = 200.0;
-	private final double minUnderlyingControlHeight = 200.0;
-
-	public PropertyGeometry() {
+    private final Font font = Font.getDefault();
+    private final double height;
+    private final double descent;
+    private final double padding = 3.0;
 
 
-//		final FontMetrics fm = Toolkit.getToolkit().getFontLoader().getFontMetrics(font);
-//		descent = fm.getDescent();
-//		height = (descent + fm.getAscent()) + (2 * padding);
+    private final double minUnderlyingControlWidth = 200.0;
+    private final double minUnderlyingControlHeight = 200.0;
 
-		//TODO REactiuve
-		descent = 10;
-		height = 10;
+    public PropertyGeometry() {
 
-	}
+        FontMetrics fm  = new FontMetrics(font);
 
-	public double getVertSeparatorPosition() {
-		return vertSeparatorPosition;
-	}
+		descent = fm.getDescent();
+		height = (descent + fm.getAscent()) + (2 * padding);
 
-	public void setVertSeparatorPosition(double vertSeparatorPosition) {
-		this.vertSeparatorPosition = vertSeparatorPosition;
-	}
+    }
 
-	public double getVertResizeWidth() {
-		return vertResizeWidth;
-	}
+    public double getVertSeparatorPosition() {
+        return vertSeparatorPosition;
+    }
 
-	public double getClosestVertSeparatorCanBeToEdge() {
-		return closestVertSeparatorCanBeToEdge;
-	}
+    public void setVertSeparatorPosition(double vertSeparatorPosition) {
+        this.vertSeparatorPosition = vertSeparatorPosition;
+    }
 
-	public double getHeight() {
-		return height;
-	}
+    public double getVertResizeWidth() {
+        return vertResizeWidth;
+    }
 
-	public double getDescent() {
-		return descent;
-	}
+    public double getClosestVertSeparatorCanBeToEdge() {
+        return closestVertSeparatorCanBeToEdge;
+    }
 
-	public double getPadding() {
-		return padding;
-	}
+    public double getHeight() {
+        return height;
+    }
 
-	public Font getFont() {
-		return font;
-	}
+    public double getDescent() {
+        return descent;
+    }
 
-	public double getMinUnderlyingControlHeight() {
-		return minUnderlyingControlHeight;
-	}
+    public double getPadding() {
+        return padding;
+    }
 
-	public double getMinUnderlyingControlWidth() {
-		return minUnderlyingControlWidth;
-	}
+    public Font getFont() {
+        return font;
+    }
 
-	@Override
-	public String toString() {
-		return "PropertyGeometry{" +
-				"vertSeparatorPosition=" + vertSeparatorPosition +
-				", vertResizeWidth=" + vertResizeWidth +
-				", closestVertSeparatorCanBeToEdge=" + closestVertSeparatorCanBeToEdge +
-				", font=" + font +
-				", height=" + height +
-				", descent=" + descent +
-				", padding=" + padding +
-				", minUnderlyingControlWidth=" + minUnderlyingControlWidth +
-				", minUnderlyingControlHeight=" + minUnderlyingControlHeight +
-				'}';
-	}
+    public double getMinUnderlyingControlHeight() {
+        return minUnderlyingControlHeight;
+    }
+
+    public double getMinUnderlyingControlWidth() {
+        return minUnderlyingControlWidth;
+    }
+
+    @Override
+    public String toString() {
+        return "PropertyGeometry{" +
+                "vertSeparatorPosition=" + vertSeparatorPosition +
+                ", vertResizeWidth=" + vertResizeWidth +
+                ", closestVertSeparatorCanBeToEdge=" + closestVertSeparatorCanBeToEdge +
+                ", font=" + font +
+                ", height=" + height +
+                ", descent=" + descent +
+                ", padding=" + padding +
+                ", minUnderlyingControlWidth=" + minUnderlyingControlWidth +
+                ", minUnderlyingControlHeight=" + minUnderlyingControlHeight +
+                '}';
+    }
 }

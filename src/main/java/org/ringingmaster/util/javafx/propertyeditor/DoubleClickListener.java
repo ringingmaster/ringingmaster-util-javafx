@@ -7,5 +7,5 @@ package org.ringingmaster.util.javafx.propertyeditor;
  */
 public interface DoubleClickListener {
 
-	void onDoubleClick(int index);
+    void onDoubleClick(int index);
 }

@@ -12,15 +12,15 @@ import java.util.List;
  */
 public class InjectableMenuBar extends MenuBar {
 
-	public InjectableMenuBar() {
-		setUseSystemMenuBar(true);
-	}
+    public InjectableMenuBar() {
+        setUseSystemMenuBar(true);
+    }
 
-	public void setMenuBarElements(List<MenuDefinition> menuDefinitions) {
+    public void setMenuBarElements(List<MenuDefinition> menuDefinitions) {
 
-		for (MenuDefinition menuDefinition : menuDefinitions) {
-			getMenus().add((Menu)menuDefinition.getMenu());
-		}
-	}
+        for (MenuDefinition menuDefinition : menuDefinitions) {
+            getMenus().add((Menu) menuDefinition.getMenu());
+        }
+    }
 
 }

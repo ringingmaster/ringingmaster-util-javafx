@@ -7,6 +7,6 @@ package org.ringingmaster.util.javafx.propertyeditor;
  */
 public enum CallbackStyle {
 
-	EVERY_KEYSTROKE,
-	WHEN_FINISHED
+    EVERY_KEYSTROKE,
+    WHEN_FINISHED
 }

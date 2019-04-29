@@ -11,10 +11,10 @@ import java.util.List;
  */
 public class InjectableToolBar extends ToolBar {
 
-	public void setDefinitions(List<ToolbarDefinitionItem> toolbarDefinitionItems) {
+    public void setDefinitions(List<ToolbarDefinitionItem> toolbarDefinitionItems) {
 
-		for (ToolbarDefinitionItem toolbarDefinitionItem : toolbarDefinitionItems) {
-			getItems().add(toolbarDefinitionItem.getItem());
-		}
-	}
+        for (ToolbarDefinitionItem toolbarDefinitionItem : toolbarDefinitionItems) {
+            getItems().add(toolbarDefinitionItem.getItem());
+        }
+    }
 }

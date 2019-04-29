@@ -6,6 +6,6 @@ package org.ringingmaster.util.javafx.draw;
  * @author Lake
  */
 public enum Direction {
-	RIGHT,
-	DOWN
+    RIGHT,
+    DOWN
 }

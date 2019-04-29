@@ -7,17 +7,16 @@ package org.ringingmaster.util.javafx.dialog;
  */
 public enum EditMode {
 
-	ADD("Add"),
-	EDIT("Edit")
-	;
+    ADD("Add"),
+    EDIT("Edit");
 
-	private final String editText;
+    private final String editText;
 
-	EditMode(String editText) {
-		this.editText = editText;
-	}
+    EditMode(String editText) {
+        this.editText = editText;
+    }
 
-	public String getEditText() {
-		return editText;
-	}
+    public String getEditText() {
+        return editText;
+    }
 }

@@ -6,5 +6,5 @@ package org.ringingmaster.util.javafx.propertyeditor;
  * @author Lake
  */
 public interface PropertyValueListener {
-	void propertyValue_renderingChanged(PropertyValue propertyValue);
+    void propertyValue_renderingChanged(PropertyValue propertyValue);
 }

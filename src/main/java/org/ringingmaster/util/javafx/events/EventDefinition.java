@@ -14,14 +14,17 @@ import java.util.List;
  */
 public interface EventDefinition {
 
-	String getName();
-	Image getImage();
+    String getName();
 
-	List<EventDefinition> getSubItems();
+    Image getImage();
 
-	void handle(ActionEvent event);
+    List<EventDefinition> getSubItems();
 
-	BooleanProperty disableProperty();
-	StringProperty tooltipTextProperty();
-	BooleanProperty pressedProperty();
+    void handle(ActionEvent event);
+
+    BooleanProperty disableProperty();
+
+    StringProperty tooltipTextProperty();
+
+    BooleanProperty pressedProperty();
 }

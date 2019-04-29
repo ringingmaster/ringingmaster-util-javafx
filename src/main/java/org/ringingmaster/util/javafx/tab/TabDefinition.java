@@ -8,20 +8,20 @@ import javafx.scene.Node;
  * @author Lake
  */
 public class TabDefinition {
-	private final String name;
-	private final Node node;
+    private final String name;
+    private final Node node;
 
 
-	public TabDefinition(String name, Node node) {
-		this.name = name;
-		this.node = node;
-	}
+    public TabDefinition(String name, Node node) {
+        this.name = name;
+        this.node = node;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Node getNode() {
-		return node;
-	}
+    public Node getNode() {
+        return node;
+    }
 }

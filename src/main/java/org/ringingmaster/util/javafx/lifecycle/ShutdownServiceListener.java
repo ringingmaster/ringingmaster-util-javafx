@@ -7,10 +7,10 @@ package org.ringingmaster.util.javafx.lifecycle;
  */
 public interface ShutdownServiceListener {
 
-	enum ShutdownOptions{
-		ALLOW_SHUTDOWN,
-		PREVENT_SHUTDOWN,
-	}
+    enum ShutdownOptions {
+        ALLOW_SHUTDOWN,
+        PREVENT_SHUTDOWN,
+    }
 
-	ShutdownOptions shutdownService_shutdown();
+    ShutdownOptions shutdownService_shutdown();
 }

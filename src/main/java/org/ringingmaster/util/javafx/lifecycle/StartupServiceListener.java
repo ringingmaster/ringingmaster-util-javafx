@@ -7,5 +7,5 @@ package org.ringingmaster.util.javafx.lifecycle;
  */
 public interface StartupServiceListener {
 
-	void startupService_startup();
+    void startupService_startup();
 }

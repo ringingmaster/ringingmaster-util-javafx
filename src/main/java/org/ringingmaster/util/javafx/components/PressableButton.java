@@ -12,26 +12,26 @@ import javafx.scene.control.Button;
  */
 public class PressableButton extends Button {
 
-	private final SimpleBooleanProperty pressedOverrideProperty = new SimpleBooleanProperty(true);
+    private final SimpleBooleanProperty pressedOverrideProperty = new SimpleBooleanProperty(true);
 
-	{
-		pressedOverrideProperty.addListener((observable, oldValue, newValue) -> setPressed(newValue));
-	}
+    {
+        pressedOverrideProperty.addListener((observable, oldValue, newValue) -> setPressed(newValue));
+    }
 
-	public PressableButton() {
-		super();
-	}
+    public PressableButton() {
+        super();
+    }
 
-	public PressableButton(String text, Node graphic) {
-		super(text, graphic);
+    public PressableButton(String text, Node graphic) {
+        super(text, graphic);
 
-	}
+    }
 
-	public BooleanProperty pressedOverrideProperty() {
-		return pressedOverrideProperty;
-	}
+    public BooleanProperty pressedOverrideProperty() {
+        return pressedOverrideProperty;
+    }
 
-	public void setPressedOverride(boolean pressedOverride) {
-		setPressed(pressedOverride);
-	}
+    public void setPressedOverride(boolean pressedOverride) {
+        setPressed(pressedOverride);
+    }
 }

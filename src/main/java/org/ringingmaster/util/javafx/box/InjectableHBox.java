@@ -11,13 +11,13 @@ import java.util.List;
  */
 public class InjectableHBox extends HBox {
 
-	public void setBoxLayoutDefinitions(List<BoxLayoutDefinition> boxLayoutDefinitions) {
+    public void setBoxLayoutDefinitions(List<BoxLayoutDefinition> boxLayoutDefinitions) {
 
-		for (BoxLayoutDefinition boxLayoutDefinition : boxLayoutDefinitions) {
+        for (BoxLayoutDefinition boxLayoutDefinition : boxLayoutDefinitions) {
 
-			getChildren().add(boxLayoutDefinition.getNode());
-			HBox.setHgrow(boxLayoutDefinition.getNode(), boxLayoutDefinition.getPriority());
-		}
+            getChildren().add(boxLayoutDefinition.getNode());
+            HBox.setHgrow(boxLayoutDefinition.getNode(), boxLayoutDefinition.getPriority());
+        }
 
-	}
+    }
 }

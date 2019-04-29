@@ -13,14 +13,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ToolbarDefinitionSeparator implements ToolbarDefinitionItem {
 
-	private final Orientation orientation;
+    private final Orientation orientation;
 
-	public ToolbarDefinitionSeparator(Orientation orientation) {
-		this.orientation = checkNotNull(orientation);
-	}
+    public ToolbarDefinitionSeparator(Orientation orientation) {
+        this.orientation = checkNotNull(orientation);
+    }
 
-	@Override
-	public Node getItem() {
-		return new Separator(orientation);
-	}
+    @Override
+    public Node getItem() {
+        return new Separator(orientation);
+    }
 }

@@ -1,10 +1,10 @@
 package org.ringingmaster.util.javafx.propertyeditor;
 
-import org.ringingmaster.util.listener.Listenable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import org.ringingmaster.util.listener.Listenable;
 
 
 /**
@@ -14,22 +14,22 @@ import javafx.scene.text.Font;
  */
 public interface PropertyValue extends Listenable<PropertyValueListener> {
 
-	String getName();
+    String getName();
 
-	Region getEditor();
+    Region getEditor();
 
-	void setFont(Font font);
+    void setFont(Font font);
 
-	void positionEditor(double x, double y, double width, double height);
+    void positionEditor(double x, double y, double width, double height);
 
-	void draw(GraphicsContext gc, double top, double bottom, double left, double right,
-	          double center, double horzPadding, double vertPadding,
-	          Color backgroundColor,
-	          Color linesColor,
-	          Color textColor, Color textColorDisabled);
+    void draw(GraphicsContext gc, double top, double bottom, double left, double right,
+              double center, double horzPadding, double vertPadding,
+              Color backgroundColor,
+              Color linesColor,
+              Color textColor, Color textColorDisabled);
 
-	void setVisible(boolean visible);
+    void setVisible(boolean visible);
 
-	void setDisable(boolean disable);
+    void setDisable(boolean disable);
 
 }

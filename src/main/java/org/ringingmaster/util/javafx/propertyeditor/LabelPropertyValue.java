@@ -18,43 +18,43 @@ import org.slf4j.LoggerFactory;
  */
 public class LabelPropertyValue extends SkeletalPropertyValue implements PropertyValue {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	public LabelPropertyValue(String propertyName) {
-		super(propertyName);
-		setEditor(buildLabel());
-	}
+    public LabelPropertyValue(String propertyName) {
+        super(propertyName);
+        setEditor(buildLabel());
+    }
 
-	private Label buildLabel() {
-		Label label = new Label();
-		label.setPadding(new Insets(0, 2, 0, 2));
-		label.setBackground(Background.EMPTY);
-		//TODO label.setPromptText("TEST");
+    private Label buildLabel() {
+        Label label = new Label();
+        label.setPadding(new Insets(0, 2, 0, 2));
+        label.setBackground(Background.EMPTY);
+        //TODO label.setPromptText("TEST");
 
-		return label;
-	}
+        return label;
+    }
 
-	public void setValue(String value) {
-		final Label textField = (Label) getEditor();
-		if (value == null ||
-			!textField.getText().equals(value)) {
-			textField.setText(value);
-		}
-	}
+    public void setValue(String value) {
+        final Label textField = (Label) getEditor();
+        if (value == null ||
+                !textField.getText().equals(value)) {
+            textField.setText(value);
+        }
+    }
 
-	public void setColor(Color color) {
-		getEditor().setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
-	}
+    public void setColor(Color color) {
+        getEditor().setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
+    }
 
-	@Override
-	public void setFont(Font font) {
-		((Label)getEditor()).setFont(font);
-	}
+    @Override
+    public void setFont(Font font) {
+        ((Label) getEditor()).setFont(font);
+    }
 
-	@Override
-	public String toString() {
-		return "DisplayPropertyValue{" +
-				"name=" + getName() +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "DisplayPropertyValue{" +
+                "name=" + getName() +
+                '}';
+    }
 }

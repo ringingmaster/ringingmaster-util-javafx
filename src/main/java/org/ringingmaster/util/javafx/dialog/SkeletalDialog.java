@@ -25,107 +25,111 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public abstract class SkeletalDialog<MODEL> {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private EditMode editMode;
-	private Stage stage;
-	private Function<MODEL, Boolean> onSuccessHandler;
-
-
-	public static class DialogBuilder<S_MODEL, S_CTRL extends SkeletalDialog<S_MODEL>> {
-		public S_CTRL buildDialog(EditMode editMode, S_MODEL model, Window owner, URL fxmlResource, List<String> stylesheets, Function<S_MODEL, Boolean> onSuccessHandler) {
-			checkNotNull(editMode);
-			checkNotNull(owner);
-			checkNotNull(fxmlResource);
-			checkNotNull(onSuccessHandler);
-
-			FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource);
-
-			try {
-				Scene scene = new Scene(fxmlLoader.load());
-				S_CTRL controller = fxmlLoader.getController();
-				controller.init(editMode, scene, model, owner, stylesheets, onSuccessHandler);
-				return controller;
-
-			} catch (IOException e) {
-				final Logger log = LoggerFactory.getLogger(this.getClass());
-				log.error("Error initialising [" + fxmlResource + "]", e);
-				throw new RuntimeException(e);
-			}
-		}
-	}
-
-	protected void init(EditMode editMode, Scene scene, MODEL model, Window owner, List<String> stylesheets, Function<MODEL, Boolean> onSuccessHandler) {
-		this.editMode = checkNotNull(editMode);
-		this.onSuccessHandler = checkNotNull(onSuccessHandler);
-
-		configureScene(scene, stylesheets);
-		buildStage(scene, owner);
-
-		initialiseDialog(editMode, model);
+    private EditMode editMode;
+    private Stage stage;
+    private Function<MODEL, Boolean> onSuccessHandler;
 
 
-		if (model != null) {
-			populateDialogFromModel(model);
-		}
-	}
+    public static class DialogBuilder<S_MODEL, S_CTRL extends SkeletalDialog<S_MODEL>> {
+        public S_CTRL buildDialog(EditMode editMode, S_MODEL model, Window owner, URL fxmlResource, List<String> stylesheets, Function<S_MODEL, Boolean> onSuccessHandler) {
+            checkNotNull(editMode);
+            checkNotNull(owner);
+            checkNotNull(fxmlResource);
+            checkNotNull(onSuccessHandler);
 
-	protected void showAndWait() {
-		stage.showAndWait();
-	}
+            FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource);
 
-	private void configureScene(Scene scene, List<String> stylesheets) {
-		checkNotNull(scene);
-		scene.getStylesheets().addAll(stylesheets);
-		scene.setOnKeyPressed(event -> {
-			if (event.getCode().equals(KeyCode.ESCAPE)) {
-				OnCancel();
-			}
-		});
-	}
+            try {
+                Scene scene = new Scene(fxmlLoader.load());
+                S_CTRL controller = fxmlLoader.getController();
+                controller.init(editMode, scene, model, owner, stylesheets, onSuccessHandler);
+                return controller;
+
+            } catch (IOException e) {
+                final Logger log = LoggerFactory.getLogger(this.getClass());
+                log.error("Error initialising [" + fxmlResource + "]", e);
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    protected void init(EditMode editMode, Scene scene, MODEL model, Window owner, List<String> stylesheets, Function<MODEL, Boolean> onSuccessHandler) {
+        this.editMode = checkNotNull(editMode);
+        this.onSuccessHandler = checkNotNull(onSuccessHandler);
+
+        configureScene(scene, stylesheets);
+        buildStage(scene, owner);
+
+        initialiseDialog(editMode, model);
 
 
-	private void buildStage(Scene scene, Window owner) {
-		stage = new Stage(StageStyle.DECORATED);
-		stage.initOwner(owner);
-		stage.setScene(scene);
-		stage.initModality(Modality.WINDOW_MODAL);
-		stage.setTitle(editMode.getEditText() + ": ");
-	}
+        if (model != null) {
+            populateDialogFromModel(model);
+        }
+    }
 
-	public Stage getStage() {
-		return stage;
-	}
+    protected void showAndWait() {
+        stage.showAndWait();
+    }
 
-	public EditMode getEditMode() {
-		return editMode;
-	}
+    private void configureScene(Scene scene, List<String> stylesheets) {
+        checkNotNull(scene);
+        scene.getStylesheets().addAll(stylesheets);
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ESCAPE)) {
+                OnCancel();
+            }
+        });
+    }
 
-	@FXML
-	private void OnOk() {
-		MODEL result = buildModelFromDialogData();
 
-		try {
-			Boolean success = onSuccessHandler.apply(result);
-			if (success) {
-				close();
-			}
-		} catch (RuntimeException e) {
-			log.error("",e);
-		}
-	}
+    private void buildStage(Scene scene, Window owner) {
+        stage = new Stage(StageStyle.DECORATED);
+        stage.initOwner(owner);
+        stage.setScene(scene);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setTitle(editMode.getEditText() + ": ");
+    }
 
-	@FXML
-	protected void OnCancel() {
-		close();
-	}
+    public Stage getStage() {
+        return stage;
+    }
 
-	protected void close() {
-		stage.close();
-	}
+    public EditMode getEditMode() {
+        return editMode;
+    }
 
-	protected void initialiseDialog(EditMode editMode, MODEL model) {};
+    @FXML
+    private void OnOk() {
+        MODEL result = buildModelFromDialogData();
 
-	protected abstract void populateDialogFromModel(MODEL model);
-	protected abstract MODEL buildModelFromDialogData();
+        try {
+            Boolean success = onSuccessHandler.apply(result);
+            if (success) {
+                close();
+            }
+        } catch (RuntimeException e) {
+            log.error("", e);
+        }
+    }
+
+    @FXML
+    protected void OnCancel() {
+        close();
+    }
+
+    protected void close() {
+        stage.close();
+    }
+
+    protected void initialiseDialog(EditMode editMode, MODEL model) {
+    }
+
+    ;
+
+    protected abstract void populateDialogFromModel(MODEL model);
+
+    protected abstract MODEL buildModelFromDialogData();
 }

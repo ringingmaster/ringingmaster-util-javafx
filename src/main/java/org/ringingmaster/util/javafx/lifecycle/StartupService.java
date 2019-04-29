@@ -14,20 +14,20 @@ import static com.google.common.base.Preconditions.checkState;
  *
  * @author Lake
  */
-public class StartupService  extends ConcurrentListenable<StartupServiceListener> implements Listenable<StartupServiceListener> {
+public class StartupService extends ConcurrentListenable<StartupServiceListener> implements Listenable<StartupServiceListener> {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private AtomicBoolean started = new AtomicBoolean(false);
+    private AtomicBoolean started = new AtomicBoolean(false);
 
-	public void runStartup() {
-		log.info("Attempt at startup");
-		boolean success = started.compareAndSet(false,true);
-		checkState(success, "Only call runStartup() once");
-		for (StartupServiceListener startupServiceListener : getListeners()) {
-			startupServiceListener.startupService_startup();
-		}
-		log.info("Startup allowed");
-	}
+    public void runStartup() {
+        log.info("Attempt at startup");
+        boolean success = started.compareAndSet(false, true);
+        checkState(success, "Only call runStartup() once");
+        for (StartupServiceListener startupServiceListener : getListeners()) {
+            startupServiceListener.startupService_startup();
+        }
+        log.info("Startup allowed");
+    }
 
 }

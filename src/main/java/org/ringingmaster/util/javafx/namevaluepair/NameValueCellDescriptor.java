@@ -10,35 +10,35 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Lake
  */
 public class NameValueCellDescriptor {
-	private final String text;
-	private final Color backgroundColor;
-	private final boolean invalid;
+    private final String text;
+    private final Color backgroundColor;
+    private final boolean invalid;
 
 
-	public NameValueCellDescriptor(String text, Color backgroundColor, boolean invalid) {
-		this.invalid = invalid;
-		this.text = checkNotNull(text);
-		this.backgroundColor = backgroundColor;
-	}
+    public NameValueCellDescriptor(String text, Color backgroundColor, boolean invalid) {
+        this.invalid = invalid;
+        this.text = checkNotNull(text);
+        this.backgroundColor = backgroundColor;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public Color getBackgroundColor() {
-		return backgroundColor;
-	}
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
 
-	public boolean isInvalid() {
-		return invalid;
-	}
+    public boolean isInvalid() {
+        return invalid;
+    }
 
-	@Override
-	public String toString() {
-		return "NameValueCellDescriptor{" +
-				"text='" + text + '\'' +
-				", backgroundColor=" + backgroundColor +
-				", invalid=" + invalid +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "NameValueCellDescriptor{" +
+                "text='" + text + '\'' +
+                ", backgroundColor=" + backgroundColor +
+                ", invalid=" + invalid +
+                '}';
+    }
 }
