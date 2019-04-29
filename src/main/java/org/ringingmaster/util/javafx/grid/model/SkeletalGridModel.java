@@ -9,7 +9,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkPositionIndex;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * TODO comments ???
@@ -30,15 +29,17 @@ public abstract class SkeletalGridModel implements GridModel {
         listeners.add(listener);
     }
 
-    @Override
-    public void deRegisterListener(GridModelListener listener) {
-        boolean removed = listeners.remove(listener);
-        checkState(removed == true);
-    }
-
-    protected List<GridModelListener> getListeners() {
+    protected List<GridModelListener> listeners() {
         return listeners;
     }
+
+    protected void fireCellContentsChanged() {
+        for (GridModelListener listener : listeners) {
+
+            listener.gridModelListener_cellContentsChanged();
+        }
+    }
+
 
     @Override
     public GridPosition getCaretPosition() {

@@ -5,6 +5,7 @@ import org.ringingmaster.util.javafx.grid.model.GridModel;
 import org.ringingmaster.util.javafx.grid.model.GridModelListener;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * TODO comments ???
@@ -31,16 +32,14 @@ public class GridPane extends Pane implements GridModelListener {
 
 
     public void setModel(GridModel model) {
-        if (this.model != null) {
-            this.model.deRegisterListener(this);
-        }
+        checkState(this.model == null);
         this.model = checkNotNull(model);
         this.model.registerListener(this);
-        gridModelListener_contentsChanged();
+        gridModelListener_cellContentsChanged();
     }
 
     @Override
-    public void gridModelListener_contentsChanged() {
+    public void gridModelListener_cellContentsChanged() {
         dimensions = new GridDimensionBuilder().setModel(model).build();
 
         setMinWidth(dimensions.getTableRight());

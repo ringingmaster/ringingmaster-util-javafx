@@ -1,9 +1,6 @@
 package org.ringingmaster.util.javafx.grid.model;
 
 import java.util.Iterator;
-import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * TODO comments ???
@@ -11,18 +8,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Lake
  */
 public abstract class SkeletalCellModel implements CellModel {
-
-    private List<GridModelListener> listeners;
-
-    public SkeletalCellModel(final List<GridModelListener> listeners) {
-        this.listeners = checkNotNull(listeners);
-    }
-
-    protected void fireCellStructureChanged() { //TODO rename
-        for (GridModelListener listener : listeners) {
-            listener.gridModelListener_contentsChanged();
-        }
-    }
 
 
     @Override

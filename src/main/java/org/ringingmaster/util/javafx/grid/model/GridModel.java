@@ -53,7 +53,4 @@ public interface GridModel {
 
 
     void registerListener(GridModelListener listener);
-
-    void deRegisterListener(GridModelListener listener);
-
 }

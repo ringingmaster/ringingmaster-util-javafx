@@ -7,7 +7,7 @@ package org.ringingmaster.util.javafx.grid.model;
  */
 public interface GridModelListener {
 
-    void gridModelListener_contentsChanged();
+    void gridModelListener_cellContentsChanged();
 
     void gridModelListener_caretMoved();
 
