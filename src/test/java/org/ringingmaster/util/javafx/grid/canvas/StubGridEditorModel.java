@@ -63,6 +63,11 @@ public class StubGridEditorModel implements GridModel {
     }
 
     @Override
+    public boolean hasRowHeader() {
+        return false;
+    }
+
+    @Override
     public int getRowSize() {
         return model.length;
     }
@@ -80,11 +85,6 @@ public class StubGridEditorModel implements GridModel {
     @Override
     public CharacterModel getCharacterModel(GridPosition gridPosition) {
         return null;
-    }
-
-    @Override
-    public CellModel getRowHeader(int row) {
-        return new StubCellModel(rowHeaders[row]);
     }
 
     @Override
