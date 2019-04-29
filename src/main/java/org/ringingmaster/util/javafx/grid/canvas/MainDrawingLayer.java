@@ -7,8 +7,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import org.ringingmaster.util.javafx.grid.model.AdditionalStyleType;
-import org.ringingmaster.util.javafx.grid.model.GridCharacterGroup;
-import org.ringingmaster.util.javafx.grid.model.GridCharacterModel;
+import org.ringingmaster.util.javafx.grid.model.CellModel;
+import org.ringingmaster.util.javafx.grid.model.CharacterModel;
 import org.ringingmaster.util.javafx.grid.model.GridModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,20 +75,20 @@ class MainDrawingLayer extends Canvas {
         for (int row = 0; row < rowCount; row++) {
             final double textBottom = dimensions.getTextBottom(row);
             for (int col = 0; col < colCount; col++) {
-                final GridCharacterGroup gridCharacterGroup = model.getCellModel(row, col);
-                final GridCellDimension tableCellDimension = dimensions.getCell(row, col);
+                final CellModel cellModel = model.getCellModel(row, col);
+                final CellDimension tableCellDimension = dimensions.getCell(row, col);
 
-                drawCellText(gc, gridCharacterGroup, tableCellDimension, textBottom);
-                drawCellUnderline(gc, gridCharacterGroup, tableCellDimension, textBottom);
+                drawCellText(gc, cellModel, tableCellDimension, textBottom);
+                drawCellUnderline(gc, cellModel, tableCellDimension, textBottom);
             }
         }
     }
 
-    private void drawCellText(GraphicsContext gc, GridCharacterGroup gridCharacterGroup, GridCellDimension tableCellDimension, double textBottom) {
-        for (int characterIndex = 0; characterIndex < gridCharacterGroup.getLength(); characterIndex++) {
+    private void drawCellText(GraphicsContext gc, CellModel cellModel, CellDimension tableCellDimension, double textBottom) {
+        for (int characterIndex = 0; characterIndex < cellModel.getLength(); characterIndex++) {
             double textLeft = tableCellDimension.getVerticalCharacterStartPosition(characterIndex);
 
-            GridCharacterModel gridEditorCharacterModel = gridCharacterGroup.getGridCharacterModel(characterIndex);
+            CharacterModel gridEditorCharacterModel = cellModel.getCharacterModel(characterIndex);
             final char cellText = gridEditorCharacterModel.getCharacter();
             final Font font = gridEditorCharacterModel.getFont();
             gc.setFill(gridEditorCharacterModel.getColor()); //TODO do we ned to set both for the font?
@@ -98,7 +98,19 @@ class MainDrawingLayer extends Canvas {
         }
     }
 
-    private void drawCellUnderline(GraphicsContext gc, GridCharacterGroup gridCharacterGroup, GridCellDimension tableCellDimension, double textBottom) {
+    private void drawRowHeadersText(GraphicsContext gc, GridModel model, GridDimension dimensions) {
+        final int rowCount = model.getRowSize();
+
+        for (int row = 0; row < rowCount; row++) {
+            final double textBottom = dimensions.getTextBottom(row);
+            final CellModel cellModel = model.getRowHeader(row);
+            final CellDimension tableCellDimension = dimensions.getRowHeaderCellDimension(row);
+
+            drawCellText(gc, cellModel, tableCellDimension, textBottom);
+        }
+    }
+
+    private void drawCellUnderline(GraphicsContext gc, CellModel cellModel, CellDimension tableCellDimension, double textBottom) {
         gc.setFill(Color.RED);
         gc.setStroke(Color.RED);
         gc.setLineWidth(1.0);
@@ -110,9 +122,9 @@ class MainDrawingLayer extends Canvas {
         //     spxzpdsf
 
 
-        for (int characterIndex = 0; characterIndex < gridCharacterGroup.getLength(); characterIndex++) {
-            GridCharacterModel gridCharacterModel = gridCharacterGroup.getGridCharacterModel(characterIndex);
-            if (gridCharacterModel.getAdditionalStyle().contains(AdditionalStyleType.WIGGLY_UNDERLINE)) {
+        for (int characterIndex = 0; characterIndex < cellModel.getLength(); characterIndex++) {
+            CharacterModel characterModel = cellModel.getCharacterModel(characterIndex);
+            if (characterModel.getAdditionalStyle().contains(AdditionalStyleType.WIGGLY_UNDERLINE)) {
                 final double textLeft = tableCellDimension.getVerticalCharacterStartPosition(characterIndex);
                 final double textRight = tableCellDimension.getVerticalCharacterEndPosition(characterIndex);
 
@@ -148,15 +160,5 @@ class MainDrawingLayer extends Canvas {
         return ((int) (Math.ceil((value + 0.0000001) / pixelPitch))) * pixelPitch;
     }
 
-    private void drawRowHeadersText(GraphicsContext gc, GridModel model, GridDimension dimensions) {
-        final int rowCount = model.getRowSize();
 
-        for (int row = 0; row < rowCount; row++) {
-            final double textBottom = dimensions.getTextBottom(row);
-            final GridCharacterGroup cellModel = model.getRowHeader(row);
-            final GridCellDimension tableCellDimension = dimensions.getRowHeaderCellDimension(row);
-
-            drawCellText(gc, cellModel, tableCellDimension, textBottom);
-        }
-    }
 }

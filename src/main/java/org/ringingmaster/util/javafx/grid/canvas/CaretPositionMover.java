@@ -1,7 +1,7 @@
 package org.ringingmaster.util.javafx.grid.canvas;
 
 import org.ringingmaster.util.javafx.grid.GridPosition;
-import org.ringingmaster.util.javafx.grid.model.GridCellModel;
+import org.ringingmaster.util.javafx.grid.model.CellModel;
 
 /**
  * TODO Comments
@@ -37,7 +37,7 @@ public class CaretPositionMover {
         int row = caretPosition.getRow();
         int col = caretPosition.getColumn();
         int character = caretPosition.getCharacterIndex() + 1;
-        GridCellModel cellModel = parent.getModel().getCellModel(row, col);
+        CellModel cellModel = parent.getModel().getCellModel(row, col);
         if (character > cellModel.getLength()) {
             // roll to start of next cell
             col++;
@@ -174,7 +174,7 @@ public class CaretPositionMover {
 
     void deleteForward() {
         GridPosition caretPosition = parent.getModel().getCaretPosition();
-        GridCellModel cellModel = parent.getModel().getCellModel(caretPosition.getRow(), caretPosition.getColumn());
+        CellModel cellModel = parent.getModel().getCellModel(caretPosition.getRow(), caretPosition.getColumn());
         if (caretPosition.getCharacterIndex() < cellModel.getLength()) {
             cellModel.removeCharacter(caretPosition.getCharacterIndex());
         }

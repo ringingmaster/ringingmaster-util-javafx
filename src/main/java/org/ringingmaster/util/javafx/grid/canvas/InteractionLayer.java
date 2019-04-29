@@ -185,7 +185,7 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
 //			return;
 //		}
 //
-//		GridCharacterModel characterModel = parent.getModel().getCharacterModel(gridPosition.get());
+//		CharacterModel characterModel = parent.getModel().getCharacterModel(gridPosition.get());
 //		if (characterModel!= null) {
 //			Optional<String> tooltipText = characterModel.getTooltipText();
 //			if (tooltipText.isPresent()) {
@@ -246,7 +246,7 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
             }
 
             // Now calculate the character index.
-            final GridCellDimension cell = dimensions.getCell(rowIndex, columnIndex);
+            final CellDimension cell = dimensions.getCell(rowIndex, columnIndex);
             characterIndex = 0;
 
             if (align == Align.BOUNDARY_MID_CHARACTER) {

@@ -35,11 +35,11 @@ public interface GridModel {
      */
     Color getGridColor();
 
-    GridCellModel getCellModel(int row, int column);
+    CellModel getCellModel(int row, int column);
 
-    GridCharacterModel getCharacterModel(GridPosition gridPosition);
+    CharacterModel getCharacterModel(GridPosition gridPosition);
 
-    GridCharacterGroup getRowHeader(int row);
+    CellModel getRowHeader(int row);
 
     GridPosition getCaretPosition();
 

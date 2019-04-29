@@ -1,8 +1,7 @@
 package org.ringingmaster.util.javafx.grid.canvas;
 
 import com.google.common.annotations.VisibleForTesting;
-import org.ringingmaster.util.javafx.grid.model.GridCellModel;
-import org.ringingmaster.util.javafx.grid.model.GridCharacterGroup;
+import org.ringingmaster.util.javafx.grid.model.CellModel;
 import org.ringingmaster.util.javafx.grid.model.GridModel;
 
 /**
@@ -33,26 +32,26 @@ public class GridDimensionBuilder {
     }
 
     private GridDimension calculateFromModel() {
-        CharacterGroupMeasurer measurer = new CharacterGroupMeasurer();
+        CellMeasurer measurer = new CellMeasurer();
 
         final int rowCount = model.getRowSize();
         final int colCount = model.getColumnSize();
         final int colCountInclRowHeader = colCount + GridDimension.ROW_HEADER_OFFSET;
 
-        final CharacterGroupMeasurement[][] cellMeasurements = new CharacterGroupMeasurement[colCountInclRowHeader][rowCount];
+        final CellMeasurement[][] cellMeasurements = new CellMeasurement[colCountInclRowHeader][rowCount];
 
         // Measure all row headers
         for (int row = 0; row < rowCount; row++) {
-            GridCharacterGroup rowHeaderModel = model.getRowHeader(row);
-            CharacterGroupMeasurement cellDimension = measurer.measureCell(rowHeaderModel);
+            CellModel rowHeaderModel = model.getRowHeader(row);
+            CellMeasurement cellDimension = measurer.measureCell(rowHeaderModel);
             cellMeasurements[GridDimension.ROW_HEADER_POSITION][row] = cellDimension;
         }
 
         // measure all the cells.
         for (int row = 0; row < rowCount; row++) {
             for (int col = 0; col < colCount; col++) {
-                final GridCellModel cellModel = model.getCellModel(row, col);
-                CharacterGroupMeasurement cellDimension = measurer.measureCell(cellModel);
+                final CellModel cellModel = model.getCellModel(row, col);
+                CellMeasurement cellDimension = measurer.measureCell(cellModel);
                 cellMeasurements[col + GridDimension.ROW_HEADER_OFFSET][row] = cellDimension;
             }
         }
@@ -66,13 +65,13 @@ public class GridDimensionBuilder {
 
         double[] tableBottomGaps = calculateBottomGaps(cellMeasurements, colCountInclRowHeader, rowCount);
 
-        GridCellDimension[][] cells = calculateCells(cellMeasurements, vertLinePositions, colCountInclRowHeader, rowCount);
+        CellDimension[][] cells = calculateCells(cellMeasurements, vertLinePositions, colCountInclRowHeader, rowCount);
 
         return new GridDimension(false, vertLinePositions, horzLinePositions,
                 tableRowHeights, tableColumnWidths, tableBottomGaps, cells);
     }
 
-    private double[] calculateColumnWidths(final CharacterGroupMeasurement[][] cellMeasurements, int colCount, int rowCount) {
+    private double[] calculateColumnWidths(final CellMeasurement[][] cellMeasurements, int colCount, int rowCount) {
         final double[] columnWidths = new double[colCount];
 
         for (int col = 0; col < colCount; col++) {
@@ -81,7 +80,7 @@ public class GridDimensionBuilder {
         return columnWidths;
     }
 
-    private double measureColumnWidth(final CharacterGroupMeasurement[][] cellMeasurements, int rowCount, final int col) {
+    private double measureColumnWidth(final CellMeasurement[][] cellMeasurements, int rowCount, final int col) {
         double maxColWidth = 0;
         for (int row = 0; row < rowCount; row++) {
             final double cellWidth = cellMeasurements[col][row].getTotalWidth();
@@ -92,7 +91,7 @@ public class GridDimensionBuilder {
         return Math.max(maxColWidth, MIN_COL_WIDTH);
     }
 
-    private double[] calculateRowHeights(final CharacterGroupMeasurement[][] cellMeasurements, int colCount, int rowCount) {
+    private double[] calculateRowHeights(final CellMeasurement[][] cellMeasurements, int colCount, int rowCount) {
         final double[] rowHeights = new double[rowCount];
 
         for (int row = 0; row < rowCount; row++) {
@@ -101,7 +100,7 @@ public class GridDimensionBuilder {
         return rowHeights;
     }
 
-    private double measureRowHeight(final CharacterGroupMeasurement[][] cellMeasurements, int colCount, final int row) {
+    private double measureRowHeight(final CellMeasurement[][] cellMeasurements, int colCount, final int row) {
         double maxRowHeight = 0;
         for (int col = 0; col < colCount; col++) {
             final double cellHeight = cellMeasurements[col][row].getMaxHeight();
@@ -122,7 +121,7 @@ public class GridDimensionBuilder {
         return positions;
     }
 
-    private double[] calculateBottomGaps(final CharacterGroupMeasurement[][] cellMeasurements, int colCount, int rowCount) {
+    private double[] calculateBottomGaps(final CellMeasurement[][] cellMeasurements, int colCount, int rowCount) {
         final double[] bottomGaps = new double[rowCount];
 
         for (int row = 0; row < rowCount; row++) {
@@ -135,10 +134,10 @@ public class GridDimensionBuilder {
         return bottomGaps;
     }
 
-    private GridCellDimension[][] calculateCells(final CharacterGroupMeasurement[][] cellMeasurements, double[] vertLinePositions,
-                                                 int colCount, int rowCount) {
+    private CellDimension[][] calculateCells(final CellMeasurement[][] cellMeasurements, double[] vertLinePositions,
+                                             int colCount, int rowCount) {
 
-        GridCellDimension[][] cells = new GridCellDimension[colCount][rowCount];
+        CellDimension[][] cells = new CellDimension[colCount][rowCount];
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
             for (int colIndex = 0; colIndex < colCount; colIndex++) {
                 double vertLinePosition = vertLinePositions[colIndex];
@@ -153,7 +152,7 @@ public class GridDimensionBuilder {
     }
 
     @VisibleForTesting
-    protected GridCellDimension calculateCell(double vertLinePosition, double horizontalPadding, double[] characterWidths) {
+    protected CellDimension calculateCell(double vertLinePosition, double horizontalPadding, double[] characterWidths) {
         double[] characterStarts = new double[characterWidths.length + 1];
         double[] characterMids = new double[characterWidths.length];
         double[] characterEnds = new double[characterWidths.length];
@@ -169,6 +168,6 @@ public class GridDimensionBuilder {
         // This is to allow the caret to positioned at position n+1 where n is the number of characters.
         characterStarts[characterIndex] = nextStart;
 
-        return new GridCellDimension(characterWidths.length, characterStarts, characterMids, characterEnds);
+        return new CellDimension(characterWidths.length, characterStarts, characterMids, characterEnds);
     }
 }

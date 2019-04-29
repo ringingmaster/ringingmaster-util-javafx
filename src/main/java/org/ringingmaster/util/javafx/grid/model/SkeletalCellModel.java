@@ -10,11 +10,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Lake
  */
-public abstract class SkeletalGridCellModel implements GridCellModel {
+public abstract class SkeletalCellModel implements CellModel {
 
     private List<GridModelListener> listeners;
 
-    public SkeletalGridCellModel(final List<GridModelListener> listeners) {
+    public SkeletalCellModel(final List<GridModelListener> listeners) {
         this.listeners = checkNotNull(listeners);
     }
 
@@ -36,8 +36,8 @@ public abstract class SkeletalGridCellModel implements GridCellModel {
     }
 
     @Override
-    public Iterator<GridCharacterModel> iterator() {
-        return new Iterator<GridCharacterModel>() {
+    public Iterator<CharacterModel> iterator() {
+        return new Iterator<>() {
             int index = 0;
 
             @Override
@@ -46,8 +46,8 @@ public abstract class SkeletalGridCellModel implements GridCellModel {
             }
 
             @Override
-            public GridCharacterModel next() {
-                return getGridCharacterModel(index++);
+            public CharacterModel next() {
+                return getCharacterModel(index++);
             }
 
             @Override

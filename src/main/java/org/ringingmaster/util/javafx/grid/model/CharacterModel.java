@@ -11,7 +11,7 @@ import java.util.Set;
  * TODO comments???
  * User: Stephen
  */
-public interface GridCharacterModel {
+public interface CharacterModel {
 
     char getCharacter();
 

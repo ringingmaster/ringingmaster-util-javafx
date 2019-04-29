@@ -57,20 +57,20 @@ public class GridDimensionBuilderTest {
 
     @Test
     public void calculateCellGetsCorrectValues() {
-        GridCellDimension gridCellDimension = new GridDimensionBuilder().calculateCell(10.0, 2, new double[]{10, 5, 20});
-        assertEquals(3, gridCellDimension.getCharacterCount());
+        CellDimension cellDimension = new GridDimensionBuilder().calculateCell(10.0, 2, new double[]{10, 5, 20});
+        assertEquals(3, cellDimension.getCharacterCount());
 
-        assertEquals(12.0, gridCellDimension.getVerticalCharacterStartPosition(0), 0.000001);
-        assertEquals(22.0, gridCellDimension.getVerticalCharacterStartPosition(1), 0.000001);
-        assertEquals(27.0, gridCellDimension.getVerticalCharacterStartPosition(2), 0.000001);
+        assertEquals(12.0, cellDimension.getVerticalCharacterStartPosition(0), 0.000001);
+        assertEquals(22.0, cellDimension.getVerticalCharacterStartPosition(1), 0.000001);
+        assertEquals(27.0, cellDimension.getVerticalCharacterStartPosition(2), 0.000001);
 
-        assertEquals(22.0, gridCellDimension.getVerticalCharacterEndPosition(0), 0.000001);
-        assertEquals(27.0, gridCellDimension.getVerticalCharacterEndPosition(1), 0.000001);
-        assertEquals(47.0, gridCellDimension.getVerticalCharacterEndPosition(2), 0.000001);
+        assertEquals(22.0, cellDimension.getVerticalCharacterEndPosition(0), 0.000001);
+        assertEquals(27.0, cellDimension.getVerticalCharacterEndPosition(1), 0.000001);
+        assertEquals(47.0, cellDimension.getVerticalCharacterEndPosition(2), 0.000001);
 
-        assertEquals(17.0, gridCellDimension.getVerticalCharacterMidPosition(0), 0.000001);
-        assertEquals(24.5, gridCellDimension.getVerticalCharacterMidPosition(1), 0.000001);
-        assertEquals(37.0, gridCellDimension.getVerticalCharacterMidPosition(2), 0.000001);
+        assertEquals(17.0, cellDimension.getVerticalCharacterMidPosition(0), 0.000001);
+        assertEquals(24.5, cellDimension.getVerticalCharacterMidPosition(1), 0.000001);
+        assertEquals(37.0, cellDimension.getVerticalCharacterMidPosition(2), 0.000001);
     }
 
 }

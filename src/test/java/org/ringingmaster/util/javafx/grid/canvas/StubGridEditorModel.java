@@ -4,9 +4,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.ringingmaster.util.javafx.grid.GridPosition;
 import org.ringingmaster.util.javafx.grid.model.AdditionalStyleType;
-import org.ringingmaster.util.javafx.grid.model.GridCellModel;
-import org.ringingmaster.util.javafx.grid.model.GridCharacterGroup;
-import org.ringingmaster.util.javafx.grid.model.GridCharacterModel;
+import org.ringingmaster.util.javafx.grid.model.CellModel;
+import org.ringingmaster.util.javafx.grid.model.CharacterModel;
 import org.ringingmaster.util.javafx.grid.model.GridModel;
 import org.ringingmaster.util.javafx.grid.model.GridModelListener;
 
@@ -74,18 +73,18 @@ public class StubGridEditorModel implements GridModel {
     }
 
     @Override
-    public GridCellModel getCellModel(int row, int column) {
-        return new StubGridCellModel(model[row][column]);
+    public CellModel getCellModel(int row, int column) {
+        return new StubCellModel(model[row][column]);
     }
 
     @Override
-    public GridCharacterModel getCharacterModel(GridPosition gridPosition) {
+    public CharacterModel getCharacterModel(GridPosition gridPosition) {
         return null;
     }
 
     @Override
-    public GridCharacterGroup getRowHeader(int row) {
-        return new StubGridCellModel(rowHeaders[row]);
+    public CellModel getRowHeader(int row) {
+        return new StubCellModel(rowHeaders[row]);
     }
 
     @Override
@@ -118,11 +117,11 @@ public class StubGridEditorModel implements GridModel {
         return (getColumnSize() == 0 || getRowSize() == 0);
     }
 
-    class StubGridCellModel implements GridCellModel {
+    class StubCellModel implements CellModel {
 
         private final String characters;
 
-        StubGridCellModel(String characters) {
+        StubCellModel(String characters) {
             this.characters = characters;
         }
 
@@ -140,8 +139,8 @@ public class StubGridEditorModel implements GridModel {
         }
 
         @Override
-        public GridCharacterModel getGridCharacterModel(int index) {
-            return new GridCharacterModel() {
+        public CharacterModel getCharacterModel(int index) {
+            return new CharacterModel() {
                 @Override
                 public char getCharacter() {
                     return characters.charAt(index);
@@ -170,8 +169,8 @@ public class StubGridEditorModel implements GridModel {
         }
 
         @Override
-        public Iterator<GridCharacterModel> iterator() {
-            return new Iterator<GridCharacterModel>() {
+        public Iterator<CharacterModel> iterator() {
+            return new Iterator<CharacterModel>() {
                 int index = 0;
 
                 @Override
@@ -180,8 +179,8 @@ public class StubGridEditorModel implements GridModel {
                 }
 
                 @Override
-                public GridCharacterModel next() {
-                    return getGridCharacterModel(index++);
+                public CharacterModel next() {
+                    return getCharacterModel(index++);
                 }
 
                 @Override

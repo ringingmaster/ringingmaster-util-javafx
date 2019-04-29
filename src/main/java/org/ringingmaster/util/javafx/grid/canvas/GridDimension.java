@@ -21,14 +21,14 @@ public class GridDimension {
     private final double[] columnWidths;
     private final double[] bottomGaps;
 
-    private final GridCellDimension[][] cellDimensions;
+    private final CellDimension[][] cellDimensions;
 
 
     GridDimension(boolean zeroSized,
                   double[] vertLinePositions, double[] horzLinePositions,
                   double[] rowHeights, double[] columnWidths,
                   double[] bottomGaps,
-                  GridCellDimension[][] cellDimensions) {
+                  CellDimension[][] cellDimensions) {
         this.zeroSized = zeroSized;
         this.vertLinePositions = vertLinePositions;
         this.horzLinePositions = horzLinePositions;
@@ -70,16 +70,16 @@ public class GridDimension {
     }
 
 
-    public GridCellDimension getCell(int rowIndex, int colIndex) {
+    public CellDimension getCell(int rowIndex, int colIndex) {
         int offsetColIndex = ROW_HEADER_OFFSET + colIndex;
         checkElementIndex(offsetColIndex, cellDimensions.length);
-        final GridCellDimension[] column = cellDimensions[offsetColIndex];
+        final CellDimension[] column = cellDimensions[offsetColIndex];
         checkElementIndex(rowIndex, column.length);
         return column[rowIndex];
     }
 
-    public GridCellDimension getRowHeaderCellDimension(int rowIndex) {
-        final GridCellDimension[] column = cellDimensions[ROW_HEADER_POSITION];
+    public CellDimension getRowHeaderCellDimension(int rowIndex) {
+        final CellDimension[] column = cellDimensions[ROW_HEADER_POSITION];
         checkElementIndex(rowIndex, column.length);
         return column[rowIndex];
     }

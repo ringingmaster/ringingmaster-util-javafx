@@ -5,7 +5,11 @@ package org.ringingmaster.util.javafx.grid.model;
  *
  * @author Lake
  */
-public interface GridCellModel extends GridCharacterGroup {
+public interface CellModel extends Iterable<CharacterModel> {
+
+    int getLength();
+
+    CharacterModel getCharacterModel(int index);
 
     void insertCharacter(int index, String character);
 

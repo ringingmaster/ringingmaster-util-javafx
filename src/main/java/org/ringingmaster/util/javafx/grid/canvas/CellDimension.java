@@ -9,14 +9,14 @@ import static com.google.common.base.Preconditions.checkState;
  *
  * @author Lake
  */
-public class GridCellDimension {
+public class CellDimension {
 
     private int characterCount;
     private final double[] characterStarts;
     private final double[] characterMids;
     private final double[] characterEnds;
 
-    public GridCellDimension(int characterCount, double[] characterStarts, double[] characterMids, double[] characterEnds) {
+    public CellDimension(int characterCount, double[] characterStarts, double[] characterMids, double[] characterEnds) {
         this.characterCount = characterCount;
         this.characterStarts = checkNotNull(characterStarts);
         this.characterMids = checkNotNull(characterMids);

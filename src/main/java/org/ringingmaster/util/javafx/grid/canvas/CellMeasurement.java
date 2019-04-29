@@ -11,7 +11,7 @@ import java.util.Arrays;
  * @author Stephen
  */
 @Immutable
-public class CharacterGroupMeasurement {
+public class CellMeasurement {
 
     private final double maxHeight;
     private final double bottomGap;
@@ -19,7 +19,7 @@ public class CharacterGroupMeasurement {
     private final double totalCharacterWidth;
     private final double[] characterWidths;
 
-    CharacterGroupMeasurement(final double maxHeight, final double maxDescent, final double[] characterWidths, final double horizontalPadding) {
+    CellMeasurement(final double maxHeight, final double maxDescent, final double[] characterWidths, final double horizontalPadding) {
         this.maxHeight = maxHeight;
         this.bottomGap = maxDescent;
         this.horizontalPadding = horizontalPadding;
@@ -57,7 +57,7 @@ public class CharacterGroupMeasurement {
 
     @Override
     public String toString() {
-        return "CharacterGroupMeasurement{" +
+        return "CellMeasurement{" +
                 "maxHeight=" + maxHeight +
                 ", bottomGap=" + bottomGap +
                 ", totalCharacterWidth=" + totalCharacterWidth +
