@@ -109,6 +109,11 @@ public abstract class SkeletalGridModel implements GridModel {
     }
 
     @Override
+    public boolean hasRowHeader() {
+        return false;
+    }
+
+    @Override
     public CharacterModel getCharacterModel(GridPosition gridPosition) {
         checkNotNull(gridPosition);
         CellModel cellModel = getCellModel(gridPosition.getColumn(), gridPosition.getRow());

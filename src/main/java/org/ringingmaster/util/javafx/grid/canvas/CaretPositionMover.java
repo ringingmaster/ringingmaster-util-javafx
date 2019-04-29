@@ -45,7 +45,7 @@ public class CaretPositionMover {
             if (col >= parent.getModel().getColumnSize()) {
                 // roll to next row
                 row++;
-                col = 0;
+                col = (parent.getModel().hasRowHeader()?1:0);
             }
         }
         // if we have blown the row count, then there is nowhere else to go
@@ -76,7 +76,7 @@ public class CaretPositionMover {
         if (character < 0) {
             // roll to end of previous cell
             col--;
-            if (col < 0) {
+            if (col < (parent.getModel().hasRowHeader()?1:0)) {
                 // roll to previous row
                 row--;
                 col = parent.getModel().getColumnSize() - 1;
@@ -156,7 +156,7 @@ public class CaretPositionMover {
         }
 
         GridPosition pos = parent.getModel().getCaretPosition();
-        int col = 0;
+        int col = (parent.getModel().hasRowHeader()?1:0);
         int row = pos.getRow();
         int character = 0;
         parent.getModel().setCaretPosition(new GridPosition(row, col,  character));

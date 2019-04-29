@@ -11,6 +11,8 @@ import org.ringingmaster.util.javafx.grid.GridPosition;
  */
 public interface GridModel {
 
+    boolean hasRowHeader();
+
     /**
      * Get the number of rows (not lines)
      *
@@ -38,8 +40,6 @@ public interface GridModel {
     CellModel getCellModel(int row, int column);
 
     CharacterModel getCharacterModel(GridPosition gridPosition);
-
-    CellModel getRowHeader(int row);
 
     GridPosition getCaretPosition();
 

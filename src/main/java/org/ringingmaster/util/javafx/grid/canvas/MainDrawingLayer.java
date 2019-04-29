@@ -35,7 +35,6 @@ class MainDrawingLayer extends Canvas {
         clearBackground(gc);
         drawGrid(gc, parent.getModel(), parent.getDimensions());
         drawCellsText(gc, parent.getModel(), parent.getDimensions());
-        drawRowHeadersText(gc, parent.getModel(), parent.getDimensions());
     }
 
     private void clearBackground(GraphicsContext gc) {
@@ -44,14 +43,15 @@ class MainDrawingLayer extends Canvas {
 
     private void drawGrid(final GraphicsContext gc, GridModel model, GridDimension dimensions) {
         final int horzLineCount = model.getRowSize() + EXTRA_END_LINE_TO_CLOSE_ROW_OR_COL;
-        final int vertLineCount = model.getColumnSize() + EXTRA_END_LINE_TO_CLOSE_ROW_OR_COL;
+        int accountForRowHeader = model.hasRowHeader() ? 1 : 0;
+        final int vertLineCount = model.getColumnSize() - accountForRowHeader + EXTRA_END_LINE_TO_CLOSE_ROW_OR_COL ;
 
         gc.setFill(model.getGridColor());
         gc.setStroke(model.getGridColor());
         gc.setLineWidth(1.0);
 
         // Draw horizontal lines
-        final double left = dimensions.getTableLeft();
+        final double left = dimensions.getTableLeft(model.hasRowHeader());
         final double right = dimensions.getTableRight();
         for (int horizLineIndex = 0; horizLineIndex < horzLineCount; horizLineIndex++) {
             final double horzLinePosition = dimensions.getTableHorizontalLinePosition(horizLineIndex);
@@ -63,7 +63,7 @@ class MainDrawingLayer extends Canvas {
         final double top = dimensions.getTableTop();
         final double bottom = dimensions.getTableBottom();
         for (int vertLineIndex = 0; vertLineIndex < vertLineCount; vertLineIndex++) {
-            final double vertLinePosition = dimensions.getTableVerticalLinePosition(vertLineIndex);
+            final double vertLinePosition = dimensions.getTableVerticalLinePosition(vertLineIndex + accountForRowHeader);
             gc.strokeLine(vertLinePosition, top, vertLinePosition, bottom);
         }
     }
@@ -95,18 +95,6 @@ class MainDrawingLayer extends Canvas {
             gc.setStroke(gridEditorCharacterModel.getColor());
             gc.setFont(font);
             gc.fillText(String.valueOf(cellText), textLeft, textBottom);//What about the other version of this using and AttributedString
-        }
-    }
-
-    private void drawRowHeadersText(GraphicsContext gc, GridModel model, GridDimension dimensions) {
-        final int rowCount = model.getRowSize();
-
-        for (int row = 0; row < rowCount; row++) {
-            final double textBottom = dimensions.getTextBottom(row);
-            final CellModel cellModel = model.getRowHeader(row);
-            final CellDimension tableCellDimension = dimensions.getRowHeaderCellDimension(row);
-
-            drawCellText(gc, cellModel, tableCellDimension, textBottom);
         }
     }
 

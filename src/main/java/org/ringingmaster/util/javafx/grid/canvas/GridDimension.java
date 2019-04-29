@@ -9,9 +9,6 @@ import static com.google.common.base.Preconditions.checkElementIndex;
  */
 public class GridDimension {
 
-    public static final int ROW_HEADER_OFFSET = 1;
-    public static final int ROW_HEADER_POSITION = 0;
-
     private final boolean zeroSized;
 
     private final double[] vertLinePositions;
@@ -42,8 +39,8 @@ public class GridDimension {
         return vertLinePositions[0];
     }
 
-    public double getTableLeft() {
-        return vertLinePositions[ROW_HEADER_OFFSET];
+    public double getTableLeft(boolean hasRowHeader) {
+        return vertLinePositions[hasRowHeader?1:0];
     }
 
     public double getTableRight() {
@@ -59,7 +56,7 @@ public class GridDimension {
     }
 
     public double getTableVerticalLinePosition(int vertLineIndex) {
-        final int offsetVertLineIndex = ROW_HEADER_OFFSET + vertLineIndex;
+        final int offsetVertLineIndex = vertLineIndex;
         checkElementIndex(offsetVertLineIndex, vertLinePositions.length);
         return vertLinePositions[offsetVertLineIndex];
     }
@@ -71,15 +68,9 @@ public class GridDimension {
 
 
     public CellDimension getCell(int rowIndex, int colIndex) {
-        int offsetColIndex = ROW_HEADER_OFFSET + colIndex;
+        int offsetColIndex = colIndex;
         checkElementIndex(offsetColIndex, cellDimensions.length);
         final CellDimension[] column = cellDimensions[offsetColIndex];
-        checkElementIndex(rowIndex, column.length);
-        return column[rowIndex];
-    }
-
-    public CellDimension getRowHeaderCellDimension(int rowIndex) {
-        final CellDimension[] column = cellDimensions[ROW_HEADER_POSITION];
         checkElementIndex(rowIndex, column.length);
         return column[rowIndex];
     }
@@ -105,6 +96,6 @@ public class GridDimension {
     }
 
     public int getColumnCount() {
-        return columnWidths.length - ROW_HEADER_OFFSET;
+        return columnWidths.length;
     }
 }

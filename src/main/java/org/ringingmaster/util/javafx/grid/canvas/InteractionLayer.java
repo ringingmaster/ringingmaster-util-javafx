@@ -262,6 +262,9 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
             }
         }
 
+        if (parent.getModel().hasRowHeader() && columnIndex==0) {
+            return Optional.empty();
+        }
         return Optional.of(new GridPosition( rowIndex, columnIndex, characterIndex));
     }
 }

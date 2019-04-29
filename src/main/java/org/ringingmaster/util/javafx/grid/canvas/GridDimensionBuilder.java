@@ -36,36 +36,29 @@ public class GridDimensionBuilder {
 
         final int rowCount = model.getRowSize();
         final int colCount = model.getColumnSize();
-        final int colCountInclRowHeader = colCount + GridDimension.ROW_HEADER_OFFSET;
 
-        final CellMeasurement[][] cellMeasurements = new CellMeasurement[colCountInclRowHeader][rowCount];
+        final CellMeasurement[][] cellMeasurements = new CellMeasurement[colCount][rowCount];
 
-        // Measure all row headers
-        for (int row = 0; row < rowCount; row++) {
-            CellModel rowHeaderModel = model.getRowHeader(row);
-            CellMeasurement cellDimension = measurer.measureCell(rowHeaderModel);
-            cellMeasurements[GridDimension.ROW_HEADER_POSITION][row] = cellDimension;
-        }
 
         // measure all the cells.
         for (int row = 0; row < rowCount; row++) {
             for (int col = 0; col < colCount; col++) {
                 final CellModel cellModel = model.getCellModel(row, col);
                 CellMeasurement cellDimension = measurer.measureCell(cellModel);
-                cellMeasurements[col + GridDimension.ROW_HEADER_OFFSET][row] = cellDimension;
+                cellMeasurements[col][row] = cellDimension;
             }
         }
 
 
-        double[] tableColumnWidths = calculateColumnWidths(cellMeasurements, colCountInclRowHeader, rowCount);
-        double[] tableRowHeights = calculateRowHeights(cellMeasurements, colCountInclRowHeader, rowCount);
+        double[] tableColumnWidths = calculateColumnWidths(cellMeasurements, colCount, rowCount);
+        double[] tableRowHeights = calculateRowHeights(cellMeasurements, colCount, rowCount);
 
         double[] vertLinePositions = calculateLinePositionsFromGaps(tableColumnWidths);
         double[] horzLinePositions = calculateLinePositionsFromGaps(tableRowHeights);
 
-        double[] tableBottomGaps = calculateBottomGaps(cellMeasurements, colCountInclRowHeader, rowCount);
+        double[] tableBottomGaps = calculateBottomGaps(cellMeasurements, colCount, rowCount);
 
-        CellDimension[][] cells = calculateCells(cellMeasurements, vertLinePositions, colCountInclRowHeader, rowCount);
+        CellDimension[][] cells = calculateCells(cellMeasurements, vertLinePositions, colCount, rowCount);
 
         return new GridDimension(false, vertLinePositions, horzLinePositions,
                 tableRowHeights, tableColumnWidths, tableBottomGaps, cells);
