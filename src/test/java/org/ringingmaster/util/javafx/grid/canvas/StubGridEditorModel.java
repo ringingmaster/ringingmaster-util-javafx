@@ -47,11 +47,6 @@ public class StubGridEditorModel implements GridModel {
     }
 
     @Override
-    public void deRegisterListener(GridModelListener listener) {
-
-    }
-
-    @Override
     public int getColumnSize() {
         int colCount = 0;
         for (String[] row : model) {

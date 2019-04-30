@@ -32,7 +32,7 @@ public class GridDimensionBuilderTest {
         assertEquals(model.getRowSize(), d.getRowCount());
         assertEquals(model.getColumnSize(), d.getColumnCount());
 
-        assertEquals(d.getTableLeft(), d.getTableVerticalLinePosition(0), 0.0);
+        assertEquals(d.getTableLeft(true), d.getTableVerticalLinePosition(0), 0.0);
         assertEquals(d.getTableTop(), d.getTableHorizontalLinePosition(0), 0.0);
 
         assertEquals(d.getRowHeaderLeft(), 0.0, 0.0);
