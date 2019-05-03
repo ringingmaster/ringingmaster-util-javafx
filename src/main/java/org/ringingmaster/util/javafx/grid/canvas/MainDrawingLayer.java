@@ -5,6 +5,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontSmoothingType;
 import org.ringingmaster.util.javafx.grid.model.AdditionalStyleType;
 import org.ringingmaster.util.javafx.grid.model.CellModel;
@@ -12,6 +13,8 @@ import org.ringingmaster.util.javafx.grid.model.CharacterModel;
 import org.ringingmaster.util.javafx.grid.model.GridModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.ringingmaster.util.javafx.grid.model.AdditionalStyleType.SUPERSCRIPT;
 
 /**
  * TODO comments ???
@@ -84,17 +87,23 @@ class MainDrawingLayer extends Canvas {
         }
     }
 
-    private void drawCellText(GraphicsContext gc, CellModel cellModel, CellDimension tableCellDimension, double textBottom) {
+    private void drawCellText(GraphicsContext gc, CellModel cellModel, CellDimension tableCellDimension, final double textBottom) {
         for (int characterIndex = 0; characterIndex < cellModel.getLength(); characterIndex++) {
             double textLeft = tableCellDimension.getVerticalCharacterStartPosition(characterIndex);
 
             CharacterModel gridEditorCharacterModel = cellModel.getCharacterModel(characterIndex);
             final char cellText = gridEditorCharacterModel.getCharacter();
             final Font font = gridEditorCharacterModel.getFont();
+
+            double bottom = textBottom;
+            if (gridEditorCharacterModel.getAdditionalStyle().contains(SUPERSCRIPT)) {
+                bottom -= font.getSize();
+            }
+
             gc.setFill(gridEditorCharacterModel.getColor()); //TODO do we ned to set both for the font?
             gc.setStroke(gridEditorCharacterModel.getColor());
             gc.setFont(font);
-            gc.fillText(String.valueOf(cellText), textLeft, textBottom);//What about the other version of this using and AttributedString
+            gc.fillText(String.valueOf(cellText), textLeft, bottom);//What about the other version of this using and AttributedString
         }
     }
 
@@ -106,9 +115,6 @@ class MainDrawingLayer extends Canvas {
         final int bottomOffset = 2;
         final int pixelPitch = 2;
         final double bottom = textBottom + bottomOffset;
-
-        //     spxzpdsf
-
 
         for (int characterIndex = 0; characterIndex < cellModel.getLength(); characterIndex++) {
             CharacterModel characterModel = cellModel.getCharacterModel(characterIndex);

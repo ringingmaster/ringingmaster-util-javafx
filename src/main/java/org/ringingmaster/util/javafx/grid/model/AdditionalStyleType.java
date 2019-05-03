@@ -6,5 +6,6 @@ package org.ringingmaster.util.javafx.grid.model;
  * @author Lake
  */
 public enum AdditionalStyleType {
-    WIGGLY_UNDERLINE
+    WIGGLY_UNDERLINE,
+    SUPERSCRIPT
 }
