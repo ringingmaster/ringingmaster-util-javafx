@@ -19,7 +19,7 @@ import java.util.function.Function;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class NameValuePairTable extends TableView<NameValuePairModel> {
 

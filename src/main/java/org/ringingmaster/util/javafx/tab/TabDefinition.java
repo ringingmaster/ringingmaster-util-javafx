@@ -5,7 +5,7 @@ import javafx.scene.Node;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class TabDefinition {
     private final String name;

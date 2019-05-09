@@ -7,7 +7,7 @@ import org.ringingmaster.util.javafx.grid.GridPosition;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public interface GridModel {
 

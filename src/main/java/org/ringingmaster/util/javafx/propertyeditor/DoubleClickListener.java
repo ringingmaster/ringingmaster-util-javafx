@@ -3,7 +3,7 @@ package org.ringingmaster.util.javafx.propertyeditor;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public interface DoubleClickListener {
 

@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkPositionIndex;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public abstract class SkeletalGridModel implements GridModel {
 

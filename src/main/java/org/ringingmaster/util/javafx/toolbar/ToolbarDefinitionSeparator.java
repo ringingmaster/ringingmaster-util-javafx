@@ -9,7 +9,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class ToolbarDefinitionSeparator implements ToolbarDefinitionItem {
 

@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class NameValuePairModel {
 

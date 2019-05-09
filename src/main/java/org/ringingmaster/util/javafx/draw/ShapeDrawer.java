@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class ShapeDrawer {
 

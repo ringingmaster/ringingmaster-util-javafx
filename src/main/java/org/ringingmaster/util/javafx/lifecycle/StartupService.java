@@ -12,7 +12,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class StartupService extends ConcurrentListenable<StartupServiceListener> implements Listenable<StartupServiceListener> {
 

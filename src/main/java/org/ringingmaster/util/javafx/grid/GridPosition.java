@@ -6,7 +6,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * TODO
  *
- * @author Stephen
+ * @author Steve Lake
  */
 @Immutable
 public class GridPosition implements Comparable<GridPosition> {

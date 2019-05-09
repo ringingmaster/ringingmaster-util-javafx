@@ -10,7 +10,7 @@ import org.ringingmaster.util.listener.Listenable;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public interface PropertyValue extends Listenable<PropertyValueListener> {
 

@@ -8,7 +8,7 @@ import org.ringingmaster.util.javafx.grid.model.GridModel;
  * Contains all the calculations to turn a model, first into a list of width and height measurements
  * and from that into final absolute dimensions.
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class GridDimensionBuilder {
 

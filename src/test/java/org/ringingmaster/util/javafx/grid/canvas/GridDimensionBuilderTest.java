@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class GridDimensionBuilderTest {
 

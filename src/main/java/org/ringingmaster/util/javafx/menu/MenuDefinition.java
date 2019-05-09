@@ -5,7 +5,7 @@ import javafx.scene.control.MenuItem;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public interface MenuDefinition {
 

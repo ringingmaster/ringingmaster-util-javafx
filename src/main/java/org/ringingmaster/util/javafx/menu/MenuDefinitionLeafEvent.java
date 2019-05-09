@@ -7,7 +7,7 @@ import org.ringingmaster.util.javafx.events.EventDefinition;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class MenuDefinitionLeafEvent implements MenuDefinition {
 

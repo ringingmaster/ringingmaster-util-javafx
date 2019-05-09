@@ -10,7 +10,7 @@ import org.ringingmaster.util.javafx.grid.model.GridModel;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class SelectionLayer extends Canvas {
 

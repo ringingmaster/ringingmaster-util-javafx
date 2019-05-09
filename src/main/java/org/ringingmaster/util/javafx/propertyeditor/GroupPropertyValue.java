@@ -8,7 +8,7 @@ import org.ringingmaster.util.javafx.draw.ShapeDrawer;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class GroupPropertyValue extends SkeletalPropertyValue implements PropertyValue {
 

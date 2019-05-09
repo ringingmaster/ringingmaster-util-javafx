@@ -6,7 +6,7 @@ import org.ringingmaster.util.javafx.grid.model.CellModel;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class CaretPositionMover {
 

@@ -5,7 +5,7 @@ import static com.google.common.base.Preconditions.checkElementIndex;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class GridDimension {
 

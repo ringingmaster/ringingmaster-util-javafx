@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * TODO
  *
- * @author Stephen
+ * @author Steve Lake
  */
 @Immutable
 public class CellMeasurement {

@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class InteractionLayer extends Pane implements BlinkTimerListener {
 

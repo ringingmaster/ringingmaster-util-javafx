@@ -3,7 +3,7 @@ package org.ringingmaster.util.javafx.grid.model;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public interface CellModel extends Iterable<CharacterModel> {
 

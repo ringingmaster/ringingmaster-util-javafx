@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 /**
  * A simple override of a button to allow the protected final setPressed() to be accessed through a property.
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class PressableButton extends Button {
 

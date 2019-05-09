@@ -5,7 +5,7 @@ import java.util.Iterator;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public abstract class SkeletalCellModel implements CellModel {
 

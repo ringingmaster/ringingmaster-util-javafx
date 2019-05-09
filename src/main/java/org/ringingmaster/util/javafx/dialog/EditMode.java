@@ -3,7 +3,7 @@ package org.ringingmaster.util.javafx.dialog;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public enum EditMode {
 

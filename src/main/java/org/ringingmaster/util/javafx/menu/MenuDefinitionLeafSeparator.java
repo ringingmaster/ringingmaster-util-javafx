@@ -6,7 +6,7 @@ import javafx.scene.control.SeparatorMenuItem;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class MenuDefinitionLeafSeparator implements MenuDefinition {
 

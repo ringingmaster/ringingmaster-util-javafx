@@ -6,7 +6,7 @@ import javafx.scene.layout.Priority;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class BoxLayoutDefinition {
 

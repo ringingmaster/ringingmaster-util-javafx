@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class IntegerPropertyValue extends SkeletalPropertyValue implements PropertyValue {
 

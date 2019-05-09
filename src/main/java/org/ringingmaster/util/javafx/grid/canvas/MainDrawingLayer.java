@@ -19,7 +19,7 @@ import static org.ringingmaster.util.javafx.grid.model.AdditionalStyleType.SUPER
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 class MainDrawingLayer extends Canvas {
 

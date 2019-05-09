@@ -3,7 +3,7 @@ package org.ringingmaster.util.javafx.draw;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public enum Direction {
     RIGHT,

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class PropertyEditor extends ScrollPane {
 

@@ -6,7 +6,7 @@ import org.ringingmaster.util.javafx.grid.canvas.MainDrawingLayer;
 import static org.junit.Assert.assertEquals;
 
 /**
- * @author Lake
+ * @author Steve Lake
  */
 public class MainDrawingLayerTest {
 

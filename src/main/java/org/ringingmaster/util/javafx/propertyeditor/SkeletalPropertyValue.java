@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public abstract class SkeletalPropertyValue extends ConcurrentListenable<PropertyValueListener> implements PropertyValue {
 

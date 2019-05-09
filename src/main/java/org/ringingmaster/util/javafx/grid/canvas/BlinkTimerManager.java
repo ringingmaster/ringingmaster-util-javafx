@@ -9,7 +9,7 @@ import java.util.TimerTask;
 /**
  * A wrapper to prevent each grid having its own thread for a blink timer.
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class BlinkTimerManager extends ConcurrentListenable<BlinkTimerListener> implements Listenable<BlinkTimerListener> {
 

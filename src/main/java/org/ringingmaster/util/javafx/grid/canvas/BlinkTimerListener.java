@@ -3,7 +3,7 @@ package org.ringingmaster.util.javafx.grid.canvas;
 /**
  * TODO Comments
  *
- * @author Lake
+ * @author Steve Lake
  */
 public interface BlinkTimerListener {
     void blinkTimerManager_triggerBlink(boolean blinkOn);

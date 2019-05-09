@@ -6,7 +6,7 @@ import org.ringingmaster.util.javafx.font.FontMetrics;
 /**
  * TODO comments ???
  *
- * @author Lake
+ * @author Steve Lake
  */
 public class PropertyGeometry {
 
