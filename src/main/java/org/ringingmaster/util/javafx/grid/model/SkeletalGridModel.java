@@ -1,6 +1,7 @@
 package org.ringingmaster.util.javafx.grid.model;
 
 import org.ringingmaster.util.javafx.grid.GridPosition;
+import org.ringingmaster.util.javafx.grid.canvas.CaretPositionMover;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,19 +24,28 @@ public abstract class SkeletalGridModel implements GridModel {
 
     private GridPosition caretPosition = new GridPosition(0, 0, 0);
     private GridPosition selectionStartPosition = caretPosition;
+    private CaretPositionMover caretPositionMover = new CaretPositionMover();
+
+    public SkeletalGridModel() {
+        caretPositionMover.setModel(this);
+    }
 
     @Override
     public void registerListener(final GridModelListener listener) {
         listeners.add(listener);
     }
 
-    protected List<GridModelListener> listeners() {
-        return listeners;
-    }
-
     protected void fireCellContentsChanged() {
-        for (GridModelListener listener : listeners) {
+        // The changing of the cell structure means the caret may be outside the grid.
+        if (caretPosition.getRow() >= getRowSize()) {
+            caretPositionMover.moveUp();
+        }
+        if (caretPosition.getColumn() >= getColumnSize()) {
+            caretPositionMover.moveLeft();
+        }
 
+
+        for (GridModelListener listener : listeners) {
             listener.gridModelListener_cellContentsChanged();
         }
     }
@@ -60,9 +70,6 @@ public abstract class SkeletalGridModel implements GridModel {
             fireSelectionChanged();
         }
         //log.info("Caret [" + caretPosition+ "], Selection Start [" + selectionStartPosition + "]");
-
-        doSetCaretPosition(caretPosition);
-        fireCaretPositionMoved();
     }
 
     @Override

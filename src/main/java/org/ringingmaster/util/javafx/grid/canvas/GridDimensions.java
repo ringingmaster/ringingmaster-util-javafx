@@ -7,7 +7,7 @@ import static com.google.common.base.Preconditions.checkElementIndex;
  *
  * @author Steve Lake
  */
-public class GridDimension {
+public class GridDimensions {
 
     private final boolean zeroSized;
 
@@ -21,11 +21,11 @@ public class GridDimension {
     private final CellDimension[][] cellDimensions;
 
 
-    GridDimension(boolean zeroSized,
-                  double[] vertLinePositions, double[] horzLinePositions,
-                  double[] rowHeights, double[] columnWidths,
-                  double[] bottomGaps,
-                  CellDimension[][] cellDimensions) {
+    GridDimensions(boolean zeroSized,
+                   double[] vertLinePositions, double[] horzLinePositions,
+                   double[] rowHeights, double[] columnWidths,
+                   double[] bottomGaps,
+                   CellDimension[][] cellDimensions) {
         this.zeroSized = zeroSized;
         this.vertLinePositions = vertLinePositions;
         this.horzLinePositions = horzLinePositions;

@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import org.apache.commons.lang.CharUtils;
 import org.ringingmaster.util.javafx.grid.GridPosition;
+import org.ringingmaster.util.javafx.grid.model.GridModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +24,8 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-
-    private final GridPane parent;
+    private GridModel model;
+    private GridDimensions dimensions;
 
     private static final double CARET_WIDTH = 2.0;
     private volatile boolean caretVisible = false;
@@ -36,9 +37,8 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
 
 //TODO Reactive 	private Tooltip tooltip = new Tooltip("");
 
-    public InteractionLayer(GridPane parent) {
-        this.parent = parent;
-        caretPositionMover = new CaretPositionMover(parent);
+    public InteractionLayer() {
+        caretPositionMover = new CaretPositionMover();
 
         BlinkTimerManager.getInstance().addListener(this);
 
@@ -67,6 +67,16 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
         //TODO Reactive Tooltip.install(this, tooltip);
     }
 
+    void setModel(GridModel model) {
+        this.model = model;
+        caretPositionMover.setModel(model);
+    }
+
+    public void setDimensions(GridDimensions dimensions) {
+        this.dimensions = dimensions;
+        setPrefSize(dimensions.getTableRight(), dimensions.getTableBottom());
+    }
+
     @Override
     public void blinkTimerManager_triggerBlink(boolean blinkOn) {
         caretBlinkOn = blinkOn;
@@ -86,8 +96,8 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
 
         if (CharUtils.isAsciiPrintable(character.charAt(0))) {
             Preconditions.checkState(character.length() == 1);
-            GridPosition caretPosition = parent.getModel().getCaretPosition();
-            parent.getModel().getCellModel(caretPosition.getRow(), caretPosition.getColumn()).insertCharacter(caretPosition.getCharacterIndex(), character);
+            GridPosition caretPosition = model.getCaretPosition();
+            model.getCellModel(caretPosition.getRow(), caretPosition.getColumn()).insertCharacter(caretPosition.getCharacterIndex(), character);
             caretPositionMover.moveRight();
             //log.info("keyTyped:" + e);
         }
@@ -131,11 +141,11 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
     }
 
     void draw() {
-        GridPosition caretPosition = parent.getModel().getCaretPosition();
+        GridPosition caretPosition = model.getCaretPosition();
 
-        final double left = parent.getDimensions().getCell(caretPosition.getRow(), caretPosition.getColumn()).getVerticalCharacterStartPosition(caretPosition.getCharacterIndex());
-        final double cellTop = parent.getDimensions().getTableHorizontalLinePosition(caretPosition.getRow());
-        final double cellHeight = parent.getDimensions().getRowHeight(caretPosition.getRow());
+        final double left = dimensions.getCell(caretPosition.getRow(), caretPosition.getColumn()).getVerticalCharacterStartPosition(caretPosition.getCharacterIndex());
+        final double cellTop = dimensions.getTableHorizontalLinePosition(caretPosition.getRow());
+        final double cellHeight = dimensions.getRowHeight(caretPosition.getRow());
 
         caret.setX(left);
         caret.setY(cellTop);
@@ -147,7 +157,7 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
         //log.info("[{}] mouse pressed", parent.getName());
         Optional<GridPosition> gridPosition = mouseCoordinatesToGridPosition(e.getX(), e.getY(), Align.BOUNDARY_MID_CHARACTER);
         if (gridPosition.isPresent()) {
-            parent.getModel().setCaretPosition(gridPosition.get());
+            model.setCaretPosition(gridPosition.get());
         }
         mouseDown = true;
         requestFocus();
@@ -159,7 +169,7 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
         mouseDown = false;
         Optional<GridPosition> gridPosition = mouseCoordinatesToGridPosition(e.getX(), e.getY(), Align.BOUNDARY_MID_CHARACTER);
         if (gridPosition.isPresent()) {
-            parent.getModel().setSelectionEndPosition(gridPosition.get());
+            model.setSelectionEndPosition(gridPosition.get());
         }
         e.consume();
     }
@@ -169,7 +179,7 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
         if (mouseDown) {
             Optional<GridPosition> gridPosition = mouseCoordinatesToGridPosition(e.getX(), e.getY(), Align.BOUNDARY_MID_CHARACTER);
             if (gridPosition.isPresent()) {
-                parent.getModel().setSelectionEndPosition(gridPosition.get());
+                model.setSelectionEndPosition(gridPosition.get());
             }
         }
         e.consume();
@@ -185,7 +195,7 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
 //			return;
 //		}
 //
-//		CharacterModel characterModel = parent.getModel().getCharacterModel(gridPosition.get());
+//		CharacterModel characterModel = model.getCharacterModel(gridPosition.get());
 //		if (characterModel!= null) {
 //			Optional<String> tooltipText = characterModel.getTooltipText();
 //			if (tooltipText.isPresent()) {
@@ -203,7 +213,7 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
     }
 
     public Optional<GridPosition> mouseCoordinatesToGridPosition(final double x, final double y, Align align) {
-        GridDimension dimensions = parent.getDimensions();
+        GridDimensions dimensions = this.dimensions;
         if (dimensions.isZeroSized()) {
             return Optional.empty();
         }
@@ -262,7 +272,7 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
             }
         }
 
-        if (parent.getModel().hasRowHeader() && columnIndex==0) {
+        if (model.hasRowHeader() && columnIndex==0) {
             return Optional.empty();
         }
         return Optional.of(new GridPosition( rowIndex, columnIndex, characterIndex));

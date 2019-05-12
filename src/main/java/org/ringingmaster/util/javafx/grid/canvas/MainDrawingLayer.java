@@ -5,7 +5,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontSmoothingType;
 import org.ringingmaster.util.javafx.grid.model.AdditionalStyleType;
 import org.ringingmaster.util.javafx.grid.model.CellModel;
@@ -26,25 +25,32 @@ class MainDrawingLayer extends Canvas {
     public static final int EXTRA_END_LINE_TO_CLOSE_ROW_OR_COL = 1;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private final GridPane parent;
+    private GridModel model;
+    private GridDimensions dimensions;
 
-    public MainDrawingLayer(GridPane parent) {
-        this.parent = parent;
+    void setModel(GridModel model) {
+        this.model = model;
+    }
+
+    public void setDimensions(GridDimensions dimensions) {
+        this.dimensions = dimensions;
+        setWidth(dimensions.getTableRight());
+        setHeight(dimensions.getTableBottom());
     }
 
     public void draw() {
         GraphicsContext gc = getGraphicsContext2D();
         gc.setFontSmoothingType(FontSmoothingType.LCD);
         clearBackground(gc);
-        drawGrid(gc, parent.getModel(), parent.getDimensions());
-        drawCellsText(gc, parent.getModel(), parent.getDimensions());
+        drawGrid(gc);
+        drawCellsText(gc);
     }
 
     private void clearBackground(GraphicsContext gc) {
         gc.clearRect(0, 0, getWidth(), getHeight());
     }
 
-    private void drawGrid(final GraphicsContext gc, GridModel model, GridDimension dimensions) {
+    private void drawGrid(final GraphicsContext gc) {
         final int horzLineCount = model.getRowSize() + EXTRA_END_LINE_TO_CLOSE_ROW_OR_COL;
         int accountForRowHeader = model.hasRowHeader() ? 1 : 0;
         final int vertLineCount = model.getColumnSize() - accountForRowHeader + EXTRA_END_LINE_TO_CLOSE_ROW_OR_COL ;
@@ -71,7 +77,7 @@ class MainDrawingLayer extends Canvas {
         }
     }
 
-    private void drawCellsText(final GraphicsContext gc, GridModel model, GridDimension dimensions) {
+    private void drawCellsText(final GraphicsContext gc) {
         final int rowCount = model.getRowSize();
         final int colCount = model.getColumnSize();
 

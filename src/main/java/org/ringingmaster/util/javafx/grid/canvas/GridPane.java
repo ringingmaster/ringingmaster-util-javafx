@@ -14,10 +14,10 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class GridPane extends Pane implements GridModelListener {
 
-    private final SelectionLayer selectionLayer = new SelectionLayer(this);
-    private final MainDrawingLayer mainDrawingLayer = new MainDrawingLayer(this);
-    private final InteractionLayer interactionLayer = new InteractionLayer(this);
-    private GridDimension dimensions;
+    private final SelectionLayer selectionLayer = new SelectionLayer();
+    private final MainDrawingLayer mainDrawingLayer = new MainDrawingLayer();
+    private final InteractionLayer interactionLayer = new InteractionLayer();
+    private GridDimensions dimensions;
     private GridModel model;
     private final String name;
 
@@ -32,8 +32,11 @@ public class GridPane extends Pane implements GridModelListener {
 
 
     public void setModel(GridModel model) {
-        checkState(this.model == null);
+        checkState(this.model == null); //At the moment, only a 1 shot
         this.model = checkNotNull(model);
+        mainDrawingLayer.setModel(model);
+        interactionLayer.setModel(model);
+        selectionLayer.setModel(model);
         this.model.registerListener(this);
         gridModelListener_cellContentsChanged();
     }
@@ -45,13 +48,9 @@ public class GridPane extends Pane implements GridModelListener {
         setMinWidth(dimensions.getTableRight());
         setMinHeight(dimensions.getTableBottom());
 
-        mainDrawingLayer.setWidth(dimensions.getTableRight());
-        mainDrawingLayer.setHeight(dimensions.getTableBottom());
-
-        interactionLayer.setPrefSize(dimensions.getTableRight(), dimensions.getTableBottom());
-
-        selectionLayer.setWidth(dimensions.getTableRight());
-        selectionLayer.setHeight(dimensions.getTableBottom());
+        mainDrawingLayer.setDimensions(dimensions);
+        interactionLayer.setDimensions(dimensions);
+        selectionLayer.setDimensions(dimensions);
 
         selectionLayer.draw();
         mainDrawingLayer.draw();
@@ -69,7 +68,7 @@ public class GridPane extends Pane implements GridModelListener {
         selectionLayer.draw();
     }
 
-    public GridDimension getDimensions() {
+    public GridDimensions getDimensions() {
         return dimensions;
     }
 

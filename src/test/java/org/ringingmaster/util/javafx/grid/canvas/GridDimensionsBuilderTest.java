@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Steve Lake
  */
-public class GridDimensionBuilderTest {
+public class GridDimensionsBuilderTest {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -27,7 +27,7 @@ public class GridDimensionBuilderTest {
 
         StubGridEditorModel model = new StubGridEditorModel(characters, rowHeaders, new GridPosition(0, 0, 0));
 
-        GridDimension d = new GridDimensionBuilder().setModel(model).build();
+        GridDimensions d = new GridDimensionBuilder().setModel(model).build();
 
         assertEquals(model.getRowSize(), d.getRowCount());
         assertEquals(model.getColumnSize(), d.getColumnCount());

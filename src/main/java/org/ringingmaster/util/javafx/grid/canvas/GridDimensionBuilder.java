@@ -16,14 +16,14 @@ public class GridDimensionBuilder {
     public static final int MIN_COL_WIDTH = 15;
     private GridModel model;
 
-    private static GridDimension ZERO_SIZED_GRID_DIMENSION = new GridDimension(true, null, null, null, null, null, null);
+    private static GridDimensions ZERO_SIZED_GRID_DIMENSION = new GridDimensions(true, null, null, null, null, null, null);
 
     GridDimensionBuilder setModel(GridModel model) {
         this.model = model;
         return this;
     }
 
-    GridDimension build() {
+    GridDimensions build() {
         if (model.isZeroSized()) {
             return ZERO_SIZED_GRID_DIMENSION;
         } else {
@@ -31,7 +31,7 @@ public class GridDimensionBuilder {
         }
     }
 
-    private GridDimension calculateFromModel() {
+    private GridDimensions calculateFromModel() {
         CellMeasurer measurer = new CellMeasurer();
 
         final int rowCount = model.getRowSize();
@@ -60,7 +60,7 @@ public class GridDimensionBuilder {
 
         CellDimension[][] cells = calculateCells(cellMeasurements, vertLinePositions, colCount, rowCount);
 
-        return new GridDimension(false, vertLinePositions, horzLinePositions,
+        return new GridDimensions(false, vertLinePositions, horzLinePositions,
                 tableRowHeights, tableColumnWidths, tableBottomGaps, cells);
     }
 

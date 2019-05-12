@@ -14,20 +14,25 @@ import org.ringingmaster.util.javafx.grid.model.GridModel;
  */
 public class SelectionLayer extends Canvas {
 
+    private GridModel model;
+    private GridDimensions dimensions;
 
-    private final GridPane parent;
-
-    public SelectionLayer(GridPane parent) {
-        this.parent = parent;
+    void setModel(GridModel model) {
+        this.model = model;
     }
 
+    public void setDimensions(GridDimensions dimensions) {
+        this.dimensions = dimensions;
+        setWidth(dimensions.getTableRight());
+        setHeight(dimensions.getTableBottom());
+    }
     public void draw() {
 
         GraphicsContext gc = getGraphicsContext2D();
         gc.setFontSmoothingType(FontSmoothingType.LCD);
 
         clearBackground(gc);
-        drawSelection(gc, parent.getModel(), parent.getDimensions());
+        drawSelection(gc);
 
     }
 
@@ -35,7 +40,7 @@ public class SelectionLayer extends Canvas {
         gc.clearRect(0, 0, getWidth(), getHeight());
     }
 
-    private void drawSelection(final GraphicsContext gc, final GridModel model, final GridDimension dimensions) {
+    private void drawSelection(final GraphicsContext gc) {
         GridPosition caretPosition1 = model.getCaretPosition();
         GridPosition caretPosition2 = model.getSelectionStartPosition();
 
