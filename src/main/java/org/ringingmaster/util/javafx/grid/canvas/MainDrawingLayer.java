@@ -55,14 +55,19 @@ class MainDrawingLayer extends Canvas {
         int accountForRowHeader = model.hasRowHeader() ? 1 : 0;
         final int vertLineCount = model.getColumnSize() - accountForRowHeader + EXTRA_END_LINE_TO_CLOSE_ROW_OR_COL ;
 
-        gc.setFill(model.getGridColor());
-        gc.setStroke(model.getGridColor());
         gc.setLineWidth(1.0);
 
         // Draw horizontal lines
         final double left = dimensions.getTableLeft(model.hasRowHeader());
         final double right = dimensions.getTableRight();
         for (int horizLineIndex = 0; horizLineIndex < horzLineCount; horizLineIndex++) {
+            Color gridRowColor = model.getGridRowColor(horizLineIndex);
+            gc.setFill(gridRowColor);
+            gc.setStroke(gridRowColor);
+
+            double gridRowLineWidth = model.getGridRowLineWidth(horizLineIndex);
+            gc.setLineWidth(gridRowLineWidth);
+
             final double horzLinePosition = dimensions.getTableHorizontalLinePosition(horizLineIndex);
             gc.strokeLine(left, horzLinePosition, right, horzLinePosition);
         }
@@ -72,6 +77,13 @@ class MainDrawingLayer extends Canvas {
         final double top = dimensions.getTableTop();
         final double bottom = dimensions.getTableBottom();
         for (int vertLineIndex = 0; vertLineIndex < vertLineCount; vertLineIndex++) {
+            Color gridColColor = model.getGridColColor(vertLineIndex);
+            gc.setFill(gridColColor);
+            gc.setStroke(gridColColor);
+
+            double gridRowLineWidth = model.getGridColLineWidth(vertLineIndex);
+            gc.setLineWidth(gridRowLineWidth);
+
             final double vertLinePosition = dimensions.getTableVerticalLinePosition(vertLineIndex + accountForRowHeader);
             gc.strokeLine(vertLinePosition, top, vertLinePosition, bottom);
         }

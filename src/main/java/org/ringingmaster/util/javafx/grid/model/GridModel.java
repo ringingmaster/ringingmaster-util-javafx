@@ -35,7 +35,16 @@ public interface GridModel {
      *
      * @return Color
      */
-    Color getGridColor();
+    Color getGridRowColor(int row);
+    Color getGridColColor(int col);
+
+    /**
+     * Get the thickness of the lines that form the grid.
+     *
+     * @return Color
+     */
+    double getGridRowLineWidth(int row);
+    double getGridColLineWidth(int col);
 
     CellModel getCellModel(int row, int column);
 
