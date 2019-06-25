@@ -124,7 +124,7 @@ public abstract class SkeletalGridModel implements GridModel {
     @Override
     public CharacterModel getCharacterModel(GridPosition gridPosition) {
         checkNotNull(gridPosition);
-        CellModel cellModel = getCellModel(gridPosition.getColumn(), gridPosition.getRow());
+        CellModel cellModel = getCellModel(gridPosition.getRow(), gridPosition.getColumn());
         if (cellModel != null) {
             return cellModel.getCharacterModel(gridPosition.getCharacterIndex());
         }

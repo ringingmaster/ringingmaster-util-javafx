@@ -3,12 +3,14 @@ package org.ringingmaster.util.javafx.grid.canvas;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import javafx.application.Platform;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import org.apache.commons.lang.CharUtils;
 import org.ringingmaster.util.javafx.grid.GridPosition;
+import org.ringingmaster.util.javafx.grid.model.CharacterModel;
 import org.ringingmaster.util.javafx.grid.model.GridModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +37,7 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
     private final CaretPositionMover caretPositionMover;
     boolean mouseDown = false;
 
-//TODO Reactive 	private Tooltip tooltip = new Tooltip("");
+    private Tooltip tooltip = new Tooltip();
 
     public InteractionLayer() {
         caretPositionMover = new CaretPositionMover();
@@ -64,7 +66,7 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
 
         setFocusTraversable(true);
 
-        //TODO Reactive Tooltip.install(this, tooltip);
+        new TooltipBehavior(true).install(this, tooltip);
     }
 
     void setModel(GridModel model) {
@@ -186,25 +188,21 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
     }
 
     private void handleMouseMoved(MouseEvent e) {
-        //TODO Reactive
-//		if (tooltip.isShowing()) {
-//			return;
-//		}
-//		Optional<GridPosition> gridPosition = mouseCoordinatesToGridPosition(e.getX(), e.getY(), Align.BOUNDARY_BETWEEN_CHARACTER);
-//		if (!gridPosition.isPresent()) {
-//			return;
-//		}
-//
-//		CharacterModel characterModel = model.getCharacterModel(gridPosition.get());
-//		if (characterModel!= null) {
-//			Optional<String> tooltipText = characterModel.getTooltipText();
-//			if (tooltipText.isPresent()) {
-//				tooltip.setText(tooltipText.get());
-//			}
-//			else {
-//				tooltip.setText(null);
-//			}
-//		}
+
+        Optional<GridPosition> gridPosition = mouseCoordinatesToGridPosition(e.getX(), e.getY(), Align.BOUNDARY_BETWEEN_CHARACTER);
+        if (!gridPosition.isPresent()) {
+            return;
+        }
+
+        CharacterModel characterModel = model.getCharacterModel(gridPosition.get());
+        if (characterModel != null) {
+            Optional<String> tooltipText = characterModel.getTooltipText();
+            if (tooltipText.isPresent()) {
+                tooltip.setText(tooltipText.get());
+            } else {
+                tooltip.setText(null);
+            }
+        }
     }
 
     private enum Align {
@@ -272,9 +270,9 @@ public class InteractionLayer extends Pane implements BlinkTimerListener {
             }
         }
 
-        if (model.hasRowHeader() && columnIndex==0) {
+        if (model.hasRowHeader() && columnIndex == 0) {
             return Optional.empty();
         }
-        return Optional.of(new GridPosition( rowIndex, columnIndex, characterIndex));
+        return Optional.of(new GridPosition(rowIndex, columnIndex, characterIndex));
     }
 }
