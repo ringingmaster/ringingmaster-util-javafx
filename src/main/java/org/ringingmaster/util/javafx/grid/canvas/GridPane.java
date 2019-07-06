@@ -43,7 +43,7 @@ public class GridPane extends Pane implements GridModelListener {
 
     @Override
     public void gridModelListener_cellContentsChanged() {
-        dimensions = new GridDimensionBuilder().setModel(model).build();
+        dimensions = new GridDimensionBuilder().setModel(model).build(); //TODO make stateles and reactive
 
         setMinWidth(dimensions.getTableRight());
         setMinHeight(dimensions.getTableBottom());
