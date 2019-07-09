@@ -1,5 +1,6 @@
 package org.ringingmaster.util.javafx.virtualcanvas;
 
+import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -9,5 +10,5 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public interface ViewportDrawer {
 
-    void draw(GraphicsContext gc, double width, double height, double hOffset, double yOffset);
+    void draw(GraphicsContext gc, Bounds viewport);
 }

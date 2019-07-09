@@ -8,7 +8,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-import org.apache.commons.lang.CharUtils;
+import org.apache.commons.lang3.CharUtils;
 import org.ringingmaster.util.javafx.grid.GridPosition;
 import org.ringingmaster.util.javafx.grid.model.CharacterModel;
 import org.ringingmaster.util.javafx.grid.model.GridModel;
