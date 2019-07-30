@@ -32,7 +32,7 @@ public class CellMeasurer {
     private float measureCellHeight(final CellModel cellModel) {
         float maxHeight = MINIMUM_HEIGHT;
         for (CharacterModel characterModel : cellModel) {
-            final Font font = characterModel.getFont();
+            final Font font = characterModel.getFont(); //TODO can be much more efficient here when font does not change size or type.
             FontMetrics fm = new FontMetrics(font);
 
 

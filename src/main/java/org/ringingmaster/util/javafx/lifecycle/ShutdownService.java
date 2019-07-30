@@ -33,7 +33,7 @@ public class ShutdownService extends ConcurrentListenable<ShutdownServiceListene
                 return ShutdownServiceListener.ShutdownOptions.PREVENT_SHUTDOWN;
             }
         }
-        log.info("Shutdown allowed");
+        log.info("Shutdown is allowed");
         return ShutdownServiceListener.ShutdownOptions.ALLOW_SHUTDOWN;
     }
 }

@@ -4,13 +4,14 @@ import io.reactivex.Observable;
 import io.reactivex.rxjavafx.observables.JavaFxObservable;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -25,7 +26,9 @@ public class VirtualCanvas extends GridPane {
 
     private final Logger log = LoggerFactory.getLogger(VirtualCanvas.class);
 
-    private final ResizableCanvas resizableCanvas = new ResizableCanvas();
+    // Canvas Nodes are not automatically re-sizable by parent as they dont derive from Region
+    // Instead, we use a StackPane and lock the canvas size to it.
+    private final StackPane canvasHolder = new StackPane();
 
     private final ScrollBar hScroll;
     private final ScrollBar vScroll;
@@ -42,33 +45,48 @@ public class VirtualCanvas extends GridPane {
         Observable<Number> hScrollValueObservable = JavaFxObservable.valuesOf(hScroll.valueProperty());
         Observable<Number> vScrollValueObservable = JavaFxObservable.valuesOf(vScroll.valueProperty());
         Observable.combineLatest(hScrollValueObservable, vScrollValueObservable, Pair::of)
-                .subscribe(pair -> resizableCanvas.setOrigin(pair.getLeft().doubleValue(), pair.getRight().doubleValue()));
+                .subscribe(pair -> setOrigin(pair.getLeft().doubleValue(), pair.getRight().doubleValue()));
 
-        // Canvas Nodes are not automatically re-sizable by parent as they dont derive from Region
-        // Instead, we use a BorderPane and lock the canvas size to it.
-        BorderPane borderPane = new BorderPane();
-        resizableCanvas.widthProperty().bind(borderPane.widthProperty());
-        resizableCanvas.heightProperty().bind(borderPane.heightProperty());
-        borderPane.setCenter(resizableCanvas);
-        borderPane.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
+        canvasHolder.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         // Configure Grid
-        add(borderPane, 0, 0);
+        add(canvasHolder, 0, 0);
         add(hScroll, 0, 1);
         add(vScroll, 1, 0);
-        setHgrow(borderPane, Priority.ALWAYS);
-        setVgrow(borderPane, Priority.ALWAYS);
+        setHgrow(canvasHolder, Priority.ALWAYS);
+        setVgrow(canvasHolder, Priority.ALWAYS);
 
-        // So the square between the two scroll basr is correct colour.
+        // So the square between the two scroll bar is correct colour.
         setBackground(new Background(new BackgroundFill(Color.gray(.9), CornerRadii.EMPTY, Insets.EMPTY)));
+    }
 
-        resizableCanvas.heightProperty().addListener((observable, oldValue, newValue) -> setScrollBarSizes());
-        resizableCanvas.widthProperty().addListener((observable, oldValue, newValue) -> setScrollBarSizes());
+    private void setOrigin(double hOrigin, double vOrigin) {
+        for (Node child : canvasHolder.getChildren()) {
+
+            if (child instanceof ResizableCanvas)
+                ((ResizableCanvas)child).setOrigin(hOrigin, vOrigin);
+        }
     }
 
 
-    public void setViewportDrawer(ViewportDrawer viewportDrawer) {
-        resizableCanvas.setViewportDrawer(viewportDrawer);
+    public void setViewportDrawers(ViewportDrawer... viewportDrawers) {
+
+        canvasHolder.getChildren().clear();
+
+        for (ViewportDrawer drawer : viewportDrawers) {
+
+            ResizableCanvas resizableCanvas = new ResizableCanvas();
+
+            resizableCanvas.setViewportDrawer(drawer);
+
+            resizableCanvas.widthProperty().bind(canvasHolder.widthProperty());
+            resizableCanvas.heightProperty().bind(canvasHolder.heightProperty());
+
+            resizableCanvas.heightProperty().addListener((observable, oldValue, newValue) -> setScrollBarSizes());
+            resizableCanvas.widthProperty().addListener((observable, oldValue, newValue) -> setScrollBarSizes());
+
+            canvasHolder.getChildren().add(resizableCanvas);
+        }
     }
 
     public void setVirtualSize(double hVirtualSize, double vVirtualSize) {
@@ -77,13 +95,17 @@ public class VirtualCanvas extends GridPane {
         setScrollBarSizes();
     }
 
-    public void render() {
-        resizableCanvas.render();
+    public void triggerVirtualCanvasRender() {
+        for (Node child : canvasHolder.getChildren()) {
+
+            if (child instanceof ResizableCanvas)
+                ((ResizableCanvas)child).render();
+        }
     }
 
     private void setScrollBarSizes() {
-        double canvasWidth = resizableCanvas.getWidth();
-        double canvasHeight = resizableCanvas.getHeight();
+        double canvasWidth = canvasHolder.getWidth();
+        double canvasHeight = canvasHolder.getHeight();
 
         double hScrollMax = hVirtualSize - canvasWidth;
         double vScrollMax = vVirtualSize - canvasHeight;
