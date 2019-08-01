@@ -69,7 +69,7 @@ public class VirtualCanvas extends GridPane {
     }
 
 
-    public void setViewportDrawers(ViewportDrawer... viewportDrawers) {
+    public void setLayers(ViewportDrawer... viewportDrawers) {
 
         canvasHolder.getChildren().clear();
 
