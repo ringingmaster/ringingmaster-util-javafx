@@ -18,7 +18,9 @@ public class CaretPositionMoverTest {
         GridPane mockGridPane = mock(GridPane.class);
         when(mockGridPane.getModel()).thenReturn(model);
 
-        CaretPositionMover caretPositionMover = new CaretPositionMover(mockGridPane);
+        CaretPositionMover caretPositionMover = new CaretPositionMover();
+        caretPositionMover.setModel(mockGridPane.getModel());
+
         caretPositionMover.moveLeft();
         Assert.assertEquals(new GridPosition(0, 0, 0), model.getCaretPosition());
         caretPositionMover.moveRight();
@@ -40,7 +42,8 @@ public class CaretPositionMoverTest {
         StubGridEditorModel model = new StubGridEditorModel(characters, new GridPosition(0, 0, 0));
         GridPane mockGridPane = mock(GridPane.class);
         when(mockGridPane.getModel()).thenReturn(model);
-        CaretPositionMover caretPositionMover = new CaretPositionMover(mockGridPane);
+        CaretPositionMover caretPositionMover = new CaretPositionMover();
+        caretPositionMover.setModel(mockGridPane.getModel());
 
         caretPositionMover.moveRight();
         Assert.assertEquals(new GridPosition(0, 0, 1), model.getCaretPosition());
@@ -69,7 +72,8 @@ public class CaretPositionMoverTest {
         StubGridEditorModel model = new StubGridEditorModel(characters, new GridPosition(1, 1, 1));
         GridPane mockGridPane = mock(GridPane.class);
         when(mockGridPane.getModel()).thenReturn(model);
-        CaretPositionMover caretPositionMover = new CaretPositionMover(mockGridPane);
+        CaretPositionMover caretPositionMover = new CaretPositionMover();
+        caretPositionMover.setModel(mockGridPane.getModel());
 
         caretPositionMover.moveLeft();
         Assert.assertEquals(new GridPosition(1, 1, 0), model.getCaretPosition());
@@ -100,7 +104,8 @@ public class CaretPositionMoverTest {
         StubGridEditorModel model = new StubGridEditorModel(characters, new GridPosition(0, 0, 1));
         GridPane mockGridPane = mock(GridPane.class);
         when(mockGridPane.getModel()).thenReturn(model);
-        CaretPositionMover caretPositionMover = new CaretPositionMover(mockGridPane);
+        CaretPositionMover caretPositionMover = new CaretPositionMover();
+        caretPositionMover.setModel(mockGridPane.getModel());
 
         caretPositionMover.moveRight();//to set the sticky position
         caretPositionMover.moveDown();
@@ -122,7 +127,8 @@ public class CaretPositionMoverTest {
         StubGridEditorModel model = new StubGridEditorModel(characters, new GridPosition(0, 3, 1));
         GridPane mockGridPane = mock(GridPane.class);
         when(mockGridPane.getModel()).thenReturn(model);
-        CaretPositionMover caretPositionMover = new CaretPositionMover(mockGridPane);
+        CaretPositionMover caretPositionMover = new CaretPositionMover();
+        caretPositionMover.setModel(mockGridPane.getModel());
 
         caretPositionMover.moveRight();//to set the sticky position
         caretPositionMover.moveUp();
@@ -142,7 +148,8 @@ public class CaretPositionMoverTest {
         StubGridEditorModel model = new StubGridEditorModel(characters, new GridPosition(0, 0, 1));
         GridPane mockGridPane = mock(GridPane.class);
         when(mockGridPane.getModel()).thenReturn(model);
-        CaretPositionMover caretPositionMover = new CaretPositionMover(mockGridPane);
+        CaretPositionMover caretPositionMover = new CaretPositionMover();
+        caretPositionMover.setModel(mockGridPane.getModel());
 
         caretPositionMover.moveToStartOfLastCellIfItHasContentsElseLastButOne();
         Assert.assertEquals(new GridPosition(2, 0, 0), model.getCaretPosition());
@@ -157,7 +164,8 @@ public class CaretPositionMoverTest {
         StubGridEditorModel model = new StubGridEditorModel(characters, new GridPosition(1, 1, 0));
         GridPane mockGridPane = mock(GridPane.class);
         when(mockGridPane.getModel()).thenReturn(model);
-        CaretPositionMover caretPositionMover = new CaretPositionMover(mockGridPane);
+        CaretPositionMover caretPositionMover = new CaretPositionMover();
+        caretPositionMover.setModel(mockGridPane.getModel());
 
         caretPositionMover.moveToStartOfLastCellIfItHasContentsElseLastButOne();
         Assert.assertEquals(new GridPosition(1, 1, 0), model.getCaretPosition());
@@ -172,7 +180,8 @@ public class CaretPositionMoverTest {
         StubGridEditorModel model = new StubGridEditorModel(characters, new GridPosition(0, 0, 2));
         GridPane mockGridPane = mock(GridPane.class);
         when(mockGridPane.getModel()).thenReturn(model);
-        CaretPositionMover caretPositionMover = new CaretPositionMover(mockGridPane);
+        CaretPositionMover caretPositionMover = new CaretPositionMover();
+        caretPositionMover.setModel(mockGridPane.getModel());
 
         caretPositionMover.moveToStartOfLastCellIfItHasContentsElseLastButOne();
         Assert.assertEquals(new GridPosition(0, 0, 0), model.getCaretPosition());
@@ -187,7 +196,8 @@ public class CaretPositionMoverTest {
         StubGridEditorModel model = new StubGridEditorModel(characters, new GridPosition(1, 0, 1));
         GridPane mockGridPane = mock(GridPane.class);
         when(mockGridPane.getModel()).thenReturn(model);
-        CaretPositionMover caretPositionMover = new CaretPositionMover(mockGridPane);
+        CaretPositionMover caretPositionMover = new CaretPositionMover();
+        caretPositionMover.setModel(mockGridPane.getModel());
 
         caretPositionMover.moveToStartOfRow();
         Assert.assertEquals(new GridPosition(0, 0, 0), model.getCaretPosition());
