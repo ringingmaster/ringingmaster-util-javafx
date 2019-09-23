@@ -32,7 +32,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.9'
     compile 'io.reactivex:rxjavafx:2.0.2'
     compile 'io.reactivex.rxjava2:rxjavafx:2.2.2'
-
+    compile 'io.reactivex.rxjava2:rxjava:2.2.8'
 
 
     // TEST: General
