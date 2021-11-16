@@ -26,20 +26,23 @@ javafx {
 
 dependencies {
     // Internal
-    compile 'org.ringingmaster:ringingmaster-util:1.0.0'
+    implementation 'org.ringingmaster:ringingmaster-util:1.0.0'
 
-    //General
-    compile 'org.apache.commons:commons-lang3:3.9'
-    compile 'io.reactivex:rxjavafx:2.0.2'
-    compile 'io.reactivex.rxjava2:rxjavafx:2.2.2'
-    compile 'io.reactivex.rxjava2:rxjava:2.2.8'
+    // General
+    implementation 'com.google.guava:guava:27.1-jre'
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'io.reactivex:rxjavafx:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjavafx:2.2.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
 
+    // Logging
+    implementation 'org.slf4j:slf4j-api:1.7.25'
 
     // TEST: General
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.8.47'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.8.47'
 
     // TEST: Logging
-    testRuntime 'org.apache.logging.log4j:log4j-core:2.8.2'
-    testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.8.2'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-core:2.8.2'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.8.2'
 }
